@@ -1,6 +1,6 @@
 package problem.Abstract;
 
-public abstract class AbstractAnswer {
+public abstract class Answer {
 	private int grade;
 	private boolean graded = false;
 	private int testId;
@@ -10,7 +10,7 @@ public abstract class AbstractAnswer {
 	/**
 	 *  Constructor stores test's id number and user's answer object.
 	 */
-	public AbstractAnswer(int newTestId, Object newUserAnswer) 
+	public Answer(int newTestId, Object newUserAnswer) 
 	{
 		testId = newTestId;
 		userAnswer = newUserAnswer;
