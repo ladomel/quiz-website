@@ -61,7 +61,4 @@ public abstract class Answer {
 	{
 		return graded;
 	}
-
-
-
 }
