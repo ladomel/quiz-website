@@ -3,7 +3,7 @@ package problem.Abstract;
 public abstract class Answer {
 	private int grade;
 	private boolean graded = false;
-	private int testId;
+	private int problemId;
 	private Object userAnswer;
 
 
@@ -12,7 +12,7 @@ public abstract class Answer {
 	 */
 	public Answer(int newTestId, Object newUserAnswer) 
 	{
-		testId = newTestId;
+		problemId = newTestId;
 		userAnswer = newUserAnswer;
 	}
 
@@ -40,7 +40,7 @@ public abstract class Answer {
 	 */
 	public int getTestId()
 	{
-		return testId;
+		return problemId;
 	}
 
 	/**
