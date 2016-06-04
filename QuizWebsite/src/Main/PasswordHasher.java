@@ -2,6 +2,7 @@ package Main;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 /**
  * Simple Password Hashing Tool
@@ -11,6 +12,22 @@ import java.security.NoSuchAlgorithmException;
 public class PasswordHasher {
 	
 	private static final String HASH_ALGORITHM = "SHA";
+	private static final String POSSIBLE_SALT_CHARS = "qwertyuioplkjhgfdsazxcvbnm";
+	private static final int SALT_LENGTH = 20;
+	
+	/**
+	 *  A teaspoon of salt for your freshly made soup!
+	 *	 
+	 * @return salt - Literally salt!
+	 */
+	public String getRandomSalt(){
+		Random rand = new Random();
+		String salt = "";
+		for (int i=0;i<SALT_LENGTH;i++){
+			salt += POSSIBLE_SALT_CHARS.charAt(rand.nextInt(POSSIBLE_SALT_CHARS.length()));
+		}
+		return salt;
+	}
 	
 	/*
 	 * Converts a hex code to String
