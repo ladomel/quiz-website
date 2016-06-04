@@ -10,6 +10,5 @@ public class User {
 	private Set<Integer> createdQuizes;	
 	private Set<Integer> takenQuizes;
 	private Set<Integer> achievements;
-	private Set<Integer> messages; // Messages stored here. might change, depends on implementation
-	
+	private Set<Integer> messages; // Messages stored here. might change, depends on implementation	
 }
