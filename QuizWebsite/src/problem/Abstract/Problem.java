@@ -1,15 +1,15 @@
 package problem.Abstract;
 
-public abstract class Problem <T extends Answer>{
+public abstract class Problem{
 
 	/**
 	 * Changes Answer's graded state to true and sets the grade with maximum grade.
 	*/
-	public abstract void setGrade(T answer);
+	public abstract void setGrade(Answer answer);
 	
 	/**
 	 * This function returns statement for user to see.
-	 * @return problem Object;
+	 * @return Statement;
 	*/
 	public abstract Statement getStatement();	
 }
