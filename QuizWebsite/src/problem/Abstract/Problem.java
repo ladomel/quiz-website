@@ -1,5 +1,7 @@
 package problem.Abstract;
 
+import classes.Answer;
+
 public abstract class Problem{
 
 	/**

@@ -2,9 +2,10 @@ package problem.QR;
 
 import java.util.Set;
 
+import classes.Answer;
 import problem.Abstract.Problem;
 
-public class ProblemQR extends Problem<AnswerQR>{
+public class ProblemQR extends Problem{
 
 	public ProblemQR(String newDescription, Set<String> newAnswers)
 	{
@@ -16,10 +17,10 @@ public class ProblemQR extends Problem<AnswerQR>{
 	private Set<String> answers;
 	
 	@Override
-	public void setGrade(AnswerQR answer) 
+	public void setGrade(Answer answer) 
 	{
-		String userAnswer = (String)answer.getAnswer();
-		if(answers.contains(userAnswer)) answer.setGrade(1);
+		String userAnswer = answer.getAnswer().get(0);   // NO check.
+		if(getAnswers().contains(userAnswer)) answer.setGrade(1);
 		else answer.setGrade(0);
 	}
 
