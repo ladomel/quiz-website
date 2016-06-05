@@ -9,7 +9,6 @@ public class User {
 		setHashedPassword(hashedPassword); // Set registration date.
 	}
 	
-	
 	public String getUserName() {
 		return userName;
 	}

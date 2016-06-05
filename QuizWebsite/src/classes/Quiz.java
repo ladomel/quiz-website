@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class Quiz {
-	public Quiz(String userName)
+	public Quiz(String userName, String quizName, String description)
 	{
 		setUserName(userName);
 	}
@@ -19,7 +19,7 @@ public class Quiz {
 	private String userName; // Creator
 	private int date; // TODO change date format. Creation date.
 	private String description; 
-	private String name;
+	private String quizName;
 	private Set<Integer> results; //  Set of results. Each try to fill the quiz is 1 Result. "History"
 	private ArrayList<Integer> problems;
 	
