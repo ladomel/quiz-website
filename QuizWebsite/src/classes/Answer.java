@@ -7,7 +7,6 @@ public class Answer {
 	private int problemId; // Might not need this.
 	private ArrayList<String> userAnswer;
 
-
 	/**
 	 *  Constructor stores problem's id number and user's answer object.
 	 */

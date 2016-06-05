@@ -15,5 +15,4 @@ private String description;
 	{
 		return description;
 	}
-
 }

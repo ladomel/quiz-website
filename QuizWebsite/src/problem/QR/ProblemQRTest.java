@@ -35,6 +35,4 @@ public class ProblemQRTest {
 		assertTrue(answer2.getGrade().equals(1));
 		assertTrue(answer3.getGrade().equals(0));
 	}
-
-
 }

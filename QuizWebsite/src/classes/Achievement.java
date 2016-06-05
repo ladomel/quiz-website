@@ -3,5 +3,5 @@ package classes;
 public abstract class Achievement {
 	private String pictureURL;
 	private String description;
-	// TODO add more....
+	public abstract boolean userUnlocked(User user); // Return true if user met the requirements for uchievement to unlock.
 }
