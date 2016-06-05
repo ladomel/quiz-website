@@ -3,9 +3,8 @@ package classes;
 import java.util.ArrayList;
 
 public class Answer {
-	private int grade;
-	private boolean graded = false;
-	private int problemId;
+	private Integer grade = null; // Null if not graded.
+	private int problemId; // Might not need this.
 	private ArrayList<String> userAnswer;
 
 
@@ -30,10 +29,9 @@ public class Answer {
 	/**
 	 * Sets the grade user in object.
 	 */
-	public void setGrade(int newGrade)
+	public void setGrade(Integer newGrade)
 	{
 		grade = newGrade;
-		graded = true;
 	}
 
 	/**
@@ -51,16 +49,6 @@ public class Answer {
 	 */
 	public Integer getGrade()
 	{
-		if(graded) return grade;
-		return null;
-	}
-
-	/**
-	 * Returns true if answer was graded.
-	 * @return graded.
-	 */
-	public boolean isGraded()
-	{
-		return graded;
+		return grade;
 	}
 }
