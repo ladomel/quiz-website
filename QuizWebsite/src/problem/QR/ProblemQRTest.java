@@ -27,9 +27,9 @@ public class ProblemQRTest {
 		Answer answer2 = new Answer(0, new ArrayList<String>(){{  add("B"); }});
 		Answer answer3 = new Answer(0, new ArrayList<String>(){{  add("C"); }});
 		
-		test.setGrade(answer1);
-		test.setGrade(answer2);
-		test.setGrade(answer3);
+		answer1.setGrade(test.getGrade(answer1.getAnswer()));
+		answer2.setGrade(test.getGrade(answer2.getAnswer()));
+		answer3.setGrade(test.getGrade(answer3.getAnswer()));
 		
 		assertTrue(answer1.getGrade().equals(1));
 		assertTrue(answer2.getGrade().equals(1));
