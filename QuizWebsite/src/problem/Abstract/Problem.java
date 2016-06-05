@@ -1,17 +1,23 @@
 package problem.Abstract;
 
-import classes.Answer;
+import java.util.ArrayList;
 
 public abstract class Problem{
 
 	/**
-	 * Changes Answer's graded state to true and sets the grade with maximum grade.
+	 * Returns ArrayList's grade, or null if wrong format.
 	*/
-	public abstract void setGrade(Answer answer);
+	public abstract Integer getGrade(ArrayList<String> answer);
 	
 	/**
 	 * This function returns statement for user to see.
 	 * @return Statement;
 	*/
 	public abstract Statement getStatement();	
+	
+	/**
+	 * This function returns length of user's expected Array of answers.
+	 * @return answer length;
+	*/
+	public abstract Integer getAnswerLength();
 }

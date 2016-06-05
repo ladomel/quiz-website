@@ -1,27 +1,31 @@
 package problem.QR;
 
+import java.util.ArrayList;
 import java.util.Set;
 
-import classes.Answer;
 import problem.Abstract.Problem;
 
 public class ProblemQR extends Problem{
 
+	private static final int QR_ANSWER_LENGTH = 1;
+	
+	private StatementQR problem;
+	private Set<String> answers;
+	
 	public ProblemQR(String newDescription, Set<String> newAnswers)
 	{
 		problem = new StatementQR(newDescription);
 		answers = newAnswers;
 	}
 	
-	private StatementQR problem;
-	private Set<String> answers;
 	
 	@Override
-	public void setGrade(Answer answer) 
+	public Integer getGrade(ArrayList<String> answer)
 	{
-		String userAnswer = answer.getAnswer().get(0);   // NO check.
-		if(getAnswers().contains(userAnswer)) answer.setGrade(1);
-		else answer.setGrade(0);
+		if(answer.size() != getAnswerLength()) return null;
+		String userAnswer = answer.get(0);   
+		if(getAnswers().contains(userAnswer)) return 1;
+		return 0;
 	}
 
 	public Set<String> getAnswers()
@@ -33,6 +37,12 @@ public class ProblemQR extends Problem{
 	public StatementQR getStatement() 
 	{
 		return problem;
+	}
+
+	@Override
+	public Integer getAnswerLength() 
+	{
+		return QR_ANSWER_LENGTH;
 	}
 }
 
