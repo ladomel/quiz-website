@@ -1,6 +1,7 @@
 package problem.QR;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Set;
 
 import problem.Abstract.Problem;
@@ -43,6 +44,13 @@ public class ProblemQR extends Problem{
 	public Integer getAnswerLength() 
 	{
 		return QR_ANSWER_LENGTH;
+	}
+
+
+	@Override
+	public ArrayList<String> getRightAnswers() {
+		Iterator<String> answerIterator = answers.iterator();
+		return  new ArrayList<String>(){{  add(answerIterator.next()); }};
 	}
 }
 
