@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public abstract class Problem{
 
 	/**
-	 * Returns ArrayList's grade, or null if wrong format.	 
+	 * Returns ArrayList's grade, or null if wrong format.	
+	 * @param answer ArrayList of user's filled fields.
 	 * @return grade of answer.
 	*/
 	public abstract Integer getGrade(ArrayList<String> answer);
