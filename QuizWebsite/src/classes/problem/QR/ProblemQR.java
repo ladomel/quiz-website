@@ -1,10 +1,10 @@
-package problem.QR;
+package classes.problem.QR;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-import problem.Abstract.Problem;
+import classes.problem.Abstract.Problem;
 
 public class ProblemQR extends Problem{
 

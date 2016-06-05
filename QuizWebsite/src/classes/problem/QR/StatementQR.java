@@ -1,6 +1,6 @@
-package problem.QR;
+package classes.problem.QR;
 
-import problem.Abstract.Statement;
+import classes.problem.Abstract.Statement;
 
 public class StatementQR extends Statement {
 

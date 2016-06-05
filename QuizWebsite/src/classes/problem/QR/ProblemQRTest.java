@@ -1,4 +1,4 @@
-package problem.QR;
+package classes.problem.QR;
 
 import static org.junit.Assert.*;
 

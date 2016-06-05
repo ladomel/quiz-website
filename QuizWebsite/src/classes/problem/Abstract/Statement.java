@@ -1,4 +1,4 @@
-package problem.Abstract;
+package classes.problem.Abstract;
 
 public abstract class Statement {
 	
