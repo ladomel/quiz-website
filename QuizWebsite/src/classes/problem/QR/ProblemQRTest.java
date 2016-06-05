@@ -25,6 +25,8 @@ public class ProblemQRTest {
 		
 		assertEquals(1, (int)test.getGrade(new ArrayList<String>(){{  add("A"); }}));
 		assertEquals(1, (int)test.getGrade(new ArrayList<String>(){{  add("B"); }}));
-		assertEquals(0, (int)test.getGrade(new ArrayList<String>(){{  add("C"); }}));
+		assertEquals(0, (int)test.getGrade(new ArrayList<String>(){{  add("C"); }}));;
+		assertEquals(null, test.getGrade(new ArrayList<String>(){{  add("B"); add("A"); }})); // Big length.
+		assertEquals(null, test.getGrade(new ArrayList<String>(){{  }})); // Empty.
 	}
 }
