@@ -2,9 +2,12 @@ package problem.QR;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.junit.Test;
+
+import classes.Answer;
 
 public class ProblemQRTest {
 
@@ -20,9 +23,9 @@ public class ProblemQRTest {
 		assertTrue(test.getAnswers().equals(answers)); // Testing if information is written without mistakes.
 		assertTrue(test.getStatement().getDescription().equals(problem));
 		
-		AnswerQR answer1 = new AnswerQR(0, "A");
-		AnswerQR answer2 = new AnswerQR(0, "B");
-		AnswerQR answer3 = new AnswerQR(0, "C");
+		Answer answer1 = new Answer(0, new ArrayList<String>(){{  add("A"); }});
+		Answer answer2 = new Answer(0, new ArrayList<String>(){{  add("B"); }});
+		Answer answer3 = new Answer(0, new ArrayList<String>(){{  add("C"); }});
 		
 		test.setGrade(answer1);
 		test.setGrade(answer2);
