@@ -1,0 +1,118 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	background: rgba(192,192,192,0.9);
+	width: 100%;
+	height: 100%;
+}
+
+#container {
+	background: gainsboro;
+	padding: 10px;
+	height: 400px;
+	min-height: 400px;
+	min-width: 400px;
+	width: 400px;
+	position: absolute;
+	left: 50%;
+	margin-left: -200px;
+	font-size: 16px;
+	font-weight: 700;
+	border-radius: 20px;
+}
+
+
+input[id="submit"] {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: 50px;
+	margin-left: -80px;
+	background: gold;
+	width: 160px;
+	height: 50px;
+	outline: 0;
+	font-size: 20px;
+	font-weight: 500;
+	border-radius: 10px;
+	padding-left: 10px;
+}
+
+.textbox {
+	border: 3px inset black;
+	width: 300px;
+	height: 30px;
+	padding: 5px;
+	font-size: 20px;
+	font-weight: 550;
+	border-radius: 20px;
+	outline: 0;
+	text-align: center;
+}
+
+.textbox::-webkit-input-placeholder { /* does not work for mozilla and IE*/
+	text-align: center;
+}
+
+
+input[id="username"] {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -70px;
+	margin-left: -150px;
+}
+
+input[id="password"] {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -10px;
+	margin-left: -150px;
+}
+
+h3 {
+	float: left;
+}
+
+#signupdiv {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	min-width: 290px;
+	max-width: 290px;
+	margin-top: 130px;
+	margin-left: -135px;
+}
+
+#signup {
+	position: relative;
+	margin-top: 9px;
+	background: red;
+	float: right;
+	width: 120px;
+	height: 40px;
+	outline: 0;
+	font-size: 15px;
+	font-weight: 700;
+	border-radius: 10px;
+	padding-left: 10px;
+}
+
+#notfound {  
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -110px;
+	margin-left: -95px;	
+	color: red;
+}
+
+h1 {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -180px;
+	margin-left: -160px;
+	text-align: center;	
+}

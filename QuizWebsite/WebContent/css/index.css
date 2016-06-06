@@ -1,0 +1,129 @@
+@CHARSET "ISO-8859-1";
+
+#centerpanel {
+	position: absolute;
+	top: 100px;
+	width: 100%;
+	min-width: 1200px;
+	height: calc(100% - 100px);
+	margin: 0px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	background: #e6e6e6;
+}
+
+#firstbox , #secondbox {
+	min-width: 1200px;
+	height: 400px;
+	margin: 0px;
+	width: 1200px;
+	left: calc(50% - 600px);
+	position: absolute;
+	top: 10px;
+}
+
+.divtitle {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 30px;
+	text-align: center;
+	font-size: 25px;
+	font-weight: 600;
+	background: yellow;
+}
+
+.list {
+	position: absolute;
+	left: 0px;
+	top: 30px;
+	width: 100%;
+	height: calc(100% - 30px);
+	overflow-y: auto;
+	overflow-x: hidden;	
+}
+
+.listentry {
+	width: 100%;
+	height: 30px;
+	border: none;
+	padding-top: 2px;
+	padding-left: 10px;
+	background: grey;
+	font-size: 20px;
+}
+
+.listentry:hover {
+	background: white;
+}
+
+.breaker {
+	position: absolute;
+	height: 50px;
+	width: 100%;
+	font-size: 30px;
+	text-align: center;
+	top: 420px;
+}
+
+#createaquiz {
+	position: absolute;
+	top: 890px;
+	width: 340px;
+	border: none;
+	background: grey;
+	height: 50px;
+	font-size: 30px;
+	left: calc(50% - 170px);
+}
+
+#createaquiz:hover {
+	background: green;
+}
+
+#secondbox {
+	top: 470px;
+	margin-bottom: 80px;
+}
+
+.quizzes {
+	width: 320px;
+	height: 400px;
+}
+
+#recentlycreatedquizzes , #recentquizzes {
+	position: absolute;
+	left: 530px;
+	background: blue;
+}
+
+#popularquizzes , #recentlytakenquizzes {
+	position: absolute;
+	right: 10px;
+	background:	black;
+}
+
+#announcements, #friendsactivity {
+	position: absolute;
+	left: 10px;
+	width: 500px;
+	height: 400px;
+	background: green;
+}
+
+#loginlabel {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	line-height: 250px;
+	text-align: center;
+	font-size: 60px;
+	font-weight: 600;
+	background: grey;
+}
+
+
+
