@@ -1,5 +1,0 @@
-CREATE TABLE IF NOT EXISTS user (
-  user_id INT NOT NULL AUTO_INCREMENT,
-  hex_password VARCHAR(255) NOT NULL,
-  PRIMARY KEY (user_id)
-)
