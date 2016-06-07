@@ -1,8 +1,5 @@
 package model;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,6 +20,15 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 	
 	private DBConfig dbConfig;
 	
+
+	private static final String USER_USER_NAME = "user_name";
+
+	private static final String USER_HEX_PASSWORD = "hex_password";
+
+	private static final String USER_TABLE = "user";
+
+	private static final String USER_USER_ID = "id";
+	
 	/*
 	 * Because fuck public. 
 	 */
@@ -33,21 +39,26 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 	private void init() {
 		dbConfig = DBConfig.getInstance();
 		setUpDataSource();
-		runInitialSQLSource();
+		setUpDB();
+	}
+	
+	private void setUpDataSource() {
+		dataSource = new BasicDataSource();
+		dataSource.setDriverClassName(dbConfig.DB_DRIVER);
+		dataSource.setUsername(dbConfig.DB_USER_NAME);
+		dataSource.setPassword(dbConfig.DB_PASSWORD);
+		dataSource.setUrl(dbConfig.DB_URL);
+		// we can control how connection pool behaves
+		dataSource.setMaxIdle(dbConfig.DB_MAX_CONNECTIONS);
 	}
 
-	private void runInitialSQLSource() {
-		String initCommands = getSourceAsString();
+	private void setUpDB() {
 		try {
 			Connection con = dataSource.getConnection();
 			Statement stmt = con.createStatement();
-			stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " +
-					dbConfig.DB_DATABASE_NAME +
-					";");
-			stmt.executeUpdate("USE " +
-					dbConfig.DB_DATABASE_NAME +
-					";");
-			stmt.executeUpdate(initCommands);
+			createDB(stmt);
+			useDB(stmt);
+			createUserTable(stmt);
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -55,31 +66,28 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 		}
 	}
 
-	private String getSourceAsString() {
-		String sqlSource = null;
-		try(BufferedReader br = new BufferedReader(
-				new FileReader(dbConfig.DB_INIT_SOURCE)) ) {
-		    StringBuilder sb = new StringBuilder();
-		    String line = br.readLine();
-		    while (line != null) {
-		        sb.append(line);
-		        sb.append(System.lineSeparator());
-		        line = br.readLine();
-		    }
-		    sqlSource = sb.toString();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return sqlSource;
+	private void createUserTable(Statement stmt) throws SQLException {
+		// to simplify creation we drop everything created prior to this
+		stmt.executeUpdate("DROP TABLE IF EXISTS " + USER_TABLE + ";" );
+		stmt.executeUpdate("CREATE TABLE " + USER_TABLE + 
+				" ( " + USER_USER_ID +
+				" INT NOT NULL AUTO_INCREMENT UNIQUE KEY);" );
+		stmt.executeUpdate("ALTER TABLE " + USER_TABLE + " ADD " +
+				USER_USER_NAME + " VARCHAR(20) NOT NULL PRIMARY KEY;");
+		stmt.executeUpdate("ALTER TABLE "  + USER_TABLE + " ADD " +
+				USER_HEX_PASSWORD + " VARCHAR(255) NOT NULL;");
 	}
 
-	private void setUpDataSource() {
-		dataSource = new BasicDataSource();
-		dataSource.setDriverClassName(dbConfig.DB_DRIVER);
-		dataSource.setUsername(dbConfig.DB_USER_NAME);
-		dataSource.setPassword(dbConfig.DB_PASSWORD);
-		dataSource.setUrl(dbConfig.DB_URL);
+	private void useDB(Statement stmt) throws SQLException {
+		stmt.executeUpdate("USE " +
+				dbConfig.DB_DATABASE_NAME +
+				";");
+	}
+
+	private void createDB(Statement stmt) throws SQLException {
+			stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " +
+					dbConfig.DB_DATABASE_NAME +
+					";");
 	}
 
 	/**
@@ -94,7 +102,7 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
         return singletonInstance;
 	}
 	
-	private ResultSet executeQuery(String command) {
+	private ResultSet connectAndExecuteQuery(String command) {
 		ResultSet rs = null;
 		try {
 			Connection con = dataSource.getConnection();
@@ -108,7 +116,7 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 		return rs;
 	}
 	
-	private void executeDM(String command) {
+	private void connectAndExecuteDM(String command) {
 		try {
 			Connection con = dataSource.getConnection();
 			Statement stmt = con.createStatement();
@@ -123,8 +131,9 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 	@Override
 	public User getUser(String userName) {
 		User user = null;
-		ResultSet rs = executeQuery(
-				"SELECT * FROM user WHERE user_name LIKE '" +
+		ResultSet rs = connectAndExecuteQuery(
+				"SELECT * FROM " + USER_TABLE + " WHERE " + 
+						USER_USER_NAME + " LIKE '" +
 				userName +
 				"';");
 		try {
@@ -133,8 +142,8 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 			if(!rs.next())
 				user = null;
 			else {
-				user = new User(rs.getString("user_name"),
-						rs.getString("hex_password"));
+				user = new User(rs.getString(USER_USER_NAME),
+						rs.getString(USER_HEX_PASSWORD));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -145,13 +154,16 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 
 	@Override
 	public void deleteUser(String userName) {
-		executeDM("DELETE FROM user WHERE user_name LIKE '" +
+		connectAndExecuteDM("DELETE FROM " + USER_TABLE + 
+				" WHERE " + USER_USER_NAME + " LIKE '" +
 				userName + "';");
 	}
 
 	@Override
 	public void putUser(User user) {
-		executeDM("INSERT INTO user (user_name, hex_password) VALUES('" +
+		connectAndExecuteDM("INSERT INTO " + USER_TABLE +
+				" (" + USER_USER_NAME + ", " + USER_HEX_PASSWORD +
+				") VALUES('" +
 				user.getUserName() + "','" +
 				user.getHashedPassword() + "');");
 	}
@@ -178,21 +190,6 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 	public void deleteQuiz(int quizId) {
 		// TODO Auto-generated method stub
 
-	}
-	
-	/**
-	 * rough check
-	 * 
-	 * 
-	 * @param arg0
-	 */
-	public static void main(String [] arg0) {
-		User levana = new User("levana", "yle");
-		QuizWebsiteModel qwm = QuizWebsiteModel.getInstance();
-		System.out.println(qwm.getUser("levana").getUserName());
-		qwm.deleteUser("levana");
-		System.out.println(qwm.getUser("levana"));
-		qwm.putUser(levana);
 	}
 
 }
