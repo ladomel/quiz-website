@@ -1,5 +1,8 @@
 package model;
 
+import classes.Quiz;
+import classes.User;
+
 /**
  * This interface provides model functionality for quiz website controller.
  * 
@@ -8,14 +11,6 @@ package model;
  */
 public interface QuizWebsiteModelInterface {
 
-	/**
-	 * Returns true when user with given user name exists.
-	 * 
-	 * @param userName - String user name
-	 * @return exists - boolean true when exists
-	 */
-	public boolean userExists(String userName);
-	
 	/**
 	 * User getter.
 	 * 
