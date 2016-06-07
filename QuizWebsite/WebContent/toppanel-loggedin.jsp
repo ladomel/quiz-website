@@ -46,7 +46,9 @@
 					<a href="">Jandaba2</a>
 				</div>
 		 	</div>
-		 	<button class="loggedinbuttons" id="logout">Logout</button>
+		 	<form action="Logout" method="post" style="width: 0px;height:0px;display:inline-block;">
+		 		<button class="loggedinbuttons" id="logout">Logout</button>
+		 	</form>
 		 </span>
 	</div>
 </body>

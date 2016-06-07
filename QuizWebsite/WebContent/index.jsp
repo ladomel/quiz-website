@@ -14,7 +14,7 @@
 <body>
 	<%
 		String toppanel; 
-		if (request.getSession().getAttribute("User") == null) toppanel = "toppanel-loggedout.jsp";
+		if (request.getSession().getAttribute("MasterUser") == null) toppanel = "toppanel-loggedout.jsp";
 		else toppanel = "toppanel-loggedin.jsp";
 	%>
 	
@@ -25,9 +25,7 @@
 				<div class="divtitle">Friends Activity</div>
 				<div class="list">
 				<%
-					if (request.getSession().getAttribute("User") != null){
-						
-					}
+					
 				%>
 				</div>
 			</span>
@@ -35,9 +33,7 @@
 				<div class="divtitle">Recently Taken Quizzes</div>
 				<div class="list">
 				<%
-					if (request.getSession().getAttribute("User") != null){
-						
-					}
+					
 				%>
 				</div>
 			</span>
@@ -45,15 +41,13 @@
 				<div class="divtitle">Recently Created Quizzes</div>
 				<div class="list">
 				<%
-					if (request.getSession().getAttribute("User") != null){
-						
-					}
+					
 				%>
 				</div>
 			</span>
 			
 			<% 
-				if (request.getSession().getAttribute("User") == null){
+				if (request.getSession().getAttribute("MasterUser") == null){
 					out.println("<span id=\"loginlabel\">Log In to See More!</span>");		
 				}
 			%>
@@ -113,8 +107,12 @@
 				</div>
 			</span>
 		</div>
+		<%
+			if (request.getSession().getAttribute("MasterUser") != null){
+				out.println("<a href=\"CreateQuiz.jsp\"><button id=\"createaquiz\">Create a Quiz!</button></a>");		
+			}
+		%>
 		
-		<a href="CreateQuiz.jsp"><button id="createaquiz">Create a Quiz!</button></a>
 	</div>
 	
 	<div id="toppanel">

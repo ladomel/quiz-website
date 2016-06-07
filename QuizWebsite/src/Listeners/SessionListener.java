@@ -25,7 +25,7 @@ public class SessionListener implements HttpSessionListener {
      */
     public void sessionCreated(HttpSessionEvent arg0)  { 
     	HttpSession s = arg0.getSession();
-    	s.setAttribute("User", null);
+    	s.setAttribute("MasterUser", null);
     }
 
 	/**
@@ -33,7 +33,7 @@ public class SessionListener implements HttpSessionListener {
      */
     public void sessionDestroyed(HttpSessionEvent arg0)  { 
     	HttpSession s = arg0.getSession();
-        s.removeAttribute("User");
+        s.removeAttribute("MasterUser");
     }
 	
 }
