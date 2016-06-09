@@ -12,14 +12,6 @@ import classes.User;
 public interface QuizWebsiteModelInterface {
 
 	/**
-	 * Returns true when user with given user name exists.
-	 * 
-	 * @param userName - String user name
-	 * @return exists - boolean true when exists
-	 */
-	public boolean userExists(String userName);
-	
-	/**
 	 * User getter.
 	 * 
 	 * @param userName - String user name
