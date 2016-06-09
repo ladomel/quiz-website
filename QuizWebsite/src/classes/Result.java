@@ -24,6 +24,22 @@ public class Result {
 		this.quizId = quizId;
 	}
 
+	public Integer getFinalGrade() {
+		return finalGrade;
+	}
+
+	public void setFinalGrade(Integer finalGrade) {
+		this.finalGrade = finalGrade;
+	}
+
+	public Set<Integer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(Set<Integer> answers) {
+		this.answers = answers;
+	}
+
 	private int quizId;
 	private String userName;
 	private Integer finalGrade = null;

@@ -1,31 +1,35 @@
 package classes;
 
 import java.util.HashSet;
-import java.util.Set;
 
 public class User {
 
 	public enum Status{REGULAR, ADMINISTRATION} 
 	
-	private Status status;
 	private String userName;
 	private String hashedPassword;
+	private String salt;
+
+	private Status status;
+	private String description;
 	private HashSet<Integer> friends; // Set of user's friends.
 	private HashSet<Integer> createdQuizes;	
 	private HashSet<Integer> takenQuizes;
 	private HashSet<Integer> achievements;
 	private HashSet<Integer> messages; // Messages stored here. might change, depends on implementation	
 	
-	public User(String userName, String hashedPassword)
+	public User(String userName, String hashedPassword, String salt)
 	{
 		setUserName(userName);
 		setHashedPassword(hashedPassword); 
+		setSalt(salt);
+		
 		setStatus(Status.REGULAR);  // By default, user is regular.
 		setFriends(new HashSet<Integer>());
-		createdQuizes = new HashSet<Integer>();
-		takenQuizes = new HashSet<Integer>();
-		achievements = new HashSet<Integer>();
-		messages = new HashSet<Integer>();
+		setCreatedQuizes(new HashSet<Integer>());
+		setTakenQuizes(new HashSet<Integer>());
+		setAchievements(new HashSet<Integer>());
+		setMessages(new HashSet<Integer>());
 	}
 	
 	public String getUserName() {
@@ -65,5 +69,53 @@ public class User {
 
 	private void setFriends(HashSet<Integer> friends) {
 		this.friends = friends;
+	}
+
+	public HashSet<Integer> getCreatedQuizes() {
+		return createdQuizes;
+	}
+
+	public void setCreatedQuizes(HashSet<Integer> createdQuizes) {
+		this.createdQuizes = createdQuizes;
+	}
+
+	public HashSet<Integer> getTakenQuizes() {
+		return takenQuizes;
+	}
+
+	public void setTakenQuizes(HashSet<Integer> takenQuizes) {
+		this.takenQuizes = takenQuizes;
+	}
+
+	public HashSet<Integer> getAchievements() {
+		return achievements;
+	}
+
+	public void setAchievements(HashSet<Integer> achievements) {
+		this.achievements = achievements;
+	}
+
+	public HashSet<Integer> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(HashSet<Integer> messages) {
+		this.messages = messages;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

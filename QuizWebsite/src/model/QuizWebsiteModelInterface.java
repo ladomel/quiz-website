@@ -1,5 +1,8 @@
 package model;
 
+import classes.Quiz;
+import classes.User;
+
 /**
  * This interface provides model functionality for quiz website controller.
  * 
