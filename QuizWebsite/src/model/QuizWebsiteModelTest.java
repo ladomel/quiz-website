@@ -24,10 +24,9 @@ public class QuizWebsiteModelTest {
 	@Test
 	public void test() {
 		assertTrue(model.getUser(LEVANA_NAME) == null);
-		model.putUser(levana);
+		model.addUser(levana);
 		assertEquals(LEVANA_NAME, model.getUser(LEVANA_NAME).getUserName());
 		model.deleteUser(LEVANA_NAME);
 		assertTrue(model.getUser(LEVANA_NAME) == null);
 	}
-
 }

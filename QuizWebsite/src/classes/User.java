@@ -23,7 +23,6 @@ public class User {
 		setUserName(userName);
 		setHashedPassword(hashedPassword); 
 		setSalt(salt);
-		
 		setStatus(Status.REGULAR);  // By default, user is regular.
 		setFriends(new HashSet<Integer>());
 		setCreatedQuizes(new HashSet<Integer>());

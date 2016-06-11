@@ -5,9 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+//import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 
-//import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import classes.Quiz;
 import classes.User;
@@ -143,7 +143,7 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 				user = null;
 			else {
 				user = new User(rs.getString(USER_USER_NAME),
-						rs.getString(USER_HEX_PASSWORD));
+						rs.getString(USER_HEX_PASSWORD));    // TODO change salt to good value
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -160,7 +160,7 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 	}
 
 	@Override
-	public void putUser(User user) {
+	public void addUser(User user) {
 		connectAndExecuteDM("INSERT INTO " + USER_TABLE +
 				" (" + USER_USER_NAME + ", " + USER_HEX_PASSWORD +
 				") VALUES('" +
