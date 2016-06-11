@@ -51,17 +51,18 @@ public class Signup extends HttpServlet {
 		PasswordHasher hasher = (PasswordHasher)ctx.getAttribute("hasher");
 		User user = model.getUser(userName);
 		
-		if(user != null) out.println("used");
-		else 
-			{
-				String salt = hasher.getRandomSalt();
-				String hashedPassword = hasher.hashPassword(password + salt);
-				
-				User newUser = new User(userName, hashedPassword);
-				newUser.setSalt(salt);
-				model.putUser(newUser);
-				request.getSession().setAttribute("MasterUser", newUser);
-				out.println("free");
+		if(user != null)  // If user exists return.
+			{	
+				out.println("used");
+				return;
 			}
+		
+		String salt = hasher.getRandomSalt();
+		String hashedPassword = hasher.hashPassword(password + salt);
+
+		User newUser = new User(userName, hashedPassword, salt);
+		model.putUser(newUser);  // Put in base.
+		request.getSession().setAttribute("MasterUser", newUser); // Put in sessionListener.
+		out.println("free");
 	}
 }

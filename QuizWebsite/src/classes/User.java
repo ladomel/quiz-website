@@ -18,12 +18,11 @@ public class User {
 	private HashSet<Integer> achievements;
 	private HashSet<Integer> messages; // Messages stored here. might change, depends on implementation	
 	
-	public User(String userName, String hashedPassword)
+	public User(String userName, String hashedPassword, String salt)
 	{
 		setUserName(userName);
 		setHashedPassword(hashedPassword); 
 		setSalt(salt);
-		
 		setStatus(Status.REGULAR);  // By default, user is regular.
 		setFriends(new HashSet<Integer>());
 		setCreatedQuizes(new HashSet<Integer>());
