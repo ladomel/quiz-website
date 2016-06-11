@@ -44,14 +44,24 @@ public class Signup extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		String userName = request.getParameter("username");
-	//	String password = request.getParameter("password");
+		String password = request.getParameter("password");
 		
 		ServletContext ctx= getServletContext();  
 		QuizWebsiteModel model = (QuizWebsiteModel)ctx.getAttribute("model");
 		PasswordHasher hasher = (PasswordHasher)ctx.getAttribute("hasher");
 		User user = model.getUser(userName);
 		
-		if(user != null)  out.println("used");
-		else out.println("free");
+		if(user != null) out.println("used");
+		else 
+			{
+				String salt = hasher.getRandomSalt();
+				String hashedPassword = hasher.hashPassword(password + salt);
+				
+				User newUser = new User(userName, hashedPassword);
+				newUser.setSalt(salt);
+				model.putUser(newUser);
+				request.getSession().setAttribute("MasterUser", newUser);
+				out.println("free");
+			}
 	}
 }
