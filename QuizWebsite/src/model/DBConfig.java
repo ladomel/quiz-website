@@ -39,7 +39,7 @@ public class DBConfig {
 
 	private void init() {
 		DB_USER_NAME = "root";
-		DB_PASSWORD = "";
+		DB_PASSWORD = "nuca";
 		DB_URL = "jdbc:mysql://localhost:3306";
 		DB_DRIVER = "com.mysql.jdbc.Driver";
 		DB_DATABASE_NAME = "oop";

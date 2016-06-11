@@ -61,8 +61,7 @@ public class Signup extends HttpServlet {
 		String hashedPassword = hasher.hashPassword(password + salt);
 
 		User newUser = new User(userName, hashedPassword, salt);
-		model.putUser(newUser);  // Put in base.
-		request.getSession().setAttribute("MasterUser", newUser); // Put in sessionListener.
+		model.addUser(newUser);  // Put in base.
 		out.println("free");
 	}
 }

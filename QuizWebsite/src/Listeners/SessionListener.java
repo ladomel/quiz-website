@@ -16,9 +16,7 @@ public class SessionListener implements HttpSessionListener {
     /**
      * Default constructor. 
      */
-    public SessionListener() {
-    	
-    }
+    public SessionListener() {  }
 
 	/**
      * @see HttpSessionListener#sessionCreated(HttpSessionEvent)

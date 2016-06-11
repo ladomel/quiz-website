@@ -47,4 +47,20 @@ public class Result {
 	public void setAnswers(Set<Integer> answers) {
 		this.answers = answers;
 	}
+
+	public long getTimeStarted() {
+		return timeStarted;
+	}
+
+	public void setTimeStarted(long timeStarted) {
+		this.timeStarted = timeStarted;
+	}
+
+	public long getTimeFinished() {
+		return timeFinished;
+	}
+
+	public void setTimeFinished(long timeFinished) {
+		this.timeFinished = timeFinished;
+	}
 }

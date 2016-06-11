@@ -33,7 +33,7 @@ public interface QuizWebsiteModelInterface {
 	 * 
 	 * @param user - new User object
 	 */
-	public void putUser(User user);
+	public void addUser(User user);
 	
 	/**
 	 * Returns Quiz object for given id.

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 public class Quiz {
-	private String userName; // Creator
+	private String creatorUserName; // Creator
 	private long dateCreated; 
 	private String description; 
 	private String quizName;
@@ -29,10 +29,10 @@ public class Quiz {
 	}
 	
 	public String getUserName() {
-		return userName;
+		return creatorUserName;
 	}
 	public void setUserName(String userName) {
-		this.userName = userName;
+		this.creatorUserName = userName;
 	}
 
 	public String getDescription() {

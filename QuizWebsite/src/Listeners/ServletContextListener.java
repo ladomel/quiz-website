@@ -4,6 +4,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebListener;
 
 import Main.PasswordHasher;
+import factory.ClassFactory;
 import model.QuizWebsiteModel; // Added for some reason, might be wrong.
 
 /**
@@ -14,6 +15,7 @@ import model.QuizWebsiteModel; // Added for some reason, might be wrong.
 public class ServletContextListener implements javax.servlet.ServletContextListener {
 	private QuizWebsiteModel model;
 	private PasswordHasher hasher;
+	private ClassFactory factory;
 	
     /**
      * Default constructor. 
@@ -26,6 +28,7 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
      */
     public void contextDestroyed(ServletContextEvent arg0)  { 
     	model = null;
+    	hasher = null;
     }
 
 	/**
@@ -36,8 +39,10 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
     	ServletContext ctx=event.getServletContext();  
     	model = QuizWebsiteModel.getInstance();
     	hasher = new PasswordHasher();
+    	factory = new ClassFactory();
     	
     	ctx.setAttribute("model", model);  
+    	ctx.setAttribute("factory", factory);  
     	ctx.setAttribute("hasher", hasher);  
     }
 }

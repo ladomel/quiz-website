@@ -17,14 +17,14 @@ public class QuizWebsiteModelTest {
 	@Before
 	public void setUp() {
 		model = QuizWebsiteModel.getInstance();
-		levana = new User(LEVANA_NAME, LEVANA_HEX_PASSWORD, "salt"); // ADDD SALT, CHANGE.
+		levana = new User(LEVANA_NAME, LEVANA_HEX_PASSWORD);
 	}
 	
 	// super basic test
 	@Test
 	public void test() {
 		assertTrue(model.getUser(LEVANA_NAME) == null);
-		model.putUser(levana);
+		model.addUser(levana);
 		assertEquals(LEVANA_NAME, model.getUser(LEVANA_NAME).getUserName());
 		model.deleteUser(LEVANA_NAME);
 		assertTrue(model.getUser(LEVANA_NAME) == null);
