@@ -17,7 +17,7 @@ public class QuizWebsiteModelTest {
 	@Before
 	public void setUp() {
 		model = QuizWebsiteModel.getInstance();
-		levana = new User(LEVANA_NAME, LEVANA_HEX_PASSWORD);
+		levana = new User(LEVANA_NAME, LEVANA_HEX_PASSWORD, "salt"); // ADDD SALT, CHANGE.
 	}
 	
 	// super basic test
@@ -29,5 +29,4 @@ public class QuizWebsiteModelTest {
 		model.deleteUser(LEVANA_NAME);
 		assertTrue(model.getUser(LEVANA_NAME) == null);
 	}
-
 }

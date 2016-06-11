@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Main.PasswordHasher;
-
+import classes.User;
+import model.QuizWebsiteModelTest;
+import model.QuizWebsiteModel;
 /**
  * Servlet implementation class Login
  */
@@ -36,7 +38,19 @@ public class Login extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String userName = request.getParameter("username");
+		String password = request.getParameter("password");
 		
+		if(password.equals("p"))
+		{
+			request.getSession().setAttribute("MasterUser", new User(userName, password, "salt"));
+			RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+			rd.forward(request, response);
+		}
+		else
+		{
+			RequestDispatcher rd = request.getRequestDispatcher("invalidlogin.jsp");
+			rd.forward(request, response);
+		}	
 	}
-
 }

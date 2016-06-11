@@ -3,6 +3,14 @@ package classes;
 import java.util.Set;
 
 public class Result {
+	private int quizId;
+	private String userName;
+	private Integer finalGrade = null;
+	private long timeStarted; 
+	private long timeFinished;
+	private long timeTaken;
+	private Set<Integer> answers; // Set of integers user got.
+	
 	public Result(String userName, int quizId)
 	{
 		setQuizId(quizId);
@@ -39,12 +47,4 @@ public class Result {
 	public void setAnswers(Set<Integer> answers) {
 		this.answers = answers;
 	}
-
-	private int quizId;
-	private String userName;
-	private Integer finalGrade = null;
-	private int timeStarted; // change format
-	private int timeFinished;
-	private int timeTaken;
-	private Set<Integer> answers; // Set of integers user got.
 }

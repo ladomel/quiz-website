@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class Quiz {
 	private String userName; // Creator
-	private int date; // TODO change date format. Creation date.
+	private long dateCreated; 
 	private String description; 
 	private String quizName;
 	private Set<Integer> results; // Set of results. Each try to fill the quiz is 1 Result. "History"
@@ -13,7 +13,7 @@ public class Quiz {
 	
 	// Not necessary, might delete.
 	private int maxScore; // Max Score User can get.
-	private int quizTime; // Time to take this quiz.
+	private long quizTime; // Time to take this quiz.
 	
 	private boolean isRandom;
 	private boolean isOnePage;
@@ -99,11 +99,11 @@ public class Quiz {
 		this.maxScore = maxScore;
 	}
 
-	public int getQuizTime() {
+	public long getQuizTime() {
 		return quizTime;
 	}
 
-	public void setQuizTime(int quizTime) {
+	public void setQuizTime(long quizTime) {
 		this.quizTime = quizTime;
 	}
 

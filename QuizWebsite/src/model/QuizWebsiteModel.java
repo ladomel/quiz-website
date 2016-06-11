@@ -142,8 +142,8 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 			if(!rs.next())
 				user = null;
 			else {
-				user = new User(rs.getString(USER_USER_NAME),
-						rs.getString(USER_HEX_PASSWORD));
+		//		user = new User(rs.getString(USER_USER_NAME),
+		//				rs.getString(USER_HEX_PASSWORD));   Use salt.
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
