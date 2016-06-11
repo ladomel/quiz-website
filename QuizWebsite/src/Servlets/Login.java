@@ -43,7 +43,7 @@ public class Login extends HttpServlet {
 		
 		if(password.equals("p"))
 		{
-			request.getSession().setAttribute("MasterUser", new User(userName, password, "salt"));
+			request.getSession().setAttribute("MasterUser", new User(userName, password));
 			RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
 			rd.forward(request, response);
 		}

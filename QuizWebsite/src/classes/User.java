@@ -18,7 +18,7 @@ public class User {
 	private HashSet<Integer> achievements;
 	private HashSet<Integer> messages; // Messages stored here. might change, depends on implementation	
 	
-	public User(String userName, String hashedPassword, String salt)
+	public User(String userName, String hashedPassword)
 	{
 		setUserName(userName);
 		setHashedPassword(hashedPassword); 
