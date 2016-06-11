@@ -3,6 +3,7 @@ package Servlets;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,21 +37,25 @@ public class Login extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 *  Checks if such user exists and password is correct, then sets session's MasterUser to user.
+	 *  and goes to index.jsp.
+	 *  else redirects to invalidlogin.jsp.
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String userName = request.getParameter("username");
 		String password = request.getParameter("password");
+		RequestDispatcher dispatcher;
+		ServletContext ctx= getServletContext();  
+		QuizWebsiteModel model = (QuizWebsiteModel)ctx.getAttribute("model");
+		PasswordHasher hasher = (PasswordHasher)ctx.getAttribute("hasher");
+		User user = model.getUser(userName);
 		
-		if(password.equals("p"))
+		dispatcher = request.getRequestDispatcher("invalidlogin.jsp");	
+		if(user != null && hasher.hashPassword(password + user.getSalt()).equals(user.getHashedPassword()))
 		{
-			request.getSession().setAttribute("MasterUser", new User(userName, password));
-			RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
-			rd.forward(request, response);
-		}
-		else
-		{
-			RequestDispatcher rd = request.getRequestDispatcher("invalidlogin.jsp");
-			rd.forward(request, response);
-		}	
+			request.getSession().setAttribute("MasterUser", user);
+			dispatcher = request.getRequestDispatcher("index.jsp");
+		}		
+		dispatcher.forward(request, response);
 	}
 }
