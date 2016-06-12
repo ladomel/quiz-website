@@ -9,6 +9,7 @@ public class User {
 	private String userName;
 	private String hashedPassword;
 	private String salt;
+	private Integer userId; // Unique integer to each user.
 
 	private Status status;
 	private String description;
@@ -116,5 +117,13 @@ public class User {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 }
