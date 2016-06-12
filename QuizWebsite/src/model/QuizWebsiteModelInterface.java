@@ -20,6 +20,14 @@ public interface QuizWebsiteModelInterface {
 	public User getUser(String userName);
 	
 	/**
+	 * User getter.
+	 * 
+	 * @param userName - Id of user
+	 * @return user - User object or null if not found.
+	 */
+	public User getUser(Integer id);
+	
+	/**
 	 * Self-explanatory.
 	 * 
 	 * @param userName - String user name
