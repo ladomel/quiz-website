@@ -40,7 +40,10 @@ public class DBConfig {
 	private void init() {
 		DB_USER_NAME = "root";
 		DB_PASSWORD = "nuca";
-		DB_URL = "jdbc:mysql://localhost:3306";
+		/**
+		 * DB name is included in URL - no need to write 'USE database'
+		 */
+		DB_URL = "jdbc:mysql://localhost:3306/oop";
 		DB_DRIVER = "com.mysql.jdbc.Driver";
 		DB_DATABASE_NAME = "oop";
 		DB_MAX_CONNECTIONS = 5;
