@@ -19,6 +19,26 @@ public class User {
 	private HashSet<Integer> achievements;
 	private HashSet<Integer> messages; // Messages stored here. might change, depends on implementation	
 	
+	/*
+	 * these overrides are not necessary but they might come in handy
+	 */
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof User))
+			return false;
+		if (obj == this)
+			return true;
+
+		User otherUser = (User) obj;
+		return this.getUserName().equals(otherUser.getUserName());
+	}
+	
+	@Override
+    public int hashCode() {
+        return this.getUserName().hashCode();
+    }
+	
 	public User(String userName, String hashedPassword, String salt)
 	{
 		setUserName(userName);
