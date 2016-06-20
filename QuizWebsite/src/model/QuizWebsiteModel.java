@@ -3,11 +3,13 @@ package model;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+/*
+ * move to tomcat libraries when running on server
+ */
+//import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 
-//import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import classes.Quiz;
 import classes.User;
@@ -27,7 +29,9 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 
 	private static final String USER_TABLE = "user";
 
-	private static final String USER_USER_ID = "id";
+//	private static final String USER_USER_ID = "id";
+
+	private static final String USER_SALT = "salt";
 	
 	/*
 	 * Because fuck public. 
@@ -39,7 +43,6 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 	private void init() {
 		dbConfig = DBConfig.getInstance();
 		setUpDataSource();
-		setUpDB();
 	}
 	
 	private void setUpDataSource() {
@@ -50,44 +53,6 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 		dataSource.setUrl(dbConfig.DB_URL);
 		// we can control how connection pool behaves
 		dataSource.setMaxIdle(dbConfig.DB_MAX_CONNECTIONS);
-	}
-
-	private void setUpDB() {
-		try {
-			Connection con = dataSource.getConnection();
-			Statement stmt = con.createStatement();
-			createDB(stmt);
-			useDB(stmt);
-			createUserTable(stmt);
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	private void createUserTable(Statement stmt) throws SQLException {
-		// to simplify creation we drop everything created prior to this
-		stmt.executeUpdate("DROP TABLE IF EXISTS " + USER_TABLE + ";" );
-		stmt.executeUpdate("CREATE TABLE " + USER_TABLE + 
-				" ( " + USER_USER_ID +
-				" INT NOT NULL AUTO_INCREMENT UNIQUE KEY);" );
-		stmt.executeUpdate("ALTER TABLE " + USER_TABLE + " ADD " +
-				USER_USER_NAME + " VARCHAR(20) NOT NULL PRIMARY KEY;");
-		stmt.executeUpdate("ALTER TABLE "  + USER_TABLE + " ADD " +
-				USER_HEX_PASSWORD + " VARCHAR(255) NOT NULL;");
-	}
-
-	private void useDB(Statement stmt) throws SQLException {
-		stmt.executeUpdate("USE " +
-				dbConfig.DB_DATABASE_NAME +
-				";");
-	}
-
-	private void createDB(Statement stmt) throws SQLException {
-			stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " +
-					dbConfig.DB_DATABASE_NAME +
-					";");
 	}
 
 	/**
@@ -102,49 +67,22 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
         return singletonInstance;
 	}
 	
-	private ResultSet connectAndExecuteQuery(String command) {
-		ResultSet rs = null;
-		try {
-			Connection con = dataSource.getConnection();
-			Statement stmt = con.createStatement();
-			stmt.executeQuery("USE " + dbConfig.DB_DATABASE_NAME + ";");
-			rs = stmt.executeQuery(command);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return rs;
-	}
-	
-	private void connectAndExecuteDM(String command) {
-		try {
-			Connection con = dataSource.getConnection();
-			Statement stmt = con.createStatement();
-			stmt.executeQuery("USE " + dbConfig.DB_DATABASE_NAME + ";");
-			stmt.executeUpdate(command);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public User getUser(String userName) {
 		User user = null;
-		ResultSet rs = connectAndExecuteQuery(
-				"SELECT * FROM " + USER_TABLE + " WHERE " + 
-						USER_USER_NAME + " LIKE '" +
-				userName +
-				"';");
+		String command = "SELECT * FROM " + 
+				USER_TABLE + " WHERE " + 
+				USER_USER_NAME + " LIKE ?;";
 		try {
-			// assuming user name is unique, therefore result set has
-			// at most 1 entry
-			if(!rs.next())
-				user = null;
-			else {
+			Connection con = dataSource.getConnection();
+			java.sql.PreparedStatement preparedStatement = 
+					con.prepareStatement(command);
+			preparedStatement.setString(1, userName);
+			ResultSet rs = preparedStatement.executeQuery();
+			if(rs.next())
 				user = new User(rs.getString(USER_USER_NAME),
-						rs.getString(USER_HEX_PASSWORD));
-			}
+						rs.getString(USER_HEX_PASSWORD),
+						rs.getString(USER_SALT));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -154,18 +92,41 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 
 	@Override
 	public void deleteUser(String userName) {
-		connectAndExecuteDM("DELETE FROM " + USER_TABLE + 
-				" WHERE " + USER_USER_NAME + " LIKE '" +
-				userName + "';");
+		String command = "DELETE FROM " + 
+				USER_TABLE + " WHERE " + 
+				USER_USER_NAME + " LIKE ?;";
+		try {
+			Connection con = dataSource.getConnection();
+			java.sql.PreparedStatement preparedStatement = 
+					con.prepareStatement(command);
+			preparedStatement.setString(1, userName);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	public void putUser(User user) {
-		connectAndExecuteDM("INSERT INTO " + USER_TABLE +
-				" (" + USER_USER_NAME + ", " + USER_HEX_PASSWORD +
-				") VALUES('" +
-				user.getUserName() + "','" +
-				user.getHashedPassword() + "');");
+	public void addUser(User user) {
+		String command = "INSERT INTO " + 
+				USER_TABLE + " (" + 
+				USER_USER_NAME + ", " + USER_HEX_PASSWORD + ", " + USER_SALT +
+				") VALUES (?, ?, ?);";
+		try {
+			Connection con = dataSource.getConnection();
+			java.sql.PreparedStatement preparedStatement = 
+					con.prepareStatement(command);
+			preparedStatement.setString(1, user.getUserName());
+			preparedStatement.setString(2, user.getHashedPassword());
+			preparedStatement.setString(3, user.getSalt());
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

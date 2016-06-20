@@ -10,12 +10,12 @@ public class ProblemQR extends Problem{
 
 	private static final int QR_ANSWER_LENGTH = 1;
 	
-	private StatementQR problem;
+	private StatementQR statement;
 	private Set<String> answers;
 	
 	public ProblemQR(String newDescription, Set<String> newAnswers)
 	{
-		problem = new StatementQR(newDescription);
+		statement = new StatementQR(newDescription);
 		answers = newAnswers;
 	}
 	
@@ -37,7 +37,7 @@ public class ProblemQR extends Problem{
 	@Override
 	public StatementQR getStatement() 
 	{
-		return problem;
+		return statement;
 	}
 
 	@Override

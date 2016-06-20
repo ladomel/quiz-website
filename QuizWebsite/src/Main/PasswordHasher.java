@@ -64,5 +64,4 @@ public class PasswordHasher {
 		}
 		return hexToString(md.digest(bytes));
 	}
-	
 }
