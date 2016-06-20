@@ -3,8 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <!-- 
-	Parameters: 'statement' - promblem statement;
-				
+	Parameters: 'statement' - problem statement;
+				'answer' + i + '/' + j - possible answer to i-th blank(ex: answer1/12, means blank 0 has at least 13 correct answers);
 
  -->
 
@@ -16,6 +16,10 @@
 <body>
 	Text:
 	<textarea type="text" cols="60" rows="6" name="statement" id="stmnt"></textarea> <br>
+	Correct Answers:
+	<span id="answerfield">
+		
+	</span>
 	
 	<button onclick="addBlank();">Add Blank</button>
 	
@@ -24,9 +28,14 @@
 	</form>
 	
 	<script type="text/javascript">
+		var count = 0;
 		function addBlank(){
 			document.getElementById('stmnt').value += " ______ ";
 			document.getElementById('stmnt').focus();
+			var field = document.createElement("input");
+			field.name = "answer" + count + "/" + "0"; field.className = "ans"; field.type = "text";
+			document.getElementById('answerfield').appendChild(field);
+			count++;
 		}
 	</script>
 </body>
