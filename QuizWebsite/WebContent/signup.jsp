@@ -16,7 +16,7 @@
 		<p id="default">Please fill the blanks below</p>
 		<p id="fillall">Please fill all of the blanks before proceeding</p>
 		<p id="usernameused">Username already used, Please try again</p>
-		<form id="form">
+		<form id="form" method="post">
 			<input class="textbox" type="text" id="username" name="username" placeholder="Username"><br>
 			<input class="textbox" type="password" id="password" name="password"  placeholder="Password"><br><br>
 			<input class="button" type="submit" name="signup" value="SignUp">

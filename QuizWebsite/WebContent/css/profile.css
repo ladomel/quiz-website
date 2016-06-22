@@ -1,0 +1,153 @@
+@CHARSET "ISO-8859-1";
+
+#centerpanel {
+	position: absolute;
+	top: 100px;
+	width: 100%;
+	min-width: 1200px;
+	height: calc(100% - 100px);
+	margin: 0px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	background: #e6e6e6;
+}
+
+#profileimage {
+	height: 200px;
+	width: 200px;
+	position: absolute;
+	top: 20px;
+	left: calc(50% - 400px);
+}
+
+#profilename {
+	height: 50px;
+	font-weight: 600;
+	font-size: 40px;
+	position: absolute;
+	left: calc(50% - 150px);
+	top: 20px;	
+}
+
+#description {
+	height: 130px;
+	width: 550px;
+	font-weight: 400;
+	font-size: 20px;
+	position: absolute;
+	left: calc(50% - 155px);
+	top: 80px;	
+}
+
+#addfriendb {
+	position: absolute;
+	top: 3px;
+	right: 10px;
+	width: 180px;
+	height: 40px;
+	border: none;
+	padding: 5px 5px;
+	background: grey;
+	font-size: 14px;
+	font-weight: 500;
+	color: White;
+}
+
+#addfriendb:hover {background: green;}
+
+#achievements {
+	position: absolute;
+	width: 800px;
+	height: 120px;
+	overflow-y: hidden;
+	overflow-x: auto;
+	top: 250px;
+	display: inline;
+	white-space: nowrap; 
+	background: grey;
+	left: calc(50% - 400px)
+}
+
+#alabel {
+	position: absolute;
+	top: 230px;
+	width: 800px;
+	left: calc(50% - 400px);
+	font-size: 17px;
+	padding-left: 10px;	
+}
+
+
+.achimage {
+	display: inline;
+	max-height: 120px;
+	min-height: 120px;
+}
+
+.divtitle {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 30px;
+	text-align: center;
+	font-size: 25px;
+	font-weight: 600;
+	background: black;
+	color: white;
+}
+
+.list {
+	position: absolute;
+	left: 0px;
+	top: 30px;
+	width: 100%;
+	height: calc(100% - 30px);
+	overflow-y: auto;
+	overflow-x: hidden;	
+}
+
+.listentry {
+	width: 100%;
+	height: 30px;
+	border: none;
+	padding-top: 2px;
+	padding-left: 10px;
+	background: grey;
+	font-size: 20px;
+	display: block;
+}
+
+#friendslist, #createdquizzes {
+	width: 400px;
+	height: 300px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	position: absolute;
+	top: 400px;
+	background: grey;
+	left: calc(50% - 410px);
+	margin-bottom: 80px;
+}
+
+#createdquizzes {
+	left: calc(50% + 10px);
+}
+
+.listentry:hover {
+	background: white;
+}
+
+#editdescr {
+	background: grey;
+	width: 80px;
+	height: 30px;
+	margin: 0;
+	border: none;
+	position: absolute;
+	top: 180px;
+	left: calc(50% + 310px);
+}
+
+
+
