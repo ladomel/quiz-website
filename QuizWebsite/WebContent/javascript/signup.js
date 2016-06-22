@@ -1,6 +1,16 @@
 
 $().ready(function(){
 	$('#form').submit(function(event) {
+		var uname = $('input#username').val();
+		if (uname.includes("<") || uname.includes(">") || uname.includes("!") 
+				|| uname.includes(";") ||uname.includes("/") || uname.includes("\\")){
+			alert("Please don't use  following characters: <,>,!,/,\\,; in username.");
+			return;
+		} 
+		if (uname.length>250) {
+			alert("Limit your username to 250 characters!");
+			return;
+		}
 		if ($('input#username').val() == "" || $('input#password').val()==""){
 			document.getElementById("fillall").style.display = "block";
 			document.getElementById("default").style.display = "none";
@@ -28,13 +38,6 @@ $().ready(function(){
 								data : {
 									username : $('input#username').val(),
 									password : $('input#password').val(),
-								},
-								dataType : "text",
-								success : function (data, textStatus, jqXHR){
-									window.location = "index.jsp";
-								},
-								error: function(jqXHR, textStatus, errorThrown){
-									alert("Problem with Login!");
 								}
 							});
 						}
