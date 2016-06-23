@@ -10,8 +10,7 @@ public class QuestionQR extends Question{
 	
 	private Set<String> answers;
 	
-	/**
-	 * Returns right answer in arrayList. NewAnswers must not be null and must contain at least 1 entry.	
+	/**	
 	 * @param newProblem problem of the question.
 	 * @param newAnswers Set of strings with all correct answers.
 	*/
@@ -22,9 +21,8 @@ public class QuestionQR extends Question{
 	}
 
 	/**
-	 * Returns right answer in arrayList.	
-	 * @param answer Collection of user's filled fields.
-	 * @return grade of answer.
+	 * Returns correct answer in ArrayList.	
+	 * @return ArrayList with one element - correct answer.
 	*/
 	@Override
 	public ArrayList<String> getCorrectAnswers()
@@ -35,6 +33,11 @@ public class QuestionQR extends Question{
 		return answer;
 	}
 	
+	/**
+	 * 	Returns grade of user's answer.
+	 *  @param answer ArrayList with user's answer. 
+	 *  @return grade of the answer.
+	 */
 	@Override
 	public Integer getGrade(ArrayList<String> answer) 
 	{
@@ -43,11 +46,13 @@ public class QuestionQR extends Question{
 		return grade;
 	}
 
+	// Answers getter.
 	private Set<String> getAnswers() 
 	{
 		return answers;
 	}
 
+	// Answers setter.
 	private void setAnswers(Set<String> answers) 
 	{
 		this.answers = answers;
