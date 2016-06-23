@@ -18,11 +18,19 @@ public class QuestionMC extends Question {
 		setAnswers(answers);
 	}
 
+	/**
+	 * Returns ArrayList with correct answer at 0'th place;
+	 * @return ArrayList with correct answer at 0'th place;
+	 */
 	@Override
 	public ArrayList<String> getCorrectAnswers() {
 		return getAnswers();
 	}
 
+	/**
+	 * @param answer ArrayList with user's answer at 0'th position.
+	 * @return grade of user.
+	 */
 	@Override
 	public Integer getGrade(ArrayList<String> answer) {
 		Integer grade = 0;
@@ -30,7 +38,7 @@ public class QuestionMC extends Question {
 		return grade;
 	}
 
-	private ArrayList<String> getAnswers() {
+	public ArrayList<String> getAnswers() {
 		return answers;
 	}
 
