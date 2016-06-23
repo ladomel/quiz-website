@@ -1,14 +1,12 @@
 package classes;
 
-import java.util.HashSet;
-
 public class User {
 	
 	private String userName;
 	private String hashedPassword;
 	private String salt;
 
-	private String description;
+	private String status;
 	
 	/*
 	 * these overrides are not necessary but they might come in handy
@@ -60,11 +58,11 @@ public class User {
 		this.salt = salt;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

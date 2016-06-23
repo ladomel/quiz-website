@@ -27,8 +27,8 @@ public class QuestionQR extends Question{
 	@Override
 	public ArrayList<String> getCorrectAnswers()
 	{
-		Iterator<String> answerIterator = getAnswers().iterator();
 		ArrayList<String> answer = new ArrayList<String>();
+		Iterator<String> answerIterator = getAnswers().iterator();
 		answer.add(answerIterator.next());
 		return answer;
 	}

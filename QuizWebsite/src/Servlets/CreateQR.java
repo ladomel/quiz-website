@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import classes.problem.Abstract.Question;
-import classes.problem.QR.QuestionQR;
+import classes.question.QuestionQR;
+import classes.question.Abstract.Question;
 
 /**
  * Servlet implementation class CreateQR

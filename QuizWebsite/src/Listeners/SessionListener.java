@@ -7,7 +7,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import classes.problem.Abstract.Question;
+import classes.question.Abstract.Question;
 
 
 /**

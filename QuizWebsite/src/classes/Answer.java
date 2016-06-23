@@ -4,15 +4,13 @@ import java.util.ArrayList;
 
 public class Answer {
 	private Integer grade = null; // Null if not graded.
-	private int problemId; // Might not need this.
 	private ArrayList<String> userAnswer;
 
 	/**
 	 *  Constructor stores problem's id number and user's answer object.
 	 */
-	public Answer(int problemId, ArrayList<String> userAnswer) 
+	public Answer(ArrayList<String> userAnswer) 
 	{
-		this.problemId = problemId;
 		this.userAnswer = userAnswer;
 	}
 
@@ -31,15 +29,6 @@ public class Answer {
 	public void setGrade(Integer newGrade)
 	{
 		grade = newGrade;
-	}
-
-	/**
-	 * Returns id of the problem.
-	 * @return id of problem.
-	 */
-	public int getProblemId()
-	{
-		return problemId;
 	}
 
 	/**

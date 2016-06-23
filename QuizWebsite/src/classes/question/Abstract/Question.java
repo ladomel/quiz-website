@@ -3,13 +3,17 @@ package classes.question.Abstract;
 import java.util.ArrayList;
 
 public abstract class Question{
+
+	private String problem;
+
+	/**
+	 * @param newProblem problem description of the class.
+	 */
 	protected Question(String newProblem)
 	{
 		setProblem(newProblem);
 	}
 	
-	private String problem;
-
 	/**
 	 * Returns problem for user to see.	
 	 * @return problem.
@@ -25,15 +29,15 @@ public abstract class Question{
 	}
 	
 	/**
-	 * Returns Collection's grade, or null if wrong format.	
-	 * @param answer Collection of user's filled fields.
+	 * Returns ArrayList's grade, or null if wrong format.	
+	 * @param answer ArrayList of user's filled fields.
 	 * @return grade of answer.
 	*/
 	public abstract Integer getGrade(ArrayList <String> answer);
 	
 	/**
-	 * This function returns collection of correct answers to show user.
-	 * @return Collection of correct answers.
+	 * This function returns ArrayList of correct answers to show user.
+	 * @return ArrayList of correct answers.
 	*/
 	public abstract ArrayList<String> getCorrectAnswers();
 }
