@@ -1,30 +1,31 @@
 package Servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import Main.PasswordHasher;
-import classes.User;
-import model.QuizWebsiteModel;
+import classes.problem.Abstract.Question;
+import classes.problem.QR.QuestionQR;
 
 /**
- * Servlet implementation class Profile
+ * Servlet implementation class CreateQR
  */
-@WebServlet("/Profile")
-public class Profile extends HttpServlet {
+@WebServlet("/CreateQR")
+public class CreateQR extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Profile() {
+    public CreateQR() {
         super();
     }
 
@@ -37,24 +38,26 @@ public class Profile extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 * Takes user Id as parameter and goes to Profile.jsp if found and 
-	 * 
-	 * 
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int userId = Integer.parseInt(request.getParameter("id"));
+		String statement = request.getParameter("statement");
+		int answersSize = Integer.parseInt(request.getParameter("answersSize"));
+		HashSet<String> answers = new HashSet<String>();
 		
-		RequestDispatcher dispatcher;
-		ServletContext ctx= getServletContext();  
-		QuizWebsiteModel model = (QuizWebsiteModel)ctx.getAttribute("model");
-		dispatcher = request.getRequestDispatcher("notfound.jsp");	
+		for(int i = 0; i < answersSize; i++)
+			answers.add(request.getParameter("answer" + i));
 		
-		User user = model.getUser(userId);
-		if(user != null)
-		{
-			request.setAttribute("User", user);
-			dispatcher = request.getRequestDispatcher("Profile.jsp?id=" + userId);
-		}
+		QuestionQR problem = new QuestionQR(statement, answers);
+		
+		HttpSession session = request.getSession();
+		ArrayList<Question> problems = (ArrayList)session.getAttribute("ProblemList");
+		problems.add(problem);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("problemSubmitted.jsp");	
 		dispatcher.forward(request, response);	
 	}
 }
+
+
+
+

@@ -2,8 +2,11 @@ package classes.problem.Abstract;
 
 import java.util.ArrayList;
 
-public abstract class Problem{
+public abstract class Question{
 
+	String description;
+	
+	public abstract String getDescription();
 	/**
 	 * Returns ArrayList's grade, or null if wrong format.	
 	 * @param answer ArrayList of user's filled fields.

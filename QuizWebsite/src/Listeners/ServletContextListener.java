@@ -29,6 +29,7 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
     public void contextDestroyed(ServletContextEvent arg0)  { 
     	model = null;
     	hasher = null;
+    	factory = null;
     }
 
 	/**

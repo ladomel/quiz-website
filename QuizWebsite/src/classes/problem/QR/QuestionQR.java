@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
-import classes.problem.Abstract.Problem;
+import classes.problem.Abstract.Question;
 
-public class ProblemQR extends Problem{
+public class QuestionQR extends Question{
 
 	private static final int QR_ANSWER_LENGTH = 1;
 	
 	private StatementQR statement;
 	private Set<String> answers;
 	
-	public ProblemQR(String newDescription, Set<String> newAnswers)
+	public QuestionQR(String newDescription, Set<String> newAnswers)
 	{
 		statement = new StatementQR(newDescription);
 		answers = newAnswers;

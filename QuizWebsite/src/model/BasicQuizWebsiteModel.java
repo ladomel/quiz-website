@@ -72,4 +72,10 @@ public class BasicQuizWebsiteModel implements QuizWebsiteModelInterface {
 		replaceQuiz(null, quizId);
 	}
 
+	@Override
+	public User getUser(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
