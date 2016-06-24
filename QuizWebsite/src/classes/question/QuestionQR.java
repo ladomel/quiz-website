@@ -15,9 +15,9 @@ public class QuestionQR extends Question{
 	 * @param newProblem problem of the question.
 	 * @param newAnswers Set of strings with all correct answers.
 	*/
-	public QuestionQR(String newProblem, Set<String> newAnswers)
+	public QuestionQR(String newProblem, int grade, Set<String> newAnswers)
 	{
-		super(newProblem);
+		super(newProblem, grade);
 		setAnswers(newAnswers);
 	}
 
@@ -42,19 +42,18 @@ public class QuestionQR extends Question{
 	@Override
 	public Integer getGrade(List<String> answer) 
 	{
-		Integer grade = 0;
-		if(getAnswers().contains(answer.get(0))) grade = 1;
-		return grade;
+		if(getAnswers().contains(answer.get(0))) return super.getGrade();
+		return 0;
 	}
 
 	// Answers getter.
-	private Set<String> getAnswers() 
+	public Set<String> getAnswers() 
 	{
 		return answers;
 	}
 
 	// Answers setter.
-	private void setAnswers(Set<String> answers) 
+	public void setAnswers(Set<String> answers) 
 	{
 		this.answers = answers;
 	}
