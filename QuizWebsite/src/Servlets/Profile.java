@@ -3,13 +3,16 @@ package Servlets;
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Main.PasswordHasher;
 import classes.User;
+import model.QuizWebsiteModel;
 
 /**
  * Servlet implementation class Profile
@@ -34,12 +37,24 @@ public class Profile extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * Takes user Id as parameter and goes to Profile.jsp if found and 
+	 * 
+	 * 
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("id"));
-		User user = new User("Lado", "auff", "salt");
-		request.setAttribute("User", user);
-		RequestDispatcher rd = request.getRequestDispatcher("Profile?id=1");
-		rd.forward(request, response);	
+		int userId = Integer.parseInt(request.getParameter("id"));
+		
+		RequestDispatcher dispatcher;
+		ServletContext ctx= getServletContext();  
+		QuizWebsiteModel model = (QuizWebsiteModel)ctx.getAttribute("model");
+		dispatcher = request.getRequestDispatcher("notfound.jsp");	
+		
+		User user = model.getUser(userId);
+		if(user != null)
+		{
+			request.setAttribute("User", user);
+			dispatcher = request.getRequestDispatcher("Profile.jsp?id=" + userId);
+		}
+		dispatcher.forward(request, response);	
 	}
 }
