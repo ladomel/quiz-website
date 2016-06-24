@@ -4,7 +4,7 @@
 
 <!-- 
 	Parameters: 'statement' - problem statement;
-				'answer' + i + '/' + j - possible answer to i-th blank(ex: answer1/12, means blank 0 has at least 13 correct answers);
+				'answer' + i + '/' + j - possible answer to i-th blank(ex: answer0/12, means blank 0 has at least 13 correct answers);
 
  -->
 
