@@ -3,6 +3,9 @@ package Servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -42,17 +45,23 @@ public class CreateQR extends HttpServlet {
 		HashSet<String> answers = new HashSet<String>();
 		
 		String nextAnswer = "";
-		for(int i = 0; nextAnswer != null; i++)
+		for(int i = 0; i<5; i++)
 		{
+			
 			nextAnswer = request.getParameter("answer" + i);
+			if (nextAnswer == null) break;
 			answers.add(nextAnswer);
 		}
 		
 		QuestionQR questionQR = new QuestionQR(problem, answers);
 		
 		HttpSession session = request.getSession();
-		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
-		questions.add(0, questionQR);
+
+		ArrayList<Question> questions =  (ArrayList<Question>) session.getAttribute("QuestionList");
+
+		questions.add(questionQR);
+		
+		session.setAttribute("QuestionList", questions);
 	}
 }
 
