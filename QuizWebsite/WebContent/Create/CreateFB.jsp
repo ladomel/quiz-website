@@ -14,18 +14,17 @@
 <link rel="stylesheet" type="text/css" href="../css/createtest.css">
 </head>
 <body>
-	Text:
-	<textarea type="text" cols="60" rows="6" name="statement" id="stmnt"></textarea> <br>
-	Correct Answers:
-	<span id="answerfield">
-		
-	</span>
-	
+	<form id="form" onkeypress="return event.keyCode != 13;">
+		Text:
+		<textarea type="text" cols="60" rows="6" name="statement" id="stmnt"></textarea> <br>
+		Correct Answers:
+		<span id="answerfield">
+			
+		</span>
+	</form>	
 	<button onclick="addBlank();">Add Blank</button>
 	
-	<form action="" method="post">
-		<input id="submitquiz" type="submit" value="Submit">
-	</form>
+	<input id="submit" onclick="submit('TakeQuiz');" type="hidden" />
 	
 	<script type="text/javascript">
 		var count = 0;
