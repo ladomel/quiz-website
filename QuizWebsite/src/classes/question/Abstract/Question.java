@@ -5,13 +5,15 @@ import java.util.List;
 public abstract class Question{
 
 	private String problem;
-
+	private int grade; // Grade for each correct answer.
+	
 	/**
 	 * @param newProblem problem description of the class.
 	 */
-	protected Question(String newProblem)
+	protected Question(String newProblem, int grade)
 	{
 		setProblem(newProblem);
+		setGrade(grade);
 	}
 	
 	/**
@@ -40,4 +42,12 @@ public abstract class Question{
 	 * @return List of correct answers.
 	*/
 	public abstract List<String> getCorrectAnswers();
+
+	public int getGrade() {
+		return grade;
+	}
+
+	public void setGrade(int grade) {
+		this.grade = grade;
+	}
 }
