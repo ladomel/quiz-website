@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,20 +11,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import classes.question.QuestionQR;
+import classes.question.QuestionPR;
 import classes.question.Abstract.Question;
 
 /**
- * Servlet implementation class CreateQR
+ * Servlet implementation class CreatePR
  */
-@WebServlet("/CreateQR")
-public class CreateQR extends HttpServlet {
+@WebServlet("/CreatePR")
+public class CreatePR extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreateQR() {
+    public CreatePR() {
         super();
     }
 
@@ -39,6 +38,7 @@ public class CreateQR extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String problem = request.getParameter("statement");
+		String pictureURL = request.getParameter("externalURL");
 		HashSet<String> answers = new HashSet<String>();
 		
 		String nextAnswer = "";
@@ -48,14 +48,10 @@ public class CreateQR extends HttpServlet {
 			answers.add(nextAnswer);
 		}
 		
-		QuestionQR questionQR = new QuestionQR(problem, answers);
+		QuestionPR questionPR = new QuestionPR(problem, pictureURL, answers);
 		
 		HttpSession session = request.getSession();
 		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
-		questions.add(0, questionQR);
+		questions.add(questionPR);
 	}
 }
-
-
-
-

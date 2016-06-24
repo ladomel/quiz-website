@@ -40,7 +40,7 @@ public class CreateFB extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String problem = request.getParameter("problem");
+		String problem = request.getParameter("statement");
 		List<Set<String>> answers = new ArrayList<Set<String>>();
 		
 		String delimeter = "/";

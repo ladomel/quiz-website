@@ -26,10 +26,10 @@ public class SessionListener implements HttpSessionListener {
      * @see HttpSessionListener#sessionCreated(HttpSessionEvent)
      */
     public void sessionCreated(HttpSessionEvent arg0)  { 
-    	ArrayList<Question> problemList = new ArrayList<Question>();
+    	ArrayList<Question> questionList = new ArrayList<Question>();
     	HttpSession s = arg0.getSession();
     	s.setAttribute("MasterUser", null);
-    	s.setAttribute("ProblemList", problemList);
+    	s.setAttribute("QuestionList", questionList);
     }
 
 	/**
@@ -38,7 +38,6 @@ public class SessionListener implements HttpSessionListener {
     public void sessionDestroyed(HttpSessionEvent arg0)  { 
     	HttpSession s = arg0.getSession();
         s.removeAttribute("MasterUser");
-        s.removeAttribute("ProblemList");
+        s.removeAttribute("QuestionList");
     }
-	
 }
