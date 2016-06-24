@@ -32,29 +32,27 @@ public class CreateQR extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String statement = request.getParameter("statement");
-		int answersSize = Integer.parseInt(request.getParameter("answersSize"));
+		String problem = request.getParameter("problem");
 		HashSet<String> answers = new HashSet<String>();
 		
-		for(int i = 0; i < answersSize; i++)
-			answers.add(request.getParameter("answer" + i));
+		String nextAnswer = "";
+		for(int i = 0; nextAnswer != null; i++)
+		{
+			nextAnswer = request.getParameter("answer" + i);
+			answers.add(nextAnswer);
+		}
 		
-		QuestionQR problem = new QuestionQR(statement, answers);
+		QuestionQR questionQR = new QuestionQR(problem, answers);
 		
 		HttpSession session = request.getSession();
-		ArrayList<Question> problems = (ArrayList)session.getAttribute("ProblemList");
-		problems.add(problem);
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("problemSubmitted.jsp");	
-		dispatcher.forward(request, response);	
+		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
+		questions.add(0, questionQR);
 	}
 }
 
