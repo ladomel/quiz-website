@@ -1,15 +1,10 @@
 package classes;
 
-import java.util.ArrayList;
-import java.util.Set;
-
 public class Quiz {
 	private String creatorUserName; // Creator
 	private long dateCreated; 
 	private String description; 
 	private String quizName;
-	private Set<Integer> results; // Set of results. Each try to fill the quiz is 1 Result. "History"
-	private ArrayList<Integer> problems;
 	
 	// Not necessary, might delete.
 	private int maxScore; // Max Score User can get.
@@ -20,12 +15,11 @@ public class Quiz {
 	private boolean isImmediatelyCorrected;
 	private boolean hasPracticeMode;
 	
-	public Quiz(String userName, String quizName, String description, ArrayList<Integer> problems)
+	public Quiz(String userName, String quizName, String description)
 	{
 		setUserName(userName);
 		setDescription(description);
 		setQuizName(quizName);
-		setProblems(problems);
 	}
 	
 	public String getUserName() {
@@ -49,14 +43,6 @@ public class Quiz {
 
 	public void setQuizName(String quizName) {
 		this.quizName = quizName;
-	}
-
-	public ArrayList<Integer> getProblems() {
-		return problems;
-	}
-
-	public void setProblems(ArrayList<Integer> problems) {
-		this.problems = problems;
 	}
 
 	public boolean isRandom() {
@@ -107,11 +93,11 @@ public class Quiz {
 		this.quizTime = quizTime;
 	}
 
-	public Set<Integer> getResults() {
-		return results;
+	public long getDateCreated() {
+		return dateCreated;
 	}
 
-	public void setResults(Set<Integer> results) {
-		this.results = results;
+	public void setDateCreated(long dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 }

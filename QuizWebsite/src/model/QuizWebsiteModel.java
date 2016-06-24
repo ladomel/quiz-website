@@ -153,4 +153,10 @@ public class QuizWebsiteModel implements QuizWebsiteModelInterface {
 
 	}
 
+	@Override
+	public User getUser(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
