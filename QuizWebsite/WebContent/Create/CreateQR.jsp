@@ -12,20 +12,24 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="../css/createtest.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script type="text/javascript" src="../javascript/createquestion.js"></script>
 </head>
 <body>
-	Question:
-	<textarea type="text" cols="60" rows="6" name="statement"></textarea> <br>
-	Correct Answers:
-	<span id="answerfield">
-		<input type="text"  name="answer0">
-	</span>
+	<form id="form" onkeypress="return event.keyCode != 13;">
+		Question:
+		<textarea cols="60" rows="6" name="statement"></textarea> <br>
+		Correct Answers:
+		<span id="answerfield">
+			<input type="text"  name="answer0">
+		</span>
+		<br>
+		<br>
+	</form>
 	<br>
 	<button onclick="addAnswer();">Add Answer</button>
 	
-	<form action="" method="post">
-		<input id="submitquiz" type="submit" value="Submit">
-	</form>
+	<input id="submit" onclick="submit('CreateQR');" type="hidden" />
 	
 	<script type="text/javascript">
 		var count = 1;
