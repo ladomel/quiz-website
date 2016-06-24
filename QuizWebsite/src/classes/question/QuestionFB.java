@@ -2,19 +2,20 @@ package classes.question;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import classes.question.Abstract.Question;
 
 public class QuestionFB extends Question {
 
-	private ArrayList<Set<String>> answers;
+	private List<Set<String>> answers;
 
 	/** 
 	 * @param newProblem Description of the problem with special characters for blanks.
-	 * @param answers - ArrayList of Sets of Strings with correct answers for each blank.
+	 * @param answers - List of Sets of Strings with correct answers for each blank.
 	 */
-	public QuestionFB(String newProblem, ArrayList<Set<String>> answers) {
+	public QuestionFB(String newProblem, List<Set<String>> answers) {
 		super(newProblem);
 		setAnswers(answers);
 	}
@@ -23,10 +24,10 @@ public class QuestionFB extends Question {
 	 * Returns grade according to user's answer. Each answer is counted
 	 * separately and adds 1 point.
 	 * @return Integer with score in it.
-	 * @param answer ArrayList of Strings user entered.
+	 * @param answer List of Strings user entered.
 	 */
 	@Override
-	public Integer getGrade(ArrayList<String> answer) {
+	public Integer getGrade(List<String> answer) {
 		Integer grade = 0;
 		Iterator<String> answerIterator = answer.iterator();
 		Iterator<Set<String>> correctAnswersIterator = getAnswers().iterator();
@@ -37,11 +38,11 @@ public class QuestionFB extends Question {
 	}
 
 	/**
-	 * Return ArrayList with correct answers for user to see.
-	 * @return ArrayList with correct answers for user to see.
+	 * Return List with correct answers for user to see.
+	 * @return List with correct answers for user to see.
 	 */
 	@Override
-	public ArrayList<String> getCorrectAnswers() {
+	public List<String> getCorrectAnswers() {
 		ArrayList<String> correctAnswers = new ArrayList<String>();
 		Iterator<Set<String>> answersIterator = getAnswers().iterator();
 		
@@ -50,12 +51,11 @@ public class QuestionFB extends Question {
 		return correctAnswers;
 	}
 
-	public ArrayList<Set<String>> getAnswers() {
+	public List<Set<String>> getAnswers() {
 		return answers;
 	}
 
-	private void setAnswers(ArrayList<Set<String>> answers) {
+	private void setAnswers(List<Set<String>> answers) {
 		this.answers = answers;
 	}
-
 }

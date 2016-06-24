@@ -2,6 +2,7 @@ package classes.question;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import classes.question.Abstract.Question;
@@ -21,11 +22,11 @@ public class QuestionQR extends Question{
 	}
 
 	/**
-	 * Returns correct answer in ArrayList.	
-	 * @return ArrayList with one element - correct answer.
+	 * Returns correct answer in List.	
+	 * @return List with one element - correct answer.
 	*/
 	@Override
-	public ArrayList<String> getCorrectAnswers()
+	public List<String> getCorrectAnswers()
 	{
 		ArrayList<String> answer = new ArrayList<String>();
 		Iterator<String> answerIterator = getAnswers().iterator();
@@ -35,11 +36,11 @@ public class QuestionQR extends Question{
 	
 	/**
 	 * 	Returns grade of user's answer.
-	 *  @param answer ArrayList with user's answer. 
+	 *  @param answer List with user's answer. 
 	 *  @return grade of the answer.
 	 */
 	@Override
-	public Integer getGrade(ArrayList<String> answer) 
+	public Integer getGrade(List<String> answer) 
 	{
 		Integer grade = 0;
 		if(getAnswers().contains(answer.get(0))) grade = 1;

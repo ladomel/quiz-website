@@ -1,6 +1,6 @@
 package classes.question.Abstract;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Question{
 
@@ -29,15 +29,15 @@ public abstract class Question{
 	}
 	
 	/**
-	 * Returns ArrayList's grade, or null if wrong format.	
-	 * @param answer ArrayList of user's filled fields.
+	 * Returns List's grade, or null if wrong format.	
+	 * @param answer List of user's filled fields.
 	 * @return grade of answer.
 	*/
-	public abstract Integer getGrade(ArrayList <String> answer);
+	public abstract Integer getGrade(List <String> answer);
 	
 	/**
-	 * This function returns ArrayList of correct answers to show user.
-	 * @return ArrayList of correct answers.
+	 * This function returns List of correct answers to show user.
+	 * @return List of correct answers.
 	*/
-	public abstract ArrayList<String> getCorrectAnswers();
+	public abstract List<String> getCorrectAnswers();
 }
