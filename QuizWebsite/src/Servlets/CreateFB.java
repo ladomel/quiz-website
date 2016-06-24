@@ -1,11 +1,21 @@
 package Servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import classes.question.QuestionFB;
+import classes.question.QuestionPR;
+import classes.question.Abstract.Question;
 
 /**
  * Servlet implementation class CreateFB
@@ -19,19 +29,38 @@ public class CreateFB extends HttpServlet {
      */
     public CreateFB() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String problem = request.getParameter("problem");
+		List<Set<String>> answers = new ArrayList<Set<String>>();
 		
+		String delimeter = "/";
+		String nextAnswer;
+		for(int i = 0; request.getParameter("answer" + i + delimeter + 0) != null; i++)
+		{
+			nextAnswer = "";
+			Set<String> possibleAnswersSet= new HashSet<String>();
+			for(int j = 0; nextAnswer != null; j++)
+			{
+				nextAnswer = request.getParameter("answer" + i + delimeter + j);
+				possibleAnswersSet.add(nextAnswer);
+			}
+			answers.add(possibleAnswersSet);
+		}
+		
+		QuestionFB questionFB = new QuestionFB(problem, answers);
+		
+		HttpSession session = request.getSession();
+		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
+		questions.add(questionFB);
 	}
 }
