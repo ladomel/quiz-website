@@ -45,7 +45,7 @@ public class CreateQR extends HttpServlet {
 		HashSet<String> answers = new HashSet<String>();
 		
 		String nextAnswer = "";
-		for(int i = 0; i<5; i++)
+		for(int i = 0; nextAnswer!=null; i++)
 		{
 			
 			nextAnswer = request.getParameter("answer" + i);
