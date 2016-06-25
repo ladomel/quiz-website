@@ -13,6 +13,7 @@ public class QuestionFB extends Question {
 
 	/** 
 	 * @param newProblem - Description of the problem with special characters for blanks
+	 * @param grade - grade for each correct answer
 	 * @param answers - List of Sets of Strings with correct answers for each blank. Must not be empty
 	 */
 	public QuestionFB(String newProblem, int grade, List<Set<String>> answers) {
@@ -22,6 +23,8 @@ public class QuestionFB extends Question {
 
 	@Override
 	public Integer getGrade(List<String> answer) {
+		if(answer == null || answer.size() != getAnswers().size() || answer.contains(null))
+			throw new IllegalArgumentException("Wrong passed answer argument length");
 		Integer grade = 0;
 		Iterator<String> answerIterator = answer.iterator();
 		Iterator<Set<String>> correctAnswersIterator = getAnswers().iterator();
@@ -44,7 +47,7 @@ public class QuestionFB extends Question {
 	/**
 	 * Returns list of set of correct answers for each entry.
 	 * 
-	 * @return answers - list of set of correct answers for each entry.
+	 * @return answers - list of set of correct answers for each entry
 	 */
 	public List<Set<String>> getAnswers() {
 		return answers;
@@ -54,7 +57,7 @@ public class QuestionFB extends Question {
 	 * Sets list of set of correct answers for each entry.
 	 * Throws IllegalArgumentException if wrong parameters passed.
 	 * 
-	 * @param answers - list of set of correct answers for each entry.
+	 * @param answers - list of set of correct answers for each entry
 	 */
 	private void setAnswers(List<Set<String>> answers) {
 		if(answers == null || answers.isEmpty()) throw new IllegalArgumentException("Answer cannot be null or empty!");

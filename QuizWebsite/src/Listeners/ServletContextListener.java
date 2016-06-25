@@ -27,6 +27,7 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      */
     public void contextDestroyed(ServletContextEvent arg0)  { 
+    	
     	model = null;
     	hasher = null;
     	factory = null;
@@ -37,13 +38,13 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
      * Initializes model.
      */
     public void contextInitialized(ServletContextEvent event)  { 
-    	ServletContext ctx=event.getServletContext();  
+    	ServletContext context = event.getServletContext();  
     	model = QuizWebsiteModel.getInstance();
-    	hasher = new PasswordHasher();
     	factory = new ClassFactory();
+    	hasher = new PasswordHasher();
     	
-    	ctx.setAttribute("model", model);  
-    	ctx.setAttribute("factory", factory);  
-    	ctx.setAttribute("hasher", hasher);  
+    	context.setAttribute("model", model);  
+    	context.setAttribute("factory", factory);  
+    	context.setAttribute("hasher", hasher);  
     }
 }

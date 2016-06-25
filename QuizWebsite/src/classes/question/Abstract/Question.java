@@ -32,7 +32,6 @@ public abstract class Question{
 	 * 
 	 * @param newProblem - problem for user to see
 	*/
-	
 	private void setProblem(String newProblem)
 	{
 		if (newProblem == null) throw new IllegalArgumentException("Problem cannot be null!");
@@ -40,7 +39,7 @@ public abstract class Question{
 	}
 	
 	/**
-	 * Returns List's grade, or null if wrong format.
+	 * Returns List's grade, or throws IllegalArgumentException if answer's format is not correct.
 	 * 	
 	 * @param answer - List of user's filled fields
 	 * @return grade - grade of answer

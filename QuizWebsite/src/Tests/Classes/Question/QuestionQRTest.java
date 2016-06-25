@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import classes.question.QuestionQR;
-import factory.ClassFactory;
 
 public class QuestionQRTest {
 
@@ -36,17 +35,23 @@ public class QuestionQRTest {
 	}
 	
 	@Test
+	public void testCorrectAnswers() {
+		assertEquals((int)question.getGrade(question.getCorrectAnswers()), (int)question.getMaxGrade());
+	}
+	
+	@Test
 	public void testBasic() {
 		assertEquals(1, question.getCorrectAnswers().size());
 		assertTrue(answers.contains(question.getCorrectAnswers().get(0))); // Correct answers is in the answers Set.
-		assertEquals(grade, question.getGrade());
+		assertEquals(grade, question.getGrade());	
+		assertEquals(grade, question.getMaxGrade());
 		assertEquals(description, question.getProblem());
 		assertTrue(question.getAnswers().equals(answers));
 	}
 	
 	// Checking user's wrong answer.
 	@Test
-	public void test2() { 
+	public void testGetGrade() { 
 		userAnswer.add("S");
 		assertEquals(0, (int)question.getGrade(userAnswer));
 		userAnswer.add("a");
@@ -54,7 +59,7 @@ public class QuestionQRTest {
 	}
 	
 	@Test
-	public void test3() { 	// Checking user's right answer.
+	public void testGetGrade2() { 	// Checking user's right answer.
 		List<String> userAnswer = new ArrayList<String>();
 		userAnswer.add("a");
 		assertEquals(grade, (int)question.getGrade(userAnswer));
@@ -68,52 +73,65 @@ public class QuestionQRTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest1() { 	
 		grade = 0;
-		question = new QuestionQR(description, grade, answers);
+		new QuestionQR(description, grade, answers);
 	}
 
 	// passing negative grade.
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest2() { 	
 		grade = -1;
-		question = new QuestionQR(description, grade, answers);
+		new QuestionQR(description, grade, answers);
 	}
 
 	// Null description.
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest3() { 	
 		description = null;
-		question = new QuestionQR(description, grade, answers);
+		new QuestionQR(description, grade, answers);
 	}
 
 	// Null answers.
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest4() { 	
 		answers = null;
-		question = new QuestionQR(description, grade, answers);
+		new QuestionQR(description, grade, answers);
+	}
+
+	// answers with null.
+	@Test(expected=IllegalArgumentException.class)
+	public void illegalArgumentTest5() { 	
+		answers.add(null);
+		new QuestionQR(description, grade, answers);
 	}
 	
 	// Empty answers.
 	@Test(expected=IllegalArgumentException.class)
-	public void illegalArgumentTest5() { 
+	public void illegalArgumentTest6() { 
 		answers.clear();
-		question = new QuestionQR(description, grade, answers);
+		new QuestionQR(description, grade, answers);
 	}
 
 	// null userAnswers.
 	@Test(expected=IllegalArgumentException.class)
-	public void illegalArgumentTest6() {
+	public void illegalArgumentTest7() {
 		userAnswer = null;
 		question.getGrade(userAnswer);
 	}
 
-	// Empty userAnswers.
+	// empty userAnswers.
 	@Test(expected=IllegalArgumentException.class)
-	public void illegalArgumentTest7() {
-		userAnswer.clear();;
+	public void illegalArgumentTest8() {
+		userAnswer.clear();
+		question.getGrade(userAnswer);
+	}
+	
+	// userAnswers with null.
+	@Test(expected=IllegalArgumentException.class)
+	public void illegalArgumentTest9() {
+		userAnswer.add(null);
 		question.getGrade(userAnswer);
 	}
 
-	
 	
 	
 	

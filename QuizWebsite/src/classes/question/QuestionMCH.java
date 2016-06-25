@@ -60,7 +60,7 @@ public class QuestionMCH extends Question {
 	 * @param wrongNumbers - list of wrong answers
 	 */
 	public void setWrongAnswers(List<String> wrongAnswers) {
-		if(questions == null || questions.contains(null)) 
+		if(wrongAnswers == null || wrongAnswers.contains(null)) 
 			throw new IllegalArgumentException("Wrong wrongAnswers format!");
 		this.wrongAnswers = wrongAnswers;
 	}

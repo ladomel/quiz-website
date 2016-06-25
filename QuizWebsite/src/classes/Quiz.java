@@ -1,14 +1,24 @@
 package classes;
 
+import java.util.Set;
+
 public class Quiz {
 	private String creatorUserName; // Creator
-	private long dateCreated; 
+	private long dateCreated;  // in milliseconds
+	private int id;	// Unique id for every quiz
 	private String description; 
 	private String quizName;
 	
 	// Not necessary, might delete.
 	private int maxScore; // Max Score User can get.
-	private long quizTime; // Time to take this quiz.
+	private int quizTime; // Time to take this quiz in minutes.
+	private double averageRating; // Average rating made by users.
+	private double averageScore; // Users' average score in the quiz.
+	private long averageTimeMillis; // Users' average time in milliseconds.
+	private int numTries; // Number of times users started this quiz.
+	
+	private String category;
+	private Set<String> tags;
 	
 	private boolean isRandom;
 	private boolean isOnePage;
@@ -85,11 +95,11 @@ public class Quiz {
 		this.maxScore = maxScore;
 	}
 
-	public long getQuizTime() {
+	public int getQuizTime() {
 		return quizTime;
 	}
 
-	public void setQuizTime(long quizTime) {
+	public void setQuizTime(int quizTime) {
 		this.quizTime = quizTime;
 	}
 
@@ -99,5 +109,61 @@ public class Quiz {
 
 	public void setDateCreated(long dateCreated) {
 		this.dateCreated = dateCreated;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public double getAverageRating() {
+		return averageRating;
+	}
+
+	public void setAverageRating(double averageRating) {
+		this.averageRating = averageRating;
+	}
+
+	public int getNumTries() {
+		return numTries;
+	}
+
+	public void setNumTries(int numTries) {
+		this.numTries = numTries;
+	}
+
+	public double getAverageScore() {
+		return averageScore;
+	}
+
+	public void setAverageScore(double averageScore) {
+		this.averageScore = averageScore;
+	}
+
+	public long getAverageTimeMillis() {
+		return averageTimeMillis;
+	}
+
+	public void setAverageTimeMillis(long averageTimeMillis) {
+		this.averageTimeMillis = averageTimeMillis;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public Set<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(Set<String> tags) {
+		this.tags = tags;
 	}
 }

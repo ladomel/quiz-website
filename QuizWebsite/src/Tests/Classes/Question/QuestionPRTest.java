@@ -74,42 +74,42 @@ public class QuestionPRTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest1() { 	
 		grade = 0;
-		question = new QuestionPR(description, grade, pictureURL, answers);
+		new QuestionPR(description, grade, pictureURL, answers);
 	}
 
 	// passing negative grade.
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest2() { 	
 		grade = -1;
-		question = new QuestionPR(description, grade, pictureURL, answers);
+		new QuestionPR(description, grade, pictureURL, answers);
 	}
 
 	// Null description.
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest3() { 	
 		description = null;
-		question = new QuestionPR(description, grade, pictureURL, answers);
+		new QuestionPR(description, grade, pictureURL, answers);
 	}
 
 	// Null answers.
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest4() { 	
 		answers = null;
-		question = new QuestionPR(description, grade, pictureURL, answers);
+		new QuestionPR(description, grade, pictureURL, answers);
 	}
 
 	// answers with null.
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest5() { 	
 		answers.add(null);
-		question = new QuestionPR(description, grade, pictureURL, answers);
+		new QuestionPR(description, grade, pictureURL, answers);
 	}
 	
 	// Empty answers.
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest6() { 
 		answers.clear();
-		question = new QuestionPR(description, grade, pictureURL, answers);
+		new QuestionPR(description, grade, pictureURL, answers);
 	}
 
 	// null userAnswers.

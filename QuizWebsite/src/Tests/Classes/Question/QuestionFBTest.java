@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import classes.question.QuestionFB;
-import classes.question.QuestionQR;
 
 public class QuestionFBTest {
 	private List<Set<String>> answers;
@@ -89,33 +88,33 @@ public class QuestionFBTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest1() { 	
 		answers = null;
-		question = new QuestionFB(description, grade, answers);
+		new QuestionFB(description, grade, answers);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest2() { 	
 		answers.add(null);
-		question = new QuestionFB(description, grade, answers);
+		new QuestionFB(description, grade, answers);
 	}
 	
 
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest3() { 	
 		answers.get(2).add(null);
-		question = new QuestionFB(description, grade, answers);
+		new QuestionFB(description, grade, answers);
 	}
 	
 
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest4() { 	
 		answers.get(2).clear();
-		question = new QuestionFB(description, grade, answers);
+		new QuestionFB(description, grade, answers);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest5() { 	
 		answers.clear();
-		question = new QuestionFB(description, grade, answers);
+		new QuestionFB(description, grade, answers);
 	}
 	
 	// null userAnswers.
@@ -135,6 +134,8 @@ public class QuestionFBTest {
 	// userAnswers with null.
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest9() {
+		userAnswer.add("a");
+		userAnswer.add("b");
 		userAnswer.add(null);
 		question.getGrade(userAnswer);
 	}
