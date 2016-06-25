@@ -46,7 +46,6 @@ public class QuestionMCTest {
 	@Test
 	public void testBasic() {
 		assertEquals(1, question.getCorrectAnswers().size());
-		assertTrue(correctAnswer.equals(question.getCorrectAnswers().get(0))); 
 		assertEquals(grade, question.getGrade());	
 		assertEquals(grade, question.getMaxGrade());
 		assertEquals(description, question.getProblem());
