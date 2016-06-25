@@ -28,13 +28,14 @@ public abstract class Question{
 	}
 	
 	/**
-	 * Sets problem.	
+	 * Sets problem. Throws IllegalArgumentException if newProblem is null.
 	 * 
 	 * @param newProblem - problem for user to see
 	*/
 	
 	private void setProblem(String newProblem)
 	{
+		if (newProblem == null) throw new IllegalArgumentException("Problem cannot be null!");
 		problem = newProblem;
 	}
 	
@@ -64,10 +65,12 @@ public abstract class Question{
 
 	/**
 	 * This function sets grade for each correct answer.
+	 * Throws IllegalArgumentException if grade is negative.
 	 * 
 	 * @param grade - grade for each correct answer
 	*/
 	public void setGrade(int grade) {
+		if (grade < 1) throw new IllegalArgumentException("Grade must be positive!");
 		this.grade = grade;
 	}
 	
