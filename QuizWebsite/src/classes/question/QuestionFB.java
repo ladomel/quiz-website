@@ -12,20 +12,14 @@ public class QuestionFB extends Question {
 	private List<Set<String>> answers;
 
 	/** 
-	 * @param newProblem Description of the problem with special characters for blanks.
-	 * @param answers - List of Sets of Strings with correct answers for each blank.
+	 * @param newProblem - Description of the problem with special characters for blanks
+	 * @param answers - List of Sets of Strings with correct answers for each blank. Must not be empty
 	 */
-	public QuestionFB(String newProblem, List<Set<String>> answers) {
-		super(newProblem);
+	public QuestionFB(String newProblem, int grade, List<Set<String>> answers) {
+		super(newProblem, grade);
 		setAnswers(answers);
 	}
 
-	/**
-	 * Returns grade according to user's answer. Each answer is counted
-	 * separately and adds 1 point.
-	 * @return Integer with score in it.
-	 * @param answer List of Strings user entered.
-	 */
 	@Override
 	public Integer getGrade(List<String> answer) {
 		Integer grade = 0;
@@ -33,14 +27,10 @@ public class QuestionFB extends Question {
 		Iterator<Set<String>> correctAnswersIterator = getAnswers().iterator();
 		
 		while(answerIterator.hasNext())
-			if(correctAnswersIterator.next().contains(answerIterator.next())) grade++;
+			if(correctAnswersIterator.next().contains(answerIterator.next())) grade += getGrade();
 		return grade;
 	}
 
-	/**
-	 * Return List with correct answers for user to see.
-	 * @return List with correct answers for user to see.
-	 */
 	@Override
 	public List<String> getCorrectAnswers() {
 		ArrayList<String> correctAnswers = new ArrayList<String>();
@@ -51,11 +41,31 @@ public class QuestionFB extends Question {
 		return correctAnswers;
 	}
 
+	/**
+	 * Returns list of set of correct answers for each entry.
+	 * 
+	 * @return answers - list of set of correct answers for each entry.
+	 */
 	public List<Set<String>> getAnswers() {
 		return answers;
 	}
 
+	/**
+	 * Sets list of set of correct answers for each entry.
+	 * Throws IllegalArgumentException if wrong parameters passed.
+	 * 
+	 * @param answers - list of set of correct answers for each entry.
+	 */
 	private void setAnswers(List<Set<String>> answers) {
+		if(answers == null || answers.isEmpty()) throw new IllegalArgumentException("Answer cannot be null or empty!");
+		for(int i = 0; i < answers.size(); i++)
+			if(answers.get(i) == null || answers.get(i).isEmpty() || answers.get(i).contains(null)) 
+				throw new IllegalArgumentException("Wrong inner set format!");
 		this.answers = answers;
+	}
+
+	@Override
+	public int getMaxGrade() {
+		return getGrade()*getAnswers().size();
 	}
 }
