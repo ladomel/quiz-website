@@ -16,6 +16,7 @@
 <link rel="stylesheet" type="text/css" href="../css/createtest.css">
 </head>
 <body>
+	<form id="form" onkeypress="return event.keyCode != 13;">
 	Question:
 	<textarea type="text" cols="60" rows="6" name="statement"></textarea> <br>
 	
@@ -30,7 +31,11 @@
 		<input type="text" class="right" name="right0"> 
 		<input type="text" class="answer" name="answer0" size="3">
 	</div>
+	
+	</form>
 	<br><br>
+	
+	<input id="submit" onclick="submit('TakeQuiz');" type="hidden" />
 	
 	<script type="text/javascript">
 		var countleft = 1;
