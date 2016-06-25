@@ -7,7 +7,6 @@ public class Result {
 	private String userName;
 	private Integer finalGrade = null;
 	private long timeStarted; 
-	private long timeFinished;
 	private long timeTaken;
 	private Set<Integer> answers; // Set of integers user got.
 	
@@ -56,11 +55,11 @@ public class Result {
 		this.timeStarted = timeStarted;
 	}
 
-	public long getTimeFinished() {
-		return timeFinished;
+	public long getTimeTaken() {
+		return timeTaken;
 	}
 
-	public void setTimeFinished(long timeFinished) {
-		this.timeFinished = timeFinished;
+	public void setTimeTaken(long timeTaken) {
+		this.timeTaken = timeTaken;
 	}
 }

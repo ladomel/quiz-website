@@ -1,48 +1,96 @@
 package classes.question;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import classes.question.Abstract.Question;
 
 public class QuestionMC extends Question {
 	
-	private List<String> answers;
+	private Set<String> wrongAnswers;
+	private String correctAnswer;
 	
 	/** 
-	 * @param newProblem Description of the problem.
-	 * @param answers - List of Strings, where first string is the correct answer.
+	 * @param newProblem Description of the problem
+	 * @param grade - grade for each correct answer
+	 * @param correctAnswer - correct answer
+	 * @param wrongAnswers - set of wrong Answers
 	 */
-	public QuestionMC(String newProblem, List<String> answers)
+	public QuestionMC(String newProblem, int grade, String correctAnswer, Set<String> wrongAnswers)
 	{
-		super(newProblem);
-		setAnswers(answers);
+		super(newProblem, grade);
+		setCorrectAnswer(correctAnswer);
+		setWrongAnswers(wrongAnswers);
 	}
 
-	/**
-	 * Returns List with correct answer at 0th place;
-	 * @return List with correct answer at 0th place;
-	 */
 	@Override
 	public List<String> getCorrectAnswers() {
-		return getAnswers();
+		List<String> answer = new ArrayList<String>();
+		answer.add(correctAnswer);
+		return answer;
+	}
+
+	@Override
+	public Integer getGrade(List<String> answer) {
+		if(answer == null ||  answer.isEmpty() || answer.get(0) == null) throw new IllegalArgumentException("Answer cannot be null!");
+		if(answer.get(0).equals(getCorrectAnswer())) return getMaxGrade();  
+		return 0;
+	}
+	
+	/**
+	 * Returns set with wrong answers.
+	 * 
+	 * @return wrongAnswers - set with wrong answers
+	 */
+	
+	public Set<String> getAnswers() {
+		return wrongAnswers;
 	}
 
 	/**
-	 * @param answer List with user's answer at 0th position.
-	 * @return grade of user.
+	 * Sets a set with wrong answers.
+	 * Throws IllegalArgumentException if wrongAnswers is null or contains null.
+	 * 
+	 * @param wrongAnswers - set with wrong answers
 	 */
+	private void setWrongAnswers(Set<String> wrongAnswers) {
+		if(wrongAnswers == null || wrongAnswers.contains(null)) throw new IllegalArgumentException("WrongAnswers cannot be null!");
+		this.wrongAnswers = wrongAnswers;
+	}
+
+	/**
+	 * Returns a set with wrong answers.
+	 * 
+	 * @return wrongAnswers - set with wrong answers
+	 */
+	public Set<String> getWrongAnswers() {
+		return wrongAnswers;
+	}
+
+	
 	@Override
-	public Integer getGrade(List<String> answer) {
-		Integer grade = 0;
-		if(answer.get(0).equals(getAnswers().get(0))) grade = 1; // If answer's 0th is same as correct answer.
-		return grade;
+	public int getMaxGrade() {
+		return getGrade();
 	}
 
-	private List<String> getAnswers() {
-		return answers;
+	/**
+	 * Returns correctAnswer.
+	 * 
+	 * @return correctAnswer - string correct answer
+	 */
+	public String getCorrectAnswer() {
+		return correctAnswer;
 	}
 
-	private void setAnswers(List<String> answers) {
-		this.answers = answers;
+	/**
+	 * Sets correctAnswer.
+	 * Throws IllegalArgumentException if correctAnswer is null.
+	 * 
+	 * @param correctAnswer - string correct answer
+	 */
+	public void setCorrectAnswer(String correctAnswer) {
+		if(correctAnswer == null) throw new IllegalArgumentException("Correct answer cannot be null!");
+		this.correctAnswer = correctAnswer;
 	}
 }
