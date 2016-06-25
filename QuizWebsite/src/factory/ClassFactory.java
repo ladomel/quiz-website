@@ -5,6 +5,7 @@ import java.util.Set;
 import classes.Quiz;
 import classes.User;
 import classes.question.QuestionFB;
+import classes.question.QuestionMA;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
 
@@ -34,5 +35,10 @@ public class ClassFactory {
 	public QuestionFB getQuestionFB(String newProblem, int grade, List<Set<String>> newAnswers)
 	{
 		return new QuestionFB(newProblem, grade, newAnswers);
+	}
+	
+	public QuestionMA getQuestionMA(String newProblem, int grade, boolean graded, List<Set<String>> newAnswers)
+	{
+		return new QuestionMA(newProblem, grade, graded, newAnswers);
 	}
 }
