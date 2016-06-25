@@ -1,45 +1,82 @@
 package classes.question;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import classes.question.Abstract.Question;
 
 public class QuestionMCMA extends Question {
 
-	private ArrayList<String> correctAnswers;
-	private ArrayList<String> incorrectAnswers;
+	private List<String> correctAnswers;
+	private List<String> incorrectAnswers;
 	
-	public QuestionMCMA(String newProblem, ArrayList<String> correctAnswers, ArrayList<String> incorrectAnswers) {
-		super(newProblem);
+	/**
+	 * @param newProblem - description of the question
+	 * @param grade - grade for each correct answer
+	 * @param correctAnswers - List with correct answers
+	 * @param incorrectAnswers -  List with incorrect answers
+	 */
+	public QuestionMCMA(String newProblem, int grade, List<String> correctAnswers, List<String> incorrectAnswers) {
+		super(newProblem, grade);
 		setCorrectAnswers(correctAnswers);
 		setIncorrectAnswers(incorrectAnswers);
 	}
-
+	
 	@Override
-	public Integer getGrade(ArrayList<String> answer) {
-		Integer grade = 0;
-		Iterator<String> answerIterator = answer.iterator();
-		while(answerIterator.hasNext())
-			if(getCorrectAnswers().contains(answerIterator.next())) grade++;
-		return grade;
-	}
-
-	@Override
-	public ArrayList<String> getCorrectAnswers() {
+	public List<String> getCorrectAnswers() {
 		return correctAnswers;
 	}
 
-	public void setCorrectAnswers(ArrayList<String> correctAnswers) {
+	/**
+	 * Sets coorectAnswers. Throws IllegalArgumentException on wrong format. 
+	 * 
+	 * @param correctAnswers - List with correct answers
+	 */
+	public void setCorrectAnswers(List<String> correctAnswers) {
+		if(correctAnswers == null || correctAnswers.contains(null)) 
+			throw new IllegalArgumentException("Answer cannot be null!");
 		this.correctAnswers = correctAnswers;
 	}
 
-	public ArrayList<String> getIncorrectAnswers() {
+	/**
+	 * Returns incorrectAnswers.
+	 * 
+	 * @return incorrectAnswers - List with incorrect answers
+	 */
+	public List<String> getIncorrectAnswers() {
+		
 		return incorrectAnswers;
 	}
-
-	public void setIncorrectAnswers(ArrayList<String> incorrectAnswers) {
+	
+	/**
+	 * Sets incoorectAnswers. Throws IllegalArgumentException on wrong format. 
+	 * 
+	 * @param incorrectAnswers - List with incorrect answers
+	 */
+	public void setIncorrectAnswers(List<String> incorrectAnswers) {
+		if(incorrectAnswers == null || incorrectAnswers.contains(null)) 
+			throw new IllegalArgumentException("Answer cannot be null!");
 		this.incorrectAnswers = incorrectAnswers;
 	}
-	
+
+	@Override
+	public Integer getGrade(List<String> answer) {
+		int numCorrect = 0;
+		int numIncorrect = 0;
+		Iterator<String> answerIterator = answer.iterator();
+		String nextAnswer;
+		
+		while(answerIterator.hasNext())
+		{
+			nextAnswer = answerIterator.next();
+			if(getCorrectAnswers().contains(nextAnswer)) numCorrect++;
+			if(getIncorrectAnswers().contains(nextAnswer)) numIncorrect++;
+		}
+		return getGrade()*(numCorrect + (getIncorrectAnswers().size() - numIncorrect));
+	}
+
+	@Override
+	public int getMaxGrade() {
+		return getGrade()*(getCorrectAnswers().size() + getIncorrectAnswers().size());
+	}
 }
