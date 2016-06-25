@@ -48,7 +48,7 @@ public class CreateQR extends HttpServlet {
 			answers.add(nextAnswer);
 		}
 		
-		QuestionQR questionQR = new QuestionQR(problem, answers);
+		QuestionQR questionQR = new QuestionQR(problem, 1, answers);
 		
 		HttpSession session = request.getSession();
 		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
