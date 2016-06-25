@@ -13,32 +13,25 @@ public class QuestionPR extends Question {
 	private String pictureURL;
 	
 	/**	
-	 * @param newProblem problem of the question.
-	 * @param pictureURL URL of the picture in the question.
-	 * @param newAnswers Set of strings with all correct answers.
+	 * @param newProblem - problem of the question, not null
+	 * @param grade - grade for each correct answer
+	 * @param pictureURL - URL of the picture in the question, not null
+	 * @param newAnswers - Set of strings with all correct answers, must contain at least 1 element
 	*/
-	public QuestionPR(String newProblem, String pictureURL, Set<String> newAnswers) {
-		super(newProblem);
+	public QuestionPR(String newProblem, int grade, String pictureURL, Set<String> newAnswers) {
+		super(newProblem, grade);
 		setPictureURL(pictureURL);
 		setAnswers(newAnswers);
 	}
 
-	/**
-	 * 	Returns grade of user's answer.
-	 *  @param answer List with user's answer. 
-	 *  @return grade of the answer.
-	 */
 	@Override
 	public Integer getGrade(List<String> answer) {
-		Integer grade = 0;
-		if(getAnswers().contains(answer.get(0))) grade = 1;
-		return grade;
+		if(answer == null || answer.isEmpty() || answer.get(0) == null)  
+			throw new IllegalArgumentException("Answer has to contain at least 1 element!");
+		if(getAnswers().contains(answer.get(0))) return getMaxGrade();
+		return 0;
 	}
 
-	/**
-	 * Returns correct answer in List.	
-	 * @return List with one element - correct answer.
-	*/
 	@Override
 	public List<String> getCorrectAnswers() {
 		ArrayList<String> answer = new ArrayList<String>();
@@ -47,19 +40,50 @@ public class QuestionPR extends Question {
 		return answer;
 	}
 
-	private Set<String> getAnswers() {
+	/**
+	 * Returns set of correct answers.
+	 * 
+	 * @return answers - set of correct answers
+	*/
+	public Set<String> getAnswers() {
 		return answers;
 	}
-
-	private void setAnswers(Set<String> answers) {
+	
+	/**
+	 * Sets a set of all correct answers for the question.
+	 * Throws IllegalArgumentException answers does not contain at least 1 element.
+	 * 
+	 * @param answers - set of all correct answers for the question
+	 */
+	public void setAnswers(Set<String> answers) 
+	{
+		if(answers == null || answers.isEmpty() || answers.contains(null))  
+			throw new IllegalArgumentException("Answers must contain at least 1 element!");
 		this.answers = answers;
 	}
 
+	/**
+	 * Returns url of picture for user to see.
+	 * 
+	 * @return pictureURL - url of picture for user to see
+	 */
 	public String getPictureURL() {
 		return pictureURL;
 	}
 
+	/**
+	 * Sets url of picture for user to see. 
+	 * Throws IllegalArgumentException if pictureURL is null.
+	 * 
+	 * @param pictureURL - url of picture for user to see
+	 */
 	private void setPictureURL(String pictureURL) {
+		if(pictureURL == null) throw new IllegalArgumentException("pictureURL must not be null!");
 		this.pictureURL = pictureURL;
+	}
+
+	@Override
+	public int getMaxGrade() {
+		return getGrade();
 	}
 }
