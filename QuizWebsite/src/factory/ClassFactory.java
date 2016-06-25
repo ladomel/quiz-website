@@ -7,6 +7,7 @@ import classes.User;
 import classes.question.QuestionFB;
 import classes.question.QuestionMA;
 import classes.question.QuestionMC;
+import classes.question.QuestionMCMA;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
 
@@ -46,5 +47,10 @@ public class ClassFactory {
 	public QuestionMC getQuestionMC(String newProblem, int grade, String correctAnswer, Set<String> wrongAnswers)
 	{
 		return new QuestionMC(newProblem, grade, correctAnswer, wrongAnswers);
+	}
+	
+	public QuestionMCMA getQuestionMCMA(String newProblem, int grade,  List<String> correctAnswers, List<String> wrongAnswers)
+	{
+		return new QuestionMCMA(newProblem, grade, correctAnswers, wrongAnswers);
 	}
 }
