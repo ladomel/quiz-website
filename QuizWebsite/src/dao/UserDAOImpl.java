@@ -13,15 +13,12 @@ public class UserDAOImpl implements UserDAO {
 
 	DataSource dataSource;
 	
-	private static final String USER_NAME = "user_name";
-
-	private static final String HEX_PASSWORD = "hex_password";
-
-	private static final String USER_TABLE = "user";
-
+	private static final String USER_NAME = "username";
+	private static final String HEX_PASSWORD = "hash_password";
+	private static final String USER_TABLE = "users";
 	private static final String SALT = "salt";
-
-	private static final String STATUS = null;
+	private static final String DESCRIPTION = "description";
+	private static final String IMAGE = "image";
 	
 	public UserDAOImpl() {
 		dataSource = null;	// TODO: needs singleton data source
@@ -30,9 +27,7 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public User getUser(String userName) {
 		User user = null;
-		String command = "SELECT * FROM " + 
-				USER_TABLE + " WHERE " + 
-				USER_NAME + " LIKE ?;";
+		String command = selectCommand();
 		try {
 			Connection con = dataSource.getConnection();
 			java.sql.PreparedStatement preparedStatement = 
@@ -52,6 +47,12 @@ public class UserDAOImpl implements UserDAO {
 			e.printStackTrace();
 		}
 		return user;
+	}
+
+	private String selectCommand() {
+		return "SELECT * FROM " + 
+				USER_TABLE + " WHERE " + 
+				USER_NAME + " LIKE ?;";
 	}
 
 	@Override

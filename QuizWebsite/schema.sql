@@ -1,18 +1,20 @@
-drop schema if exists oop;
-create schema oop;
-use oop;
+DROP SCHEMA IF EXISTS oop;
+CREATE SCHEMA oop;
+USE oop;
 
 create table loggedinusers(
 	user_id int(11) not null,
-	primary key(id)
+	primary key(user_id)
 );
 
-CREATE TABLE user(
-	image VARCHAR(255) NOT NULL,
-	user_name VARCHAR(255) NOT NULL PRIMARY KEY,
-	hex_password VARCHAR(255) NOT NULL,
-	salt VARCHAR(255) NOT NULL,
-	description LONGTEXT
+create table users(
+	id int(11) not null auto_increment,
+	username varchar(255) not null unique,
+	hash_password varchar(255) not null,
+	salt varchar(255) not null,
+	description longtext,
+	image varchar(255),
+	primary key(id)
 );
 
 create table friends(
