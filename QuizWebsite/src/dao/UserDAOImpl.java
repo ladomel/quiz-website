@@ -34,7 +34,7 @@ public class UserDAOImpl implements UserDAO {
 			preparedStatement.setString(1, userName);
 			ResultSet rs = preparedStatement.executeQuery();
 			// we need only one row (there should not be more)
-			if(rs.next()) loadIntoUser(rs, user);
+			if(rs.next()) user = loadIntoUser(rs);
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
@@ -44,11 +44,12 @@ public class UserDAOImpl implements UserDAO {
 		return user;
 	}
 
-	private void loadIntoUser(ResultSet rs, User user) throws SQLException {
-		user = new User(rs.getString(USER_NAME),
+	private User loadIntoUser(ResultSet rs) throws SQLException {
+		User user = new User(rs.getString(USER_NAME),
 				rs.getString(HEX_PASSWORD),
 				rs.getString(SALT));
 		// TODO: additional info goes here (user class does not support image)
+		return user;
 	}
 
 	private String selectCommand() {
@@ -96,6 +97,9 @@ public class UserDAOImpl implements UserDAO {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement = 
 					con.prepareStatement(updateCommand());
+			preparedStatement.setString(3, user.getUserName());
+			preparedStatement.setString(1, user.getHashedPassword());
+			preparedStatement.setString(2, user.getSalt());
 			preparedStatement.executeUpdate();
 			con.close();
 		} catch (SQLException e) {
@@ -107,7 +111,8 @@ public class UserDAOImpl implements UserDAO {
 
 	private String updateCommand() {
 		return "UPDATE " + USER_TABLE + 
-				"SET " + IMAGE + " = ? WHERE " + 
+				" SET " + HEX_PASSWORD + " = ?, " +
+				SALT + " = ? WHERE " + 
 				USER_NAME + " LIKE ?;";
 	}
 

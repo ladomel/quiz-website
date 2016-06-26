@@ -1,8 +1,13 @@
 package dao;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import org.apache.commons.dbcp2.BasicDataSource;
+
+//import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 
 /**
  * This class is probably not quite factory, hence the name.
@@ -12,7 +17,7 @@ import javax.sql.DataSource;
  */
 public class DAOInstances {
 
-	private DataSource dataSource;
+	private BasicDataSource dataSource;
 	
 	public DAOInstances() {
 		dataSource = null;
@@ -22,15 +27,14 @@ public class DAOInstances {
 	 * Call this before using any of the methods.
 	 */
 	public void init() {
-		InitialContext ic;
-		try {
-			ic = new InitialContext();
-			// TODO: take this out as a constant
-			dataSource = (DataSource) ic.lookup("java:comp/env/jdbc/oop");
-		} catch (NamingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// TODO: move all these strings as constants
+		dataSource = new BasicDataSource();
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		dataSource.setUsername("root");
+		dataSource.setPassword("");
+		dataSource.setUrl("jdbc:mysql://localhost:3306/oop");
+		// we can control how connection pool behaves
+		dataSource.setMaxIdle(20);
 	}
 	
 	public UserDAO getUserDAO() {
