@@ -17,7 +17,7 @@ public class QuestionMCMA extends Question {
 	 * @param incorrectAnswers -  List with incorrect answers
 	 */
 	public QuestionMCMA(String newProblem, int grade, List<String> correctAnswers, List<String> incorrectAnswers) {
-		super(newProblem, grade);
+		super(newProblem, grade, Type.MCMA);
 		setCorrectAnswers(correctAnswers);
 		setIncorrectAnswers(incorrectAnswers);
 	}
