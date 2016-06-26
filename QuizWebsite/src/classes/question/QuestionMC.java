@@ -1,6 +1,7 @@
 package classes.question;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,13 +40,16 @@ public class QuestionMC extends Question {
 	}
 	
 	/**
-	 * Returns set with wrong answers.
+	 * Returns set with all answers.
 	 * 
-	 * @return wrongAnswers - set with wrong answers
+	 * @return allAnswers - set with all answers
 	 */
 	
-	public Set<String> getAnswers() {
-		return wrongAnswers;
+	public Set<String> getAllAnswers() {
+		Set<String> allAnswers = new HashSet<String>();
+		allAnswers.addAll(getWrongAnswers());
+		allAnswers.add(getCorrectAnswer());
+		return allAnswers;
 	}
 
 	/**

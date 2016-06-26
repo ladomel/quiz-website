@@ -1,14 +1,11 @@
 package classes;
 
-import java.util.Set;
-
 public class Result {
 	private int quizId;
 	private String userName;
 	private Integer finalGrade = null;
 	private long timeStarted; 
 	private long timeTaken;
-	private Set<Integer> answers; // Set of integers user got.
 	
 	public Result(String userName, int quizId)
 	{
@@ -37,14 +34,6 @@ public class Result {
 
 	public void setFinalGrade(Integer finalGrade) {
 		this.finalGrade = finalGrade;
-	}
-
-	public Set<Integer> getAnswers() {
-		return answers;
-	}
-
-	public void setAnswers(Set<Integer> answers) {
-		this.answers = answers;
 	}
 
 	public long getTimeStarted() {

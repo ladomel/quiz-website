@@ -55,6 +55,13 @@ public class QuestionMCTest {
 	}
 	
 	@Test
+	public void testGetAllAnswers() { 
+		assertTrue(question.getAllAnswers().containsAll(question.getWrongAnswers()));
+		assertTrue(question.getAllAnswers().contains(question.getCorrectAnswer()));
+		assertEquals(question.getAllAnswers().size(), question.getWrongAnswers().size() + 1);
+	}
+	
+	@Test
 	public void testGetGrade1() { 
 		userAnswer.add("a");	
 		assertEquals(grade, (int)question.getGrade(userAnswer));

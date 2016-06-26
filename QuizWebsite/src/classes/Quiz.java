@@ -17,7 +17,7 @@ public class Quiz {
 	private long averageTimeMillis; // Users' average time in milliseconds.
 	private int numTries; // Number of times users started this quiz.
 	
-	private String category;
+	private String category; // TODO enum
 	private Set<String> tags;
 	
 	private boolean isRandom;

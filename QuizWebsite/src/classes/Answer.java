@@ -1,24 +1,24 @@
 package classes;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Answer {
 	private Integer grade = null; // Null if not graded.
-	private ArrayList<String> userAnswer;
+	private List<String> userAnswer;
 
 	/**
 	 *  Constructor stores problem's id number and user's answer object.
 	 */
-	public Answer(ArrayList<String> userAnswer) 
+	public Answer(List<String> userAnswer) 
 	{
 		this.userAnswer = userAnswer;
 	}
 
 	/**
-	 * Returns an object with all information about Answer.
+	 * Returns a list with all information about Answer.
 	 * @return answer.
 	 */
-	public ArrayList<String> getAnswer()
+	public List<String> getAnswer()
 	{	
 		return userAnswer;
 	}
