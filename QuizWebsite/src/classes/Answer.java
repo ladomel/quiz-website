@@ -21,7 +21,7 @@ public class Answer {
 	public List<String> getAnswer()
 	{	
 		return userAnswer;
-	}
+	}	
 
 	/**
 	 * Sets the grade user in object.
