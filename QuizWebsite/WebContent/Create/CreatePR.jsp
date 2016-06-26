@@ -16,6 +16,7 @@
 <link rel="stylesheet" type="text/css" href="../css/createtest.css">
 </head>
 <body>
+	<form id="form" onkeypress="return event.keyCode != 13;">
 	Upload a Picture: <input type="file" accept="image/*" name="image"> <br>
 	Or Use External URL(Less Priority, Less Reliable, Could be lost!): 
 		<input type="text"  size="55" name="externalURL"> <br> <br>
@@ -25,13 +26,10 @@
 	<span id="answerfield">
 		<input type="text"  name="answer0">
 	</span>
+	</form>
 	<br>
 	<button onclick="addAnswer();">Add Answer</button>
-	
-	<form action="../Test" method="post">
-		<input id="submitquiz" type="submit" value="Submit">
-	</form>
-	
+	<input id="submit" onclick="submit('TakeQuiz');" type="hidden" />
 	<script type="text/javascript">
 		var count = 1;
 		function addAnswer(){
