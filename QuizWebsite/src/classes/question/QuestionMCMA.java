@@ -1,7 +1,9 @@
 package classes.question;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import classes.question.Abstract.Question;
 
@@ -20,6 +22,19 @@ public class QuestionMCMA extends Question {
 		super(newProblem, grade, Type.MCMA);
 		setCorrectAnswers(correctAnswers);
 		setIncorrectAnswers(incorrectAnswers);
+	}
+	
+	/**
+	 * This function returns set with all answers.
+	 * 
+	 * @return allAnswers - set with all answers
+	 */
+	public Set<String> getAllAnswers()
+	{
+		Set<String> allAnswers = new HashSet<String>();
+		allAnswers.addAll(getCorrectAnswers());
+		allAnswers.addAll(getIncorrectAnswers());
+		return allAnswers;
 	}
 	
 	@Override
