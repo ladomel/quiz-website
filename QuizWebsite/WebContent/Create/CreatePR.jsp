@@ -29,7 +29,7 @@
 	</form>
 	<br>
 	<button onclick="addAnswer();">Add Answer</button>
-	<input id="submit" onclick="submit('TakeQuiz');" type="hidden" />
+	<input id="submit" onclick="submit('CreatePR');" type="hidden" />
 	<script type="text/javascript">
 		var count = 1;
 		function addAnswer(){

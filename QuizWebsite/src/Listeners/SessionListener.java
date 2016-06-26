@@ -17,6 +17,7 @@ import classes.question.Abstract.Question;
 @WebListener
 public class SessionListener implements HttpSessionListener {
 	
+	private ArrayList<Question> questionList = new ArrayList<Question>();
     /**
      * Default constructor. 
      */
@@ -26,7 +27,7 @@ public class SessionListener implements HttpSessionListener {
      * @see HttpSessionListener#sessionCreated(HttpSessionEvent)
      */
     public void sessionCreated(HttpSessionEvent arg0)  { 
-    	ArrayList<Question> questionList = new ArrayList<Question>();
+    //	ArrayList<Question> questionList = new ArrayList<Question>();
     	HttpSession s = arg0.getSession();
     	s.setAttribute("MasterUser", null);
     	s.setAttribute("QuestionList", questionList);

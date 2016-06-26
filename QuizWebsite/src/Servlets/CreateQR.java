@@ -45,9 +45,9 @@ public class CreateQR extends HttpServlet {
 		HashSet<String> answers = new HashSet<String>();
 		
 		String nextAnswer = "";
-		for(int i = 0; nextAnswer!=null; i++)
+		
+		for(int i = 0; ; i++)
 		{
-			
 			nextAnswer = request.getParameter("answer" + i);
 			if (nextAnswer == null) break;
 			answers.add(nextAnswer);
@@ -57,11 +57,12 @@ public class CreateQR extends HttpServlet {
 		
 		HttpSession session = request.getSession();
 
-		ArrayList<Question> questions =  (ArrayList<Question>) session.getAttribute("QuestionList");
-
+		/*
+		ArrayList<Question> questions =  (ArrayList<Question>)session.getAttribute("QuestionList");
 		questions.add(questionQR);
 		
 		session.setAttribute("QuestionList", questions);
+		*/
 	}
 }
 

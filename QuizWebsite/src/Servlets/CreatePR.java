@@ -37,9 +37,15 @@ public class CreatePR extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 		String problem = request.getParameter("statement");
 		String pictureURL = request.getParameter("externalURL");
 		HashSet<String> answers = new HashSet<String>();
+
+		System.out.println("problem: " + problem);
+		System.out.println("pictureURL: " + pictureURL);
+		System.out.println("answers: " + answers);
+		
 		
 		String nextAnswer = "";
 		for(int i = 0; nextAnswer != null; i++)
