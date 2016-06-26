@@ -1,21 +1,36 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="classes.*" %>
+<%@ page import="classes.question.*" %>
+<%@ page import="classes.question.Abstract.*" %>
 <%@ page import="java.util.*" %>
+<%@ page import="Main.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script type="text/javascript" src="../javascript/submitquestion.js"></script>
 </head>
 <body>
-	<h2>Fill in the Blanks:</h2>
-	<%
-		ArrayList<String> a = new ArrayList<String>(); a.add("Sheni"); a.add("vatire me!");
-		out.print(a.get(0) + " ");
-		for (int i=1;i<a.size();i++){
-			out.print("<input type=\"text\" id=\"" + (i-1) + "\"  style=\" width: 50px; \" >");
-			out.print(" " + a.get(i) + " ");
-		}
-		out.print("<input type=\"submit\" style=\"display: none;\">");
+	<% 
+		QuestionFB question = (QuestionFB) ((ArrayList<Question>) request.getSession().getAttribute("Questions")).get(Integer.parseInt(request.getParameter("id")));
 	%>
+	<h2><%= question.getProblem() %></h2>
+	<form id="form"  onkeypress="return event.keyCode != 13;">
+		<%	
+			String text = question.getProblem();
+			int i=0;
+			while (true){
+				int pos = text.indexOf(Constants.BLANK);
+				if (pos>=0) {
+					out.print(" " + text.substring(0,pos) + " ");
+					out.print("<input type='text' name='answer" + i + "' id='answer" + i + "'>");
+					text = text.substring(pos+7);
+				} else break;
+			}
+		%>
+	</form>
+	<input id="submit" onclick="submit('SubmitFB');" type="hidden" />
 </body>
 </html>
