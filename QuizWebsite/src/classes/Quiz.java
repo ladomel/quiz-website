@@ -8,15 +8,17 @@ public class Quiz {
 	private int id;	// Unique id for every quiz
 	private String description; 
 	private String quizName;
+	private int quizTime; // Time to take this quiz in minutes.
+
 	
 	// Not necessary, might delete.
 	private int maxScore; // Max Score User can get.
-	private int quizTime; // Time to take this quiz in minutes.
 	private double averageRating; // Average rating made by users.
 	private double averageScore; // Users' average score in the quiz.
 	private long averageTimeMillis; // Users' average time in milliseconds.
 	private int numTries; // Number of times users started this quiz.
 	
+	// extension
 	private String category; // TODO enum
 	private Set<String> tags;
 	
