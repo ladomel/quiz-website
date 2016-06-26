@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import Main.PasswordHasher;
 import classes.User;
-import model.QuizWebsiteModelTest;
 import model.QuizWebsiteModel;
 /**
  * Servlet implementation class Login
