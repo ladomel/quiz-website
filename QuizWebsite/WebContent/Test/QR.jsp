@@ -13,7 +13,7 @@
 </head>
 <body>
 	<% 
-		QuestionQR question = (QuestionQR) ((ArrayList<Question>) request.getAttribute("Questions")).get(Integer.parseInt(request.getParameter("id")));
+		QuestionQR question = (QuestionQR) ((ArrayList<Question>) request.getSession().getAttribute("Questions")).get(Integer.parseInt(request.getParameter("id")));
 	%>
 	<h2><%= question.getProblem() %></h2>
 	<form id="form"  onkeypress="return event.keyCode != 13;">
