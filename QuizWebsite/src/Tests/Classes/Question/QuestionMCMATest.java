@@ -23,8 +23,8 @@ public class QuestionMCMATest {
 	public void init()
 	{
 		userAnswer = new ArrayList<String>(); 	
-		correctAnswers = new ArrayList<String>();
 		
+		correctAnswers = new ArrayList<String>();
 		correctAnswers.add("b");
 		correctAnswers.add("c");
 		correctAnswers.add("d");
@@ -44,6 +44,13 @@ public class QuestionMCMATest {
 		assertEquals((int)question.getGrade(question.getCorrectAnswers()), (int)question.getMaxGrade());
 	}
 	
+	@Test
+	public void testGetAllAnswers() { 
+		
+		assertEquals(question.getAllAnswers().size(), correctAnswers.size() + incorrectAnswers.size());
+		assertTrue(question.getAllAnswers().containsAll(correctAnswers));
+		assertTrue(question.getAllAnswers().containsAll(incorrectAnswers));
+	}
 	
 	@Test
 	public void testBasic() {
