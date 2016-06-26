@@ -54,7 +54,10 @@ public interface QuizDAO {
 	 */
 	public List<Integer> getCreatedQuizzes(String userName);	
 	
-	public Result getResult(String userName, Integer quizId);
+	/**
+	 * User can take same quiz several times.
+	 */
+	public List<Result> getResult(String userName, Integer quizId);
 	
 	public List<Result> getHighestPerformance(Integer quizId, int n);
 	
