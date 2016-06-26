@@ -20,8 +20,8 @@ public class UserDAOImpl implements UserDAO {
 	private static final String DESCRIPTION = "description";
 	private static final String IMAGE = "image";
 	
-	public UserDAOImpl() {
-		dataSource = null;	// TODO: needs singleton data source
+	public UserDAOImpl(DataSource dataSource) {
+		this.dataSource = dataSource;	// TODO: needs singleton data source
 	}
 	
 	@Override
