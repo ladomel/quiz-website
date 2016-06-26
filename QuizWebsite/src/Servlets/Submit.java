@@ -1,6 +1,10 @@
 package Servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,6 +34,18 @@ public class Submit extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		List<String> userAnswer = new ArrayList<String>();
+		//int position = request.getParameter("id");
+		
+		String nextAnswer = "";
+		for(int i = 0; ; i++)
+		{
+			nextAnswer = request.getParameter("answer" + i);
+			if (nextAnswer == null) break;
+			userAnswer.add(nextAnswer);
+		}
+		
+			
 		
 	}
 }
