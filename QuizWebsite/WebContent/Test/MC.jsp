@@ -13,7 +13,7 @@
 </head>
 <body>
 	<% 
-		QuestionMC question = (QuestionMC) ((ArrayList<Question>) request.getAttribute("Questions")).get(Integer.parseInt(request.getParameter("id")));
+		QuestionMC question = (QuestionMC) ((ArrayList<Question>) request.getSession().getAttribute("Questions")).get(Integer.parseInt(request.getParameter("id")));
 	%>
 	<h2><%= question.getProblem() %></h2>
 	<form id="form"  onkeypress="return event.keyCode != 13;">
