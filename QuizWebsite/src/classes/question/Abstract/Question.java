@@ -6,15 +6,18 @@ public abstract class Question{
 
 	private String problem;
 	private int grade; 
+	private Type type;
+	protected enum Type { QR, FB, MC, PR, MA, MCMA, MCH, TF };
 	
 	/**
 	 * @param newProblem - problem description of the class
 	 * @param grade - grade for each correct answer
 	 */
-	public Question(String newProblem, int grade)
+	public Question(String newProblem, int grade, Type type)
 	{
 		setProblem(newProblem);
 		setGrade(grade);
+		setType(type);
 	}
 	
 	/**
@@ -79,4 +82,12 @@ public abstract class Question{
 	 * @return grade - maximum grade user can get in the question
 	 */
 	public abstract int getMaxGrade();
+
+	public String getType() {
+		return type.toString();
+	}
+
+	protected void setType(Type type) {
+		this.type = type;
+	}
 }

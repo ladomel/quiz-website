@@ -19,7 +19,7 @@ public class QuestionPR extends Question {
 	 * @param newAnswers - Set of strings with all correct answers, must contain at least 1 element
 	*/
 	public QuestionPR(String newProblem, int grade, String pictureURL, Set<String> newAnswers) {
-		super(newProblem, grade);
+		super(newProblem, grade, Type.PR);
 		setPictureURL(pictureURL);
 		setAnswers(newAnswers);
 	}
