@@ -48,7 +48,7 @@ public class CreatePR extends HttpServlet {
 			answers.add(nextAnswer);
 		}
 		
-		QuestionPR questionPR = new QuestionPR(problem, pictureURL, answers);
+		QuestionPR questionPR = new QuestionPR(problem, 1 ,pictureURL, answers);
 		
 		HttpSession session = request.getSession();
 		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");

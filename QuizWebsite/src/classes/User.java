@@ -6,7 +6,7 @@ public class User {
 	private String hashedPassword;
 	private String salt;
 
-	private String status;
+	private String description;
 	
 	/*
 	 * these overrides are not necessary but they might come in handy
@@ -58,11 +58,11 @@ public class User {
 		this.salt = salt;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void getDescription(String status) {
+		this.description = status;
 	}
 }

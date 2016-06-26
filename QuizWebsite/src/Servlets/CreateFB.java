@@ -57,7 +57,7 @@ public class CreateFB extends HttpServlet {
 			answers.add(possibleAnswersSet);
 		}
 		
-		QuestionFB questionFB = new QuestionFB(problem, answers);
+		QuestionFB questionFB = new QuestionFB(problem, 1, answers);
 		
 		HttpSession session = request.getSession();
 		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
