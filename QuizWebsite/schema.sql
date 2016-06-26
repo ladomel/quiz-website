@@ -7,14 +7,12 @@ create table loggedinusers(
 	primary key(id)
 );
 
-create table users(
-	id int(11) not null auto_increment,
-	image varchar(255) not null,
-	username varchar(255) not null unique,
-	hash_password varchar(255) not null,
-	salt varchar(255) not null,
-	description longtext,
-	primary key(id)
+CREATE TABLE user(
+	image VARCHAR(255) NOT NULL,
+	user_name VARCHAR(255) NOT NULL PRIMARY KEY,
+	hex_password VARCHAR(255) NOT NULL,
+	salt VARCHAR(255) NOT NULL,
+	description LONGTEXT
 );
 
 create table friends(
