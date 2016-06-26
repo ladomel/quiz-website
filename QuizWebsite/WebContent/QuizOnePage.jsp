@@ -39,14 +39,13 @@
 	</div>
 	
 <%	
-	/*int numQuestions = ((ArrayList<Question>) request.getSession().getAttribute("Questions")).size();
+	ArrayList<Question> questions = (ArrayList<Question>) request.getSession().getAttribute("Questions");
 	
-	for (int i=0;i<numQuestions;i++){
-		out.print("<iframe name='question" + i + "' src='Question.jsp?id=" + i + "' id='" + i + "' />");
-	}*/
+	for (int i=0;i<questions.size();i++){
+		out.print("<iframe name='question" + i + "' src='" + questions.getType() + ".jsp?id=" + i + "' id='" + i + "' />");
+	}
 %>
-	
-	
+
 	<script type="text/javascript">
 		var startTime = new Date().getTime();
 		function countDown(){
