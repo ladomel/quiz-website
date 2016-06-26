@@ -13,7 +13,7 @@
 </head>
 <body>
 	<% 
-		QuestionPR question = (QuestionPR) ((ArrayList<Question>) request.getAttribute("Questions")).get(Integer.parseInt(request.getParameter("id")));
+		QuestionPR question = (QuestionPR) ((ArrayList<Question>) request.getSession().getAttribute("Questions")).get(Integer.parseInt(request.getParameter("id")));
 	%>
 	<img src='<%= question.getPictureURL() %>' id="image"> <br>
 	<h2><%= question.getProblem() %></h2>
