@@ -22,7 +22,7 @@ public class QuestionMA extends Question {
 	 * @param answers - List of Sets of Strings with correct answers for each blank. Must not be empty
 	 */
 	public QuestionMA(String newProblem, int grade, boolean ordered, List<Set<String>> answers, int numAnswers) {
-		super(newProblem, grade);
+		super(newProblem, grade, Type.MA);
 		setNumAnswers(numAnswers); 
 		setOrdered(ordered);
 		setAnswers(answers);

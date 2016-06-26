@@ -17,7 +17,7 @@ public class QuestionFB extends Question {
 	 * @param answers - List of Sets of Strings with correct answers for each blank. Must not be empty
 	 */
 	public QuestionFB(String newProblem, int grade, List<Set<String>> answers) {
-		super(newProblem, grade);
+		super(newProblem, grade, Type.FB);
 		setAnswers(answers);
 	}
 

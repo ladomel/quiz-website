@@ -19,7 +19,7 @@ public class QuestionMCH extends Question {
 	 * @param wrongAnswers - set of wrong answers
 	 */
 	public QuestionMCH(String newProblem, int grade, List<String> questions, List<String> rightAnswers, List<String> wrongAnswers) {
-		super(newProblem, grade);
+		super(newProblem, grade, Type.MCH);
 		setQuestions(questions);
 		setRightAnswers(rightAnswers);
 		setWrongAnswers(wrongAnswers);
