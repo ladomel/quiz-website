@@ -47,6 +47,7 @@ public class CreateMC extends HttpServlet {
 		for(int i = 0; ;i++)
 		{
 			nextAnswer = request.getParameter("answer" + i);
+		//	System.out.println(nextAnswer);
 			if( nextAnswer == null) break;
 			answers.add(nextAnswer);
 		}

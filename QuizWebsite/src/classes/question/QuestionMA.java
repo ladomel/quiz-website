@@ -40,7 +40,7 @@ public class QuestionMA extends Question {
 
 	@Override
 	public Integer getGrade(List<String> answer) {
-		if(answer == null || answer.size() > getAnswers().size() || answer.contains(null))
+		if(answer == null || answer.size() != numAnswers || answer.contains(null))
 			throw new IllegalArgumentException("Wrong passed answer argument length");
 		Integer grade = 0;
 		Iterator<String> answerIterator = answer.iterator();

@@ -60,8 +60,6 @@ public class CreateQR extends HttpServlet {
 		/*
 		ArrayList<Question> questions =  (ArrayList<Question>)session.getAttribute("QuestionList");
 		questions.add(questionQR);
-		
-		session.setAttribute("QuestionList", questions);
 		*/
 	}
 }
