@@ -42,16 +42,19 @@ public class CreatePR extends HttpServlet {
 		HashSet<String> answers = new HashSet<String>();
 		
 		String nextAnswer = "";
-		for(int i = 0; nextAnswer != null; i++)
+		
+		for(int i = 0; ; i++)
 		{
 			nextAnswer = request.getParameter("answer" + i);
+			if (nextAnswer == null) break;
 			answers.add(nextAnswer);
 		}
 		
 		QuestionPR questionPR = new QuestionPR(problem, 1 ,pictureURL, answers);
-		
+		/*
 		HttpSession session = request.getSession();
 		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
 		questions.add(questionPR);
+		*/
 	}
 }

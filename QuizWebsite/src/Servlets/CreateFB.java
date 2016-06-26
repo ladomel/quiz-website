@@ -42,16 +42,19 @@ public class CreateFB extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String problem = request.getParameter("statement");
 		List<Set<String>> answers = new ArrayList<Set<String>>();
-		
+
+		System.out.println("problem: " + problem);
 		String delimeter = "/";
 		String nextAnswer;
 		for(int i = 0; request.getParameter("answer" + i + delimeter + 0) != null; i++)
 		{
 			nextAnswer = "";
 			Set<String> possibleAnswersSet= new HashSet<String>();
-			for(int j = 0; nextAnswer != null; j++)
+			for(int j = 0; ; j++)
 			{
 				nextAnswer = request.getParameter("answer" + i + delimeter + j);
+				if(nextAnswer == null) break;
+			//	System.out.println("answer " + i + delimeter + j + " = " + nextAnswer);
 				possibleAnswersSet.add(nextAnswer);
 			}
 			answers.add(possibleAnswersSet);
@@ -59,8 +62,10 @@ public class CreateFB extends HttpServlet {
 		
 		QuestionFB questionFB = new QuestionFB(problem, 1, answers);
 		
+		/*
 		HttpSession session = request.getSession();
 		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
-		questions.add(questionFB);
+		questions.add(questionMC);
+		*/
 	}
 }

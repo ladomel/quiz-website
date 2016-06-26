@@ -38,7 +38,7 @@ public class QuestionMATest {
 		grade = 5;
 		ordered = true;
 		
-		question = new QuestionMA(description, grade, ordered, answers);
+		question = new QuestionMA(description, grade, ordered, answers, 4);
 	}
 
 	@Test
@@ -49,7 +49,7 @@ public class QuestionMATest {
 	@Test
 	public void testCorrectAnswers2() {
 		ordered = false;
-		question = new QuestionMA(description, grade, ordered, answers);
+		question = new QuestionMA(description, grade, ordered, answers, 4);
 		assertEquals((int)question.getGrade(question.getCorrectAnswers()), (int)question.getMaxGrade());
 	}
 	
@@ -96,7 +96,7 @@ public class QuestionMATest {
 	@Test
 	public void testGetGrade4() { 
 		ordered = false;
-		question = new QuestionMA(description, grade, ordered, answers);
+		question = new QuestionMA(description, grade, ordered, answers, 4);
 		userAnswer.add("h");	
 		userAnswer.add("g");
 		userAnswer.add("c");
@@ -107,7 +107,7 @@ public class QuestionMATest {
 	@Test
 	public void testGetGrade5() { 
 		ordered = false;
-		question = new QuestionMA(description, grade, ordered, answers);
+		question = new QuestionMA(description, grade, ordered, answers, 4);
 		userAnswer.add("a");	
 		userAnswer.add("a");
 		userAnswer.add("a");
@@ -118,7 +118,7 @@ public class QuestionMATest {
 	@Test
 	public void testGetGrade6() { 
 		ordered = false;
-		question = new QuestionMA(description, grade, ordered, answers);
+		question = new QuestionMA(description, grade, ordered, answers, 4);
 		userAnswer.add("a");	
 		userAnswer.add("b");
 		userAnswer.add("f");
@@ -130,33 +130,33 @@ public class QuestionMATest {
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest1() { 	
 		answers = null;
-		new QuestionMA(description, grade, ordered, answers);
+		new QuestionMA(description, grade, ordered, answers, 4);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest2() { 	
 		answers.add(null);
-		new QuestionMA(description, grade, ordered, answers);
+		new QuestionMA(description, grade, ordered, answers, 4);
 	}
 	
 
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest3() { 	
 		answers.get(2).add(null);
-		new QuestionMA(description, grade, ordered, answers);
+		new QuestionMA(description, grade, ordered, answers, 4);
 	}
 	
 
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest4() { 	
 		answers.get(2).clear();
-		new QuestionMA(description, grade, ordered, answers);
+		new QuestionMA(description, grade, ordered, answers, 4);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void illegalArgumentTest5() { 	
 		answers.clear();
-		new QuestionMA(description, grade, ordered, answers);
+		new QuestionMA(description, grade, ordered, answers, 4);
 	}
 	
 	// null userAnswers.

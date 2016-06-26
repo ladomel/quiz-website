@@ -39,9 +39,9 @@ public class ClassFactory {
 		return new QuestionFB(newProblem, grade, newAnswers);
 	}
 	
-	public QuestionMA getQuestionMA(String newProblem, int grade, boolean graded, List<Set<String>> newAnswers)
+	public QuestionMA getQuestionMA(String newProblem, int grade, boolean graded, List<Set<String>> newAnswers, int numAnswers)
 	{
-		return new QuestionMA(newProblem, grade, graded, newAnswers);
+		return new QuestionMA(newProblem, grade, graded, newAnswers, numAnswers);
 	}
 	
 	public QuestionMC getQuestionMC(String newProblem, int grade, String correctAnswer, Set<String> wrongAnswers)
