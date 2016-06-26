@@ -7,53 +7,50 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" type="text/css" href="css/quizonepage.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script type="text/javascript" src="javascript/submitquiz.js"></script>
 <%
 	Quiz quiz = (Quiz) request.getSession().getAttribute("Quiz");
 %>
 <title><%= quiz.getQuizName() %></title>
-<style>
-	html, body {
-		height: 100%;
-		width: 100%;
-		margin: 0px;
-		padding: 0px;
-	}
-	object {
-		border: black solid 5px;
-		min-height: 400px;
-		max-height: 400px;
-		min-width: 1000px;
-		max-width: 1000px;
-		position: relative;
-		left: 50%;
-		margin-left: -500px;
-	}	
-</style>
 </head>
 <body>
 	<div id="toppanel">
 		<span id="quizname"><%= quiz.getQuizName() %></span>
-		<span id="hours">1</span>hours,
-		<span id="mins">5</span>mins and 
-		<span id="secs">0</span>secs remaining;
+		<span id="clock">
+			<span id="hours"></span>hours,
+			<span id="mins"></span>mins and 
+			<span id="secs"></span>secs remaining
+		</span>
 	</div>
 	
+	<div id="bottompanel">
+		<button id="submitquiz" onclick="submitQuiz();">Submit Quiz</button>
+	</div>
+	
+	<div id="centerpanel">
+	<br>
 <%	
 	ArrayList<Question> questions = (ArrayList<Question>) request.getSession().getAttribute("Questions");
-	
+
 	for (int i=0;i<questions.size();i++){
-		out.print("<iframe name='question" + i + "' src='" + questions.getType() + ".jsp?id=" + i + "' id='" + i + "' />");
+		out.print("<iframe name='question" + i + "' src='Test/" + questions.get(i).getType() + ".jsp?id=" + i + "' id='" + i + "' ></iframe>");
+		out.print("<br>");
 	}
 %>
 
+	</div>
+
 	<script type="text/javascript">
+		var remaining = 60*60*1000 - 1;
 		var startTime = new Date().getTime();
 		function countDown(){
 			var d = new Date().getTime();
-			var k = new Date(d - startTime);
-			var h = k.getHours();
-			var m = k.getMinutes();
-			var s = k.getSeconds(); 
+			var k = remaining - (d - startTime);
+			var h = Math.floor(k / (60*60*1000)); k %= (60*60*1000); 
+			var m = Math.floor(k / (60*1000)); k %= (60*1000);
+			var s = Math.floor(k / 1000); 
 			updateTime(h,m,s);
 		}
 		function updateTime(h,m,s){
@@ -61,7 +58,7 @@
 			document.getElementById("mins").innerHTML = m;
 			document.getElementById("secs").innerHTML = s;
 		}
-		var j = setInterval("countDown()",1000);
+		var j = setInterval("countDown()",100);
 	</script>
 </body>
 </html>
