@@ -17,7 +17,7 @@
 		<form id="loginform" action="Login" method="post">
 			<input class="textbox" type="text" id="username" name="username" placeholder="Username"><br>
 			<input class="textbox" type="password" id="password" name="password" placeholder="Password"><br><br>
-			<input class="button" type="submit" id="submit" value="LogIn">
+			<input class="button" type="submit" id="submit" value="Login">
 		</form>
 		<div id="signupdiv">
 			<h3>Not a Member Yet?</h3>

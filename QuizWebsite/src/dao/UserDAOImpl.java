@@ -44,6 +44,7 @@ public class UserDAOImpl implements UserDAO {
 		return user;
 	}
 
+	
 	private User loadIntoUser(ResultSet rs) throws SQLException {
 		User user = new User(rs.getString(USER_NAME),
 				rs.getString(HEX_PASSWORD),

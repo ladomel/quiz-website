@@ -21,9 +21,9 @@
 		<span id="loginbox">
 			<form  id="loginform" action="Login" method="post">
 				Login:
-				<input type="text" id="username" placeholder="Username">
-				<input type="password" id="password" placeholder="Password">
-				<input type="submit" id="login" value="Login">
+				<input type="text" id="username" name="username" placeholder="Username">
+				<input type="password" id="password" name="password" placeholder="Password">
+				<input class="button" type="submit" id="submit" value="Login">
 			</form>
 		</span>
 		<span id="signupbox">

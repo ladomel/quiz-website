@@ -44,6 +44,8 @@ public class Login extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String userName = request.getParameter("username");
 		String password = request.getParameter("password");
+		System.out.println(userName + "Password" + password);
+		
 		RequestDispatcher dispatcher;
 		ServletContext ctx= getServletContext();  
 		UserDAO userDAO = (UserDAO)ctx.getAttribute("userDAO");
@@ -51,6 +53,7 @@ public class Login extends HttpServlet {
 		User user = userDAO.getUser(userName);
 		
 		dispatcher = request.getRequestDispatcher("invalidlogin.jsp");	
+		
 		if(user != null && hasher.hashPassword(password + user.getSalt()).equals(user.getHashedPassword()))
 		{
 			request.getSession().setAttribute("MasterUser", user);

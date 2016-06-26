@@ -5,9 +5,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+//import org.apache.commons.dbcp2.BasicDataSource;  // Usual.
 
-//import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+import org.apache.tomcat.dbcp.dbcp2.BasicDataSource; // Online.
 
 /**
  * This class is probably not quite factory, hence the name.
@@ -29,9 +29,10 @@ public class DAOInstances {
 	public void init() {
 		// TODO: move all these strings as constants
 		dataSource = new BasicDataSource();
+		
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		dataSource.setUsername("root");
-		dataSource.setPassword("");
+		dataSource.setPassword("nuca");
 		dataSource.setUrl("jdbc:mysql://localhost:3306/oop");
 		// we can control how connection pool behaves
 		dataSource.setMaxIdle(20);
