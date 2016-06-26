@@ -11,8 +11,6 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import org.junit.Before;
-
 import classes.Quiz;
 import classes.question.QuestionMA;
 import classes.question.QuestionMC;

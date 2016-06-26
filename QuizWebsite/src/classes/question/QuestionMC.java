@@ -20,7 +20,7 @@ public class QuestionMC extends Question {
 	 */
 	public QuestionMC(String newProblem, int grade, String correctAnswer, Set<String> wrongAnswers)
 	{
-		super(newProblem, grade);
+		super(newProblem, grade, Type.MC);
 		setCorrectAnswer(correctAnswer);
 		setWrongAnswers(wrongAnswers);
 	}

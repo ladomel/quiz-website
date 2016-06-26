@@ -19,7 +19,7 @@ public class QuestionQR extends Question{
 	*/
 	public QuestionQR(String newProblem, int grade, Set<String> newAnswers)
 	{
-		super(newProblem, grade);
+		super(newProblem, grade, Type.QR);
 		setAnswers(newAnswers);
 	}
 
