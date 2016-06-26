@@ -12,7 +12,7 @@
 	if (request.getSession().getAttribute("MasterUser") == null) toppanel = "toppanel-loggedout.jsp";
 		else toppanel = "toppanel-loggedin.jsp";
 	
-	User user = (User) request.getSession().getAttribute("User");
+	User user = (User)request.getSession().getAttribute("User");
 	String disabled = "disabled";
 %>
 <title><% out.print( "'s Profile"); %></title>

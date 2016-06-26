@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import classes.User;
-import model.QuizWebsiteModel;
+import dao.UserDAO;
 
 /**
  * Servlet implementation class Profile
@@ -41,18 +41,18 @@ public class Profile extends HttpServlet {
 	 * 
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int userId = Integer.parseInt(request.getParameter("id"));
+		String userName = request.getParameter("userName");
 		
 		RequestDispatcher dispatcher;
 		ServletContext ctx= getServletContext();  
-		QuizWebsiteModel model = (QuizWebsiteModel)ctx.getAttribute("model");
+		UserDAO userDAO = (UserDAO)ctx.getAttribute("userDAO");
 		dispatcher = request.getRequestDispatcher("notfound.jsp");	
 		
-		User user = model.getUser(userId);
+		User user = userDAO.getUser(userName);
 		if(user != null)
 		{
 			request.setAttribute("User", user);
-			dispatcher = request.getRequestDispatcher("Profile.jsp?id=" + userId);
+			dispatcher = request.getRequestDispatcher("Profile.jsp?id=" + userName);
 		}
 		dispatcher.forward(request, response);	
 	}

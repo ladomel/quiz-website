@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import Main.PasswordHasher;
 import classes.User;
-import model.QuizWebsiteModel;
+import dao.UserDAO;
 
 /**
  * Servlet implementation class Signup
@@ -44,11 +44,12 @@ public class Signup extends HttpServlet {
 		
 		String userName = request.getParameter("username");
 		String password = request.getParameter("password");
+		System.out.println(userName);
 		
 		ServletContext ctx= getServletContext();  
-		QuizWebsiteModel model = (QuizWebsiteModel)ctx.getAttribute("model");
+		UserDAO userDAO = (UserDAO)ctx.getAttribute("userDAO");
 		PasswordHasher hasher = (PasswordHasher)ctx.getAttribute("hasher");
-		User user = model.getUser(userName);
+		User user = userDAO.getUser(userName);
 		
 		if(user != null)  // If user exists return.
 			{	
@@ -60,7 +61,7 @@ public class Signup extends HttpServlet {
 		String hashedPassword = hasher.hashPassword(password + salt);
 
 		User newUser = new User(userName, hashedPassword, salt);
-		model.addUser(newUser);  // Put in base.
+		userDAO.addUser(newUser.getUserName(), newUser.getHashedPassword(), newUser.getSalt());  // Put in base.
 		out.println("free");
 	}
 }

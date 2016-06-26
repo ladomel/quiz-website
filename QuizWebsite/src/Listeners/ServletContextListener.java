@@ -48,13 +48,17 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
     	
     	ServletContext context = event.getServletContext();
     	
-    	daoFactory = new DAOInstances();	// TODO: add to context
+    	daoFactory = new DAOInstances();
+    	daoFactory.init();
+    	
     	userDAO = daoFactory.getUserDAO();	// TODO: add to context
     	quizDAO = daoFactory.getQuizDAO();	// TODO: add to context
     	
     	factory = new ClassFactory();
     	hasher = new PasswordHasher();
     	
+    	context.setAttribute("userDAO", userDAO);  
+    	context.setAttribute("quizDAO", quizDAO);  
     	context.setAttribute("factory", factory);  
     	context.setAttribute("hasher", hasher);  
     }
