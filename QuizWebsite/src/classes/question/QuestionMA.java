@@ -13,6 +13,7 @@ public class QuestionMA extends Question {
 
 	private List<Set<String>> answers;
 	private boolean ordered;
+	private int numAnswers;
 	
 	/** 
 	 * @param newProblem - Description of the problem with special characters for blanks
@@ -20,8 +21,9 @@ public class QuestionMA extends Question {
 	 * @param ordered - true if answers must be ordered, false otherwise
 	 * @param answers - List of Sets of Strings with correct answers for each blank. Must not be empty
 	 */
-	public QuestionMA(String newProblem, int grade, boolean ordered, List<Set<String>> answers) {
+	public QuestionMA(String newProblem, int grade, boolean ordered, List<Set<String>> answers, int numAnswers) {
 		super(newProblem, grade);
+		setNumAnswers(numAnswers); 
 		setOrdered(ordered);
 		setAnswers(answers);
 	}
@@ -122,5 +124,13 @@ public class QuestionMA extends Question {
 	 */
 	public void setOrdered(boolean ordered) {
 		this.ordered = ordered;
+	}
+
+	public int getNumAnswers() {
+		return numAnswers;
+	}
+
+	public void setNumAnswers(int numAnswers) {
+		this.numAnswers = numAnswers;
 	}
 }
