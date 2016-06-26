@@ -14,6 +14,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="../css/createtest.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script type="text/javascript" src="../javascript/createquestion.js"></script>
 </head>
 <body>
 	<form id="form" onkeypress="return event.keyCode != 13;">
@@ -35,7 +37,7 @@
 	</form>
 	<br><br>
 	
-	<input id="submit" onclick="submit('TakeQuiz');" type="hidden" />
+	<input id="submit" onclick="submit('CreateMCH');" type="hidden" />
 	
 	<script type="text/javascript">
 		var countleft = 1;

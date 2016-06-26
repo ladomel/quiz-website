@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="classes.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="classes.question.Abstract.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -25,14 +28,16 @@
 </style>
 </head>
 <body>
-	<br>
-	<object id="signup" data="Test/FB.jsp"></object> <br>
-	<object id="sign" data="Test/MA.jsp"></object> <br>
-	<object id="siup" data="Test/MC.jsp"></object> <br>
-	<object id="sgnup" data="Test/MCMA.jsp"></object> <br>
-	<object id="sp" data="Test/PR.jsp"></object> <br>
-	<object id="s" data="Test/QR.jsp"></object> <br>
-	<br>
+<%
+	Quiz quiz = (Quiz) request.getAttribute("Quiz");
+	int numQuestions = ((ArrayList<Question>) request.getAttribute("Questions")).size();
+	
+	for (int i=0;i<numQuestions;i++){
+		out.print("<iframe name='question" + i + "' src='Question.jsp?id=" + i + "' id='" + i + "' />");
+	}
+%>
+	
+	
 	<script type="text/javascript">
 		
 	</script>

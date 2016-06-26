@@ -29,7 +29,7 @@
 	<br>
 	<button onclick="addAnswer();">Add Answer</button>
 	
-	<input id="submit" onclick="submit('CreateQR');" type="hidden" />
+	<input id="submit" onclick="submit('CreateQR');"  type="hidden" />
 	
 	<script type="text/javascript">
 		var count = 1;
