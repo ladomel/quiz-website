@@ -12,7 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import Main.PasswordHasher;
 import classes.User;
-import model.QuizWebsiteModel;
+import dao.UserDAO;
+
 /**
  * Servlet implementation class Login
  */
@@ -45,9 +46,9 @@ public class Login extends HttpServlet {
 		String password = request.getParameter("password");
 		RequestDispatcher dispatcher;
 		ServletContext ctx= getServletContext();  
-		QuizWebsiteModel model = (QuizWebsiteModel)ctx.getAttribute("model");
+		UserDAO userDAO = (UserDAO)ctx.getAttribute("userDAO");
 		PasswordHasher hasher = (PasswordHasher)ctx.getAttribute("hasher");
-		User user = model.getUser(userName);
+		User user = userDAO.getUser(userName);
 		
 		dispatcher = request.getRequestDispatcher("invalidlogin.jsp");	
 		if(user != null && hasher.hashPassword(password + user.getSalt()).equals(user.getHashedPassword()))
