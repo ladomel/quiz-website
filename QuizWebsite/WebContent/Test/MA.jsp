@@ -13,7 +13,7 @@
 </head>
 <body>
 	<% 
-		QuestionMA question = (QuestionMA) ((ArrayList<Question>) request.getAttribute("Questions")).get(Integer.parseInt(request.getParameter("id")));
+		QuestionMA question = (QuestionMA) ((ArrayList<Question>) request.getSession().getAttribute("Questions")).get(Integer.parseInt(request.getParameter("id")));
 	%>
 	<h2><%= question.getProblem() %></h2>
 	<p id="warning">Order does <% if (question.isOrdered()) out.print("NOT"); %> matter!</p> 
