@@ -4,8 +4,10 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebListener;
 
 import Main.PasswordHasher;
+import dao.DAOInstances;
+import dao.QuizDAO;
+import dao.UserDAO;
 import factory.ClassFactory;
-import model.QuizWebsiteModel; // Added for some reason, might be wrong.
 
 /**
  * Application Lifecycle Listener implementation class ServletContextListener
@@ -13,7 +15,10 @@ import model.QuizWebsiteModel; // Added for some reason, might be wrong.
  */
 @WebListener
 public class ServletContextListener implements javax.servlet.ServletContextListener {
-	private QuizWebsiteModel model;
+	
+	private DAOInstances daoFactory;
+	private UserDAO userDAO;
+	private QuizDAO quizDAO;
 	private PasswordHasher hasher;
 	private ClassFactory factory;
 	
@@ -26,24 +31,30 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
 	/**
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      */
-    public void contextDestroyed(ServletContextEvent arg0)  { 
-    	
-    	model = null;
+    public void contextDestroyed(ServletContextEvent arg0)  {
     	hasher = null;
     	factory = null;
+    	
+    	daoFactory = null;	
+    	userDAO = null;	
+    	quizDAO = null;
     }
 
 	/**
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      * Initializes model.
      */
-    public void contextInitialized(ServletContextEvent event)  { 
-    	ServletContext context = event.getServletContext();  
-    	model = QuizWebsiteModel.getInstance();
+    public void contextInitialized(ServletContextEvent event)  {
+    	
+    	ServletContext context = event.getServletContext();
+    	
+    	daoFactory = new DAOInstances();	// TODO: add to context
+    	userDAO = daoFactory.getUserDAO();	// TODO: add to context
+    	quizDAO = daoFactory.getQuizDAO();	// TODO: add to context
+    	
     	factory = new ClassFactory();
     	hasher = new PasswordHasher();
     	
-    	context.setAttribute("model", model);  
     	context.setAttribute("factory", factory);  
     	context.setAttribute("hasher", hasher);  
     }
