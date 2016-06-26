@@ -4,7 +4,8 @@
 
   <Resource name="jdbc/oop" auth="Container"
             type="javax.sql.DataSource" username="root" password=""
-            driverClassName="com.mysql.jdbc.Driver" 
+            driverClassName="com.mysql.jdbc.Driver"
+            factory="org.apache.commons.dbcp.BasicDataSourceFactory"
             url="jdbc:mysql://localhost:3306/oop"
             maxActive="20" maxIdle="10"
             />

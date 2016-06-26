@@ -1,5 +1,7 @@
 package dao;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /**
@@ -20,7 +22,15 @@ public class DAOInstances {
 	 * Call this before using any of the methods.
 	 */
 	public void init() {
-		// TODO: set up data source
+		InitialContext ic;
+		try {
+			ic = new InitialContext();
+			// TODO: take this out as a constant
+			dataSource = (DataSource) ic.lookup("java:comp/env/jdbc/oop");
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public UserDAO getUserDAO() {
