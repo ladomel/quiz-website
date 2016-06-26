@@ -39,23 +39,24 @@ public class CreateMC extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String problem = request.getParameter("statement");
 		Set<String> answers = new HashSet<String>();
+		String problem = request.getParameter("statement");
 		String correctAnswer = (request.getParameter("correctanswer"));
-
-		String nextAnswer = "";
-		for(int i = 0; nextAnswer != null; i++)
+		
+		String nextAnswer;
+		for(int i = 0; ;i++)
 		{
 			nextAnswer = request.getParameter("answer" + i);
+			if( nextAnswer == null) break;
 			answers.add(nextAnswer);
 		}
 		
 		QuestionMC questionMC = new QuestionMC(problem, 1, correctAnswer, answers);
 		
+		/*
 		HttpSession session = request.getSession();
 		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
 		questions.add(questionMC);
-		
+		*/
 	}
-
 }
