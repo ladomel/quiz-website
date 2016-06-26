@@ -54,13 +54,12 @@ public class CreateQR extends HttpServlet {
 		}
 		
 		QuestionQR questionQR = new QuestionQR(problem, 1, answers);
-		
-		HttpSession session = request.getSession();
 
-		/*
-		ArrayList<Question> questions =  (ArrayList<Question>)session.getAttribute("QuestionList");
+		
+		ArrayList<Question> questions =  (ArrayList<Question>)request.getSession().getAttribute("QuestionList");
 		questions.add(questionQR);
-		*/
+		System.out.println(questions.get(0).getMaxGrade());
+		
 	}
 }
 
