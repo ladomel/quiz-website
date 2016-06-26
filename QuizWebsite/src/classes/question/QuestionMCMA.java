@@ -24,6 +24,11 @@ public class QuestionMCMA extends Question {
 		setIncorrectAnswers(incorrectAnswers);
 	}
 	
+	/**
+	 * This function returns set with all answers.
+	 * 
+	 * @return allAnswers - set with all answers
+	 */
 	public Set<String> getAllAnswers()
 	{
 		Set<String> allAnswers = new HashSet<String>();
