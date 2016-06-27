@@ -19,7 +19,7 @@
 		<form id="form" method="post">
 			<input class="textbox" type="text" id="username" name="username" placeholder="Username"><br>
 			<input class="textbox" type="password" id="password" name="password"  placeholder="Password"><br><br>
-			<input class="button" type="submit" name="signup" value="SignUp">
+			<input class="button" type="submit" name="signup" value="Signup">
 		</form>
 	</div>
 	<script type="text/javascript">
