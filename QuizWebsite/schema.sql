@@ -55,15 +55,15 @@ create table quizzes(
 	creator_id int(11) not null,
 	name varchar(250) not null,
 	description longtext,
-	is_random boolean not null,
-	is_one_page boolean not null,
-	immediate_correction boolean not null,
-	practice_mode boolean not null, 
+	is_random boolean not null default 0,
+	is_one_page boolean not null default 1,
+	immediate_correction boolean not null default 0,
+	practice_mode boolean not null default 0, 
 	creation_time bigint not null,
-	time bigint,
+	time bigint not null,
 	max_score int(11) not null,
 	category varchar(250),
-	primary key(id)		
+	primary key(id)
 );
 
 create table quiz_problems(
