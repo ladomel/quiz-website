@@ -43,10 +43,12 @@ create table user_achievements(
 	primary key(user_id,achievement_id)
 );
 
-create table question(
-	id int(11) not null,
+create table questions(
+	id int(11) not null auto_increment,
+	quiz_id int(11) not null,
 	problem longtext not null,
 	type varchar(50) not null,
+	grade int(11) not null,
 	primary key(id)
 );
 
