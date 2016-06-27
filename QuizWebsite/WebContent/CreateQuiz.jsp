@@ -17,7 +17,7 @@
 	else toppanel = "toppanel-loggedin.jsp";
 %>
 	<div id="centerpanel">
-		<div id="quizinfo">
+		<form id="infoform" action="CreateQuiz" method="post">
 			Title: <input type="text" id="name" name="name"> <br>
 			Description: <textarea cols="60" rows="4" name="description" id="desc"></textarea> <br> 
 			Random? <input type="checkbox" id="random" name="random"> <br>
@@ -25,7 +25,7 @@
 			Practice mode? <input type="checkbox" id="practice" name="practice"> <br>
 			Immediate Correction? <input type="checkbox" id="imcorr" name="correction"> <br>
 			Max Time = <input type="text" id="time" name="time">mins
-		</div>
+		</form>
 		<div id="questions"></div>
 	</div>
 	<div id="bottompanel">
