@@ -12,7 +12,12 @@ function nextQuestion(){
 	document.getElementById("iframe").src = "Question?id=" + num;
 }
 
+$(window).bind('beforeunload', function() {
+	return 'Submit Quiz or Prepare to Lose Everything(ha ha ha ha) \n Still Want to Quit?';
+});
+
 var remaining = 60*60*1000 - 1;
+
 var startTime = new Date().getTime();
 function countDown(){
 	var d = new Date().getTime();
