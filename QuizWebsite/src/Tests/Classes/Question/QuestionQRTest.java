@@ -32,6 +32,7 @@ public class QuestionQRTest {
 		answers.add("b");
 		
 		question = new QuestionQR(description, grade, answers);
+		System.out.println(question.toString());
 	}
 	
 	@Test
