@@ -46,7 +46,18 @@ public class Quiz {
 				this.isOnePage() == other.isOnePage() &&
 				this.isImmediatelyCorrected() == other.isImmediatelyCorrected() &&
 				this.isHasPracticeMode() == other.isHasPracticeMode();
-	}	
+	}
+	
+	@Override
+	public String toString() {
+		return this.getId() + " | " + this.getUserName() + " | " +
+				this.getDateCreated() + " | " + this.getDescription()
+				+ " | " + this.getQuizName() + " | "
+				+ this.getMaxScore() + " | " + this.getQuizTime() + " | "
+				+ this.isRandom() + " | " + this.isOnePage() + " | "
+				+ this.isImmediatelyCorrected() + " | "
+				+ this.isHasPracticeMode();
+	}
 	
 	public Quiz(String userName, String quizName, String description)
 	{
