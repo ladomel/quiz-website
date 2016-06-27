@@ -1,4 +1,16 @@
 
+function login(){
+	var resp2 = $.ajax({
+		type: "POST",
+		url: "Login",
+		data : {
+			username : $('input#username').val(),
+			password : $('input#password').val(),
+		}
+	});
+	window.location = "index.jsp";
+}
+
 $().ready(function(){
 	$('#form').submit(function(event) {
 		var uname = $('input#username').val();
@@ -31,16 +43,7 @@ $().ready(function(){
 							document.getElementById("usernameused").style.display = "block";	
 							document.getElementById("username").value = "";
 							document.getElementById("password").value = "";
-						} else {
-							var resp2 = $.ajax({
-								type: "POST",
-								url: "Login",
-								data : {
-									username : $('input#username').val(),
-									password : $('input#password').val(),
-								}
-							});
-						}
+						} else login();
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						alert("Problem with SignUp!");
