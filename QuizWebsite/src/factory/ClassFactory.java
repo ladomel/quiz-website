@@ -2,8 +2,6 @@ package factory;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.runner.Result;
-
 import classes.Answer;
 import classes.Quiz;
 import classes.User;
