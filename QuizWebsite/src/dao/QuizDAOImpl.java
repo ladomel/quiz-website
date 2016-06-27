@@ -216,7 +216,10 @@ public class QuizDAOImpl implements QuizDAO {
 	}
 
 	private String recentCommand() {
-		return "SELECT * FROM quizzes ORDER BY creation_time DESC LIMIT ?;";
+		return "SELECT *, username " + 
+				"FROM quizzes INNER " + 
+				"JOIN users ON users.id = quizzes.creator_id " + 
+				"ORDER BY creation_time DESC LIMIT ?;";
 	}
 
 	@Override
