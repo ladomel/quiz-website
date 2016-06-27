@@ -37,6 +37,7 @@ public class QuestionTFTest {
 		answers.add("True");
 		
 		question = new QuestionTF(description, grade, propositions, answers);
+		System.out.println(question.toString());
 	}
 
 	@Test
