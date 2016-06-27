@@ -76,9 +76,9 @@ create table quizzes(
 
 create table quiz_problems(
 	quiz_id int(11) not null,
-	index int(11) not null,
+	`index` int(11) not null,
 	question_id int(11) not null,
-	primary key(quiz_id,index)
+	primary key(quiz_id, `index`)
 );
 
 create table friendrequests(
@@ -118,5 +118,5 @@ create table  user_answers(
 	result_id int(11) not null,
 	question_id int(11) not null,
 	user_answer longtext,
-	primary key(history_id,problem_id)
+	primary key(result_id, question_id)
 );
