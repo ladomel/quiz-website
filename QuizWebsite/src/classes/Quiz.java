@@ -9,10 +9,15 @@ public class Quiz {
 	private String description; 
 	private String quizName;
 	private int quizTime; // Time to take this quiz in minutes.
-
+	private int maxScore; // Max Score User can get.
+	private boolean isRandom;
+	private boolean isOnePage;
+	private boolean isImmediatelyCorrected;
+	private boolean hasPracticeMode;
+	
 	
 	// Not necessary, might delete.
-	private int maxScore; // Max Score User can get.
+	
 	private double averageRating; // Average rating made by users.
 	private double averageScore; // Users' average score in the quiz.
 	private long averageTimeMillis; // Users' average time in milliseconds.
@@ -22,10 +27,26 @@ public class Quiz {
 	private String category; // TODO enum
 	private Set<String> tags;
 	
-	private boolean isRandom;
-	private boolean isOnePage;
-	private boolean isImmediatelyCorrected;
-	private boolean hasPracticeMode;
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Quiz))
+			return false;
+		if (obj == this)
+			return true;
+
+		Quiz other = (Quiz) obj;
+		return this.getUserName() == other.getUserName() &&
+				this.getDateCreated() == other.getDateCreated() &&
+				this.getId() == other.getId() &&
+				this.getDescription() == other.getDescription() &&
+				this.getQuizName() == other.getQuizName() &&
+				this.getMaxScore() == other.getMaxScore() &&
+				this.getQuizTime() == other.getQuizTime() &&
+				this.isRandom() == other.isRandom() &&
+				this.isOnePage() == other.isOnePage() &&
+				this.isImmediatelyCorrected() == other.isImmediatelyCorrected() &&
+				this.isHasPracticeMode() == other.isHasPracticeMode();
+	}	
 	
 	public Quiz(String userName, String quizName, String description)
 	{
