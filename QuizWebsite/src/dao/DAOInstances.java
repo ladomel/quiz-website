@@ -32,7 +32,7 @@ public class DAOInstances {
 		
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		dataSource.setUsername("root");
-		dataSource.setPassword("nuca");
+		dataSource.setPassword("558751");
 		dataSource.setUrl("jdbc:mysql://localhost:3306/oop");
 		// we can control how connection pool behaves
 		dataSource.setMaxIdle(20);
