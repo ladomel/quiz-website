@@ -35,11 +35,11 @@ public class Quiz {
 			return true;
 
 		Quiz other = (Quiz) obj;
-		return this.getUserName() == other.getUserName() &&
+		return this.getUserName().equals(other.getUserName())  &&
 				this.getDateCreated() == other.getDateCreated() &&
 				this.getId() == other.getId() &&
-				this.getDescription() == other.getDescription() &&
-				this.getQuizName() == other.getQuizName() &&
+				this.getDescription().equals(other.getDescription())  &&
+				this.getQuizName().equals(other.getQuizName()) &&
 				this.getMaxScore() == other.getMaxScore() &&
 				this.getQuizTime() == other.getQuizTime() &&
 				this.isRandom() == other.isRandom() &&

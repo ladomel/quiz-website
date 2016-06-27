@@ -53,7 +53,6 @@ public class QuizDAOImpl implements QuizDAO {
 		Quiz quiz = modelFactory.getQuiz(rs.getString("username"),
 				rs.getString("name"),
 				rs.getString("description"));
-		quiz.setDateCreated(rs.getLong("creation_time"));
 		quiz.setRandom(rs.getBoolean("is_random"));
 		quiz.setQuizTime(rs.getInt("time"));
 		quiz.setOnePage(rs.getBoolean("is_one_page"));
@@ -61,6 +60,7 @@ public class QuizDAOImpl implements QuizDAO {
 		quiz.setId(rs.getInt("id"));
 		quiz.setHasPracticeMode(rs.getBoolean("practice_mode"));
 		quiz.setDateCreated(rs.getLong("creation_time"));
+		quiz.setMaxScore(rs.getInt("max_score"));
 		return quiz;
 	}
 
