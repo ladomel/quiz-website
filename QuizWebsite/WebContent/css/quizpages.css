@@ -1,0 +1,110 @@
+@CHARSET "ISO-8859-1";
+
+html , body {
+	height: 100%;
+	width: 100%;
+	min-width: 1200px;
+	overflow: hidden;
+}
+
+#toppanel {
+	min-width: 1200px;
+	height: 50px;
+	width: 100%;
+	background: grey;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+#quizname {
+	height: 50px;
+	font-size: 40px;
+	color: white;
+	font-weight: 550;
+	position: relative;
+	left: 10px;
+	overflow: hidden;
+}
+
+#clock {
+	width: 400px;
+	height: 30px;
+	font-size: 22px;	
+	position: absolute;;
+	right: 10px;
+	top: 10px;
+}
+
+#hours, #mins , #secs {
+	width: 35px;
+	height: 35px;
+	text-align: center;
+	color: red;
+	font-weight: 500;
+	display: inline-block;
+	font-size: 30px;
+}
+
+#centerpanel {
+	min-width: 1200px;
+	height: calc(100% - 80px);
+	width: 100%;
+	position: absolute;
+	top: 50px;
+	left: 0px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+#bottompanel {
+	min-width: 1200px;
+	height: 30px;
+	width: 100%;
+	background: grey;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	overflow: hidden;
+}
+
+iframe {
+	width: 1000px;
+	overflow-x: hidden;
+	position: relative;
+	left: calc(50% - 500px);
+	height: 480px;
+	border: 5px solid blue;
+}
+
+#iframe {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	border: none;
+}
+
+#submitquiz , #submitquizz, #nextquestion {
+		width: 200px;
+		height: 30px;
+		border: none;
+		position: absolute;
+		left: calc(50% - 100px);
+		outline: 0;
+		background: green;
+		font-size: 20px;
+}
+
+#submitquiz:hover, #submitquizz:hover ,#nextquestion:hover  {
+	background: blue;
+}
+
+#submitquizz {
+	left: 20px;
+}
+
+#nextquestion {
+	left: calc(100% - 220px);
+}
