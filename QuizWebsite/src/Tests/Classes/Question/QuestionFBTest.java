@@ -32,6 +32,8 @@ public class QuestionFBTest {
 		grade = 5;
 		
 		question = new QuestionFB(description, grade, answers);
+		System.out.println(question.toString());
+		
 	}
 	
 	@Test
