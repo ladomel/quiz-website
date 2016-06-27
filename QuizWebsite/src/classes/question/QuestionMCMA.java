@@ -23,6 +23,23 @@ public class QuestionMCMA extends Question {
 		setCorrectAnswers(correctAnswers);
 		setIncorrectAnswers(incorrectAnswers);
 	}
+
+	@Override
+	public String toString() {
+		String correctAnswers = "";
+		for (String s : getCorrectAnswers()) {
+			correctAnswers += s + " ";
+		}
+		String incorrectAnswers = "";
+		for (String s : getIncorrectAnswers()) {
+			incorrectAnswers += s + " ";
+		}
+		return "Problem: " + getProblem() + " | " +
+				"Grade: " + getGrade() + " | " +
+				"Correct Answers: " + correctAnswers +
+				"Incorrect Answers: " + incorrectAnswers;
+				
+	}
 	
 	/**
 	 * This function returns set with all answers.
