@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 
 import classes.question.QuestionMC;
 import classes.question.QuestionQR;
+import classes.question.Abstract.Question;
 
 public class QuestionDAOImpl implements QuestionDAO {
 
@@ -28,13 +29,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 	}
 
 	@Override
-	public List<QuestionQR> getQR(int quizId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<QuestionMC> getMC(int quizId) {
+	public List<Question> getQuestions(int quizId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

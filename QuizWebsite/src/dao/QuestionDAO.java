@@ -4,6 +4,7 @@ import java.util.List;
 
 import classes.question.QuestionMC;
 import classes.question.QuestionQR;
+import classes.question.Abstract.Question;
 
 public interface QuestionDAO {
 	
@@ -11,8 +12,6 @@ public interface QuestionDAO {
 	
 	public void addMC(int quizId, QuestionMC mc);
 	
-	public List<QuestionQR> getQR(int quizId);
-	
-	public List<QuestionMC> getMC(int quizId);
+	public List<Question> getQuestions(int quizId);
 
 }
