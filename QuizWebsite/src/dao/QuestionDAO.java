@@ -5,7 +5,7 @@ import java.util.List;
 import classes.question.QuestionMC;
 import classes.question.QuestionQR;
 
-public interface ProblemDAO {
+public interface QuestionDAO {
 	
 	public void addQR(int quizId, QuestionQR qr);
 	
