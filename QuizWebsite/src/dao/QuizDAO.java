@@ -50,9 +50,9 @@ public interface QuizDAO {
 	public List<Result> getRecentResults(String userName, int n);
 	
 	/**
-	 * Quiz ids ordered by date (new to old).
+	 * Quizes ordered by date (new to old).
 	 */
-	public List<Integer> getCreatedQuizzes(String userName);	
+	public List<Quiz> getCreatedQuizzes(String userName);	
 	
 	/**
 	 * User can take same quiz several times.
