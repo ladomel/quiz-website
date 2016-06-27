@@ -52,6 +52,12 @@ create table questions(
 	primary key(id)
 );
 
+create table answers(
+	question_id int(11) not null,
+	answer varchar(255) not null,
+	field_id int(11) default 0
+);
+
 create table quizzes(
 	id int(11) not null auto_increment,
 	creator_id int(11) not null,
