@@ -27,9 +27,9 @@ public interface QuizDAO {
 	 * Adds given quiz into quizzes.
 	 * 
 	 * @param quiz - Quiz object
-	 * @return successful - boolean false when could not add
+	 * @return id - id of added quiz
 	 */
-	public boolean addQuiz(Quiz quiz);
+	public int addQuiz(Quiz quiz);
 	
 	/**
 	 * Deletes quiz with given quiz id.

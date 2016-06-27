@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,11 +118,10 @@ public class QuizDAOImpl implements QuizDAO {
 	}
 
 	@Override
-	public boolean addQuiz(Quiz quiz) {
+	public int addQuiz(Quiz quiz) {
+		int id = 0;
 		try {
 			Connection con = dataSource.getConnection();
-			// if exists can not add
-			if(getQuiz(quiz.getId()) != null) return false;
 			PreparedStatement preparedStatement =
 					con.prepareStatement(addingCommand());
 			preparedStatement.setString(1, quiz.getUserName());
@@ -135,12 +135,23 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setInt(9, quiz.getQuizTime());
 			preparedStatement.setInt(10, quiz.getMaxScore());
 			preparedStatement.executeUpdate();
+			id = lastInsertId(con);
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return true;
+		return id;
+	}
+
+	private int lastInsertId(Connection con) throws SQLException {
+		int id = 0;
+		Statement stmt = (Statement) con.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID();");
+		rs.next();
+		id = rs.getInt("last_insert_id()");
+		rs.close();
+		return id;
 	}
 
 	private String addingCommand() {
