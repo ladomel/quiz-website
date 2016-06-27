@@ -7,9 +7,6 @@
 <title>Sorry</title>
 </head>
 <body>
-
-<a href="yourmusicfile.mp3">Play music</a>
-<audio src="http://notpron.org/notpron/stuff/mus1.mp3" autoplay loop></audio>
 	<h1>Sorry ...</h1>
 </body>
 </html>
