@@ -235,6 +235,7 @@ public class QuizDAOImpl implements QuizDAO {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
 					con.prepareStatement(userCreatedCommand());
+			preparedStatement.setString(1, userName);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
 				Quiz quiz = loadIntoQuiz(rs);
