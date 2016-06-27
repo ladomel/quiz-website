@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link rel="stylesheet" type="text/css" href="css/quizonepage.css">
+<link rel="stylesheet" type="text/css" href="css/quizpages.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script type="text/javascript" src="javascript/submitquiz.js"></script>
 <%
@@ -36,29 +36,12 @@
 
 	for (int i=0;i<questions.size();i++){
 		out.print("<iframe name='question" + i + "' src='Test/" + questions.get(i).getType() + ".jsp?id=" + i + "' id='" + i + "' ></iframe>");
-		out.print("<br>");
+		out.print("<br><br>");
 	}
 %>
 
 	</div>
 
-	<script type="text/javascript">
-		var remaining = 60*60*1000 - 1;
-		var startTime = new Date().getTime();
-		function countDown(){
-			var d = new Date().getTime();
-			var k = remaining - (d - startTime);
-			var h = Math.floor(k / (60*60*1000)); k %= (60*60*1000); 
-			var m = Math.floor(k / (60*1000)); k %= (60*1000);
-			var s = Math.floor(k / 1000); 
-			updateTime(h,m,s);
-		}
-		function updateTime(h,m,s){
-			document.getElementById("hours").innerHTML = h;
-			document.getElementById("mins").innerHTML = m;
-			document.getElementById("secs").innerHTML = s;
-		}
-		var j = setInterval("countDown()",100);
-	</script>
+	<script type="text/javascript"></script>
 </body>
 </html>
