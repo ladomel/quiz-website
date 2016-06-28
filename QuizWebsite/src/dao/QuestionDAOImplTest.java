@@ -31,6 +31,7 @@ public class QuestionDAOImplTest {
 //		set.add("neipl");
 //		questionDAO.addQR(4, classFactory.getQuestionQR("didie", 2, set));
 		questionDAO.getQuestions(4);
+		System.out.println(questionDAO.getQuestions(4));
 	}
 
 }
