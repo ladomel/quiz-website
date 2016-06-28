@@ -33,6 +33,7 @@ public class QuestionPRTest {
 		answers.add("b");
 		
 		question = new QuestionPR(description, grade, pictureURL, answers);
+		System.out.println(question.toString());
 	}
 	
 	@Test

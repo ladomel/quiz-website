@@ -2,11 +2,11 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<!-- 
+<!--Two buttons.
 	Parameters: 'statement' - problem statement;
-				'left' + i - left column
-				'right' + i - right column
-				'answer' + i - answers for each ('right' + i)(ex: 'answer0')
+				'question' + i - left column
+				'rightanswer' + i - right answer for each 
+				'wronganswer' + i - wrong answers('right' + i)(ex: 'wronganswer0')
 
  -->
 

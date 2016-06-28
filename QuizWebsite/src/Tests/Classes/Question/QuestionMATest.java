@@ -39,6 +39,7 @@ public class QuestionMATest {
 		ordered = true;
 		
 		question = new QuestionMA(description, grade, ordered, answers, 4);
+		System.out.println(question);
 	}
 
 	@Test

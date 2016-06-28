@@ -2,8 +2,7 @@ package Servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,20 +10,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import classes.question.QuestionMC;
+import classes.question.QuestionMCMA;
 import classes.question.Abstract.Question;
 
 /**
- * Servlet implementation class CreateMC
+ * Servlet implementation class CreateMCMA
  */
-@WebServlet("/CreateMC")
-public class CreateMC extends HttpServlet {
+@WebServlet("/CreateMCMA")
+public class CreateMCMA extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public CreateMC() {
+    public CreateMCMA() {
         super();
     }
 
@@ -36,23 +35,30 @@ public class CreateMC extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 * 
-	 * Reads one MCQuestion information and adds it in createdQuestions list in session.
+	 * Reads one MCMAQuestion information and adds it in createdQuestions list in session.
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Set<String> answers = new HashSet<String>();
 		String problem = request.getParameter("statement");
-		String correctAnswer = (request.getParameter("correctanswer"));
-		
 		String nextAnswer;
+
+		List<String> correctAnswers = new ArrayList<String>();
+		for(int i = 0; ;i++)
+		{
+			nextAnswer = request.getParameter("correctanswer" + i);
+			if( nextAnswer == null) break;
+			correctAnswers.add(nextAnswer);
+		}
+
+		List<String> incorrectAnswers = new ArrayList<String>();
 		for(int i = 0; ;i++)
 		{
 			nextAnswer = request.getParameter("answer" + i);
-			if( nextAnswer == null) break;
-			answers.add(nextAnswer);
+			if(nextAnswer == null) break;
+			incorrectAnswers.add(nextAnswer);
 		}
-		
-		QuestionMC questionMC = new QuestionMC(problem, 1, correctAnswer, answers);
+
+		QuestionMCMA questionMCMA = new QuestionMCMA(problem, 1, correctAnswers, incorrectAnswers);
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
-		createdQuestions.add(questionMC);
+		createdQuestions.add(questionMCMA);
 	}
 }

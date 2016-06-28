@@ -26,6 +26,18 @@ public class QuestionMC extends Question {
 	}
 
 	@Override
+	public String toString() {
+		String answers = "";
+		for (String s : getWrongAnswers()) {
+		    answers += s + " ";
+		}
+		return "Problem: " + this.getProblem() + " | " +
+				"Grade: " + getGrade() + " | " +
+				"correctAnswer: " + getCorrectAnswer() + " | " +
+				"WrongAnswers: " + answers;
+	}
+	
+	@Override
 	public List<String> getCorrectAnswers() {
 		List<String> answer = new ArrayList<String>();
 		answer.add(correctAnswer);

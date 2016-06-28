@@ -19,6 +19,8 @@ import classes.question.QuestionPR;
 import classes.question.QuestionQR;
 import classes.question.Abstract.Question;
 
+//createdQuestions = List with user's created questions.
+//MasterUser - user currently logged in.
 
 /**
  * Application Lifecycle Listener implementation class SessionListener
@@ -26,7 +28,6 @@ import classes.question.Abstract.Question;
  */
 @WebListener
 public class SessionListener implements HttpSessionListener {
-	
     /**
      * Default constructor. 
      */
@@ -38,7 +39,6 @@ public class SessionListener implements HttpSessionListener {
     public void sessionCreated(HttpSessionEvent arg0)  { 
 
     	ArrayList<Question> questions = new ArrayList<Question>(); // questions stored here while submitting quiz
-    	ArrayList<Question> questionList = new ArrayList<Question>();// questions stored here while creating quiz
     	
     	HashSet<String> PRanswers = new HashSet<String>();
     	PRanswers.add("a");
@@ -71,7 +71,7 @@ public class SessionListener implements HttpSessionListener {
     	s.setAttribute("Quiz", quiz);
     	s.setAttribute("Questions", questions);	
 
-    	s.setAttribute("QuestionList", questionList);
+    	s.setAttribute("createdQuestions", null);
     	s.setAttribute("MasterUser", null);
     }
 
@@ -81,6 +81,6 @@ public class SessionListener implements HttpSessionListener {
     public void sessionDestroyed(HttpSessionEvent arg0)  { 
     	HttpSession s = arg0.getSession();
         s.removeAttribute("MasterUser");
-        s.removeAttribute("QuestionList");
+        s.removeAttribute("createdQuestions");
     }
 }

@@ -26,6 +26,29 @@ public class QuestionMCH extends Question {
 
 		if(questions.size() != rightAnswers.size()) throw new IllegalArgumentException("Sizes are different!");
 	}
+	
+	@Override
+	public String toString() {
+		String questions = "";
+		for (String s : getQuestions()) {
+			questions += s + " ";
+		}
+		
+		String rightAnswers = "";
+		for (String s : getRightAnswers()) {
+			rightAnswers += s + " ";
+		}
+		
+		String wrongAnswers = "";
+		for (String s : getWrongAnswers()) {
+			wrongAnswers += s + " ";
+		}
+		return "Problem: " + getProblem() + " | " +
+				"Grade: " + getGrade() + " | " +
+				"Questions: " + questions +  " | " +
+				"Right Answers: " + rightAnswers +  " | " +
+				"Wrong Answers: " + wrongAnswers;
+	}
 
 	@Override
 	public List<String> getCorrectAnswers() {
