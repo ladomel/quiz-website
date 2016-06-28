@@ -11,7 +11,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script type="text/javascript" src="javascript/submitquiz.js"></script>
 <%
-	Quiz quiz = (Quiz) request.getAttribute("Quiz");
+	Quiz quiz = (Quiz) request.getSession().getAttribute("Quiz");
 %>
 <title><%= quiz.getQuizName() %></title>
 </head>
