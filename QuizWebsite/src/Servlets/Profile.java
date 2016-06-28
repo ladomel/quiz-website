@@ -52,7 +52,7 @@ public class Profile extends HttpServlet {
 		if(user != null)
 		{
 			request.setAttribute("User", user);
-			dispatcher = request.getRequestDispatcher("Profile.jsp?id=" + userName);
+			dispatcher = request.getRequestDispatcher("Profile.jsp?username=" + userName);
 		}
 		dispatcher.forward(request, response);	
 	}
