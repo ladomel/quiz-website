@@ -3,7 +3,7 @@
  */
 
 function submitQuiz(){
-	
+	window.location = "FinishQuiz";
 }
 
 function nextQuestion(){
