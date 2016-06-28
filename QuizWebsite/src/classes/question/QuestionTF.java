@@ -28,6 +28,24 @@ public class QuestionTF extends Question {
 	}
 	
 	@Override
+	public String toString() {
+		String propositions = "";
+		for (String s : getPropositions()) {
+			propositions += s + " ";
+		}
+		
+		String answers = "";
+		for (String s : getAnswers()) {
+			answers += s + " ";
+		}
+		
+		return "Problem: " + getProblem() + " | " +
+				"Grade: " + getGrade() + " | " +
+				"Propositions: " + propositions +  " | " +
+				"Answers: " + answers;
+	}
+	
+	@Override
 	public Integer getGrade(List<String> answer) {
 		if(answer == null || answer.isEmpty() || answer.contains(null) || answer.size()!= getAnswers().size())
 			throw new IllegalArgumentException("answer has to contain at least 1 element and have correct size!");

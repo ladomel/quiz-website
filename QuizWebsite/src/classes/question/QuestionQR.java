@@ -24,6 +24,17 @@ public class QuestionQR extends Question{
 	}
 
 	@Override
+	public String toString() {
+		String answers = "";
+		for (String s : getAnswers()) {
+		    answers += s + " ";
+		}
+		return "Problem: " + this.getProblem() + " | " +
+				"Grade: " + getGrade() + " | " +
+				"Answers: " + answers;
+	}
+	
+	@Override
 	public List<String> getCorrectAnswers()
 	{
 		ArrayList<String> answer = new ArrayList<String>();

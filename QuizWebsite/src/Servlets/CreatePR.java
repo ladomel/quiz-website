@@ -9,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import classes.question.QuestionPR;
 import classes.question.Abstract.Question;
@@ -35,6 +34,8 @@ public class CreatePR extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * 
+	 * Reads one PRQuestion information and adds it in createdQuestions list in session.
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String problem = request.getParameter("statement");
@@ -51,10 +52,7 @@ public class CreatePR extends HttpServlet {
 		}
 		
 		QuestionPR questionPR = new QuestionPR(problem, 1 ,pictureURL, answers);
-		/*
-		HttpSession session = request.getSession();
-		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
-		questions.add(questionPR);
-		*/
+		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
+		createdQuestions.add(questionPR);
 	}
 }

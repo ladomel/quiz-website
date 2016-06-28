@@ -37,6 +37,7 @@ public class QuestionMCMATest {
 		grade = 5;
 		
 		question = new QuestionMCMA(description, grade, correctAnswers, incorrectAnswers);
+		System.out.println(question);
 	}
 
 	@Test

@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="classes.question.Abstract.Question" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -12,12 +16,14 @@
 </head>
 <body>
 <%
-	String toppanel; 
+	String toppanel;
 	if (request.getSession().getAttribute("MasterUser") == null) toppanel = "toppanel-loggedout.jsp";
 	else toppanel = "toppanel-loggedin.jsp";
+	
+	request.getSession().setAttribute("createdQuestions", new ArrayList<Question>());
 %>
 	<div id="centerpanel">
-		<div id="quizinfo">
+		<form id="infoform" action="CreateQuiz" method="post">
 			Title: <input type="text" id="name" name="name"> <br>
 			Description: <textarea cols="60" rows="4" name="description" id="desc"></textarea> <br> 
 			Random? <input type="checkbox" id="random" name="random"> <br>
@@ -25,7 +31,7 @@
 			Practice mode? <input type="checkbox" id="practice" name="practice"> <br>
 			Immediate Correction? <input type="checkbox" id="imcorr" name="correction"> <br>
 			Max Time = <input type="text" id="time" name="time">mins
-		</div>
+		</form>
 		<div id="questions"></div>
 	</div>
 	<div id="bottompanel">

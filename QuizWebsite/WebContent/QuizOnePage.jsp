@@ -7,39 +7,41 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Quiz Name</title>
-<style>
-	html, body {
-		height: 100%;
-		width: 100%;
-		margin: 0px;
-		padding: 0px;
-	}
-	object {
-		border: black solid 5px;
-		min-height: 400px;
-		max-height: 400px;
-		min-width: 1000px;
-		max-width: 1000px;
-		position: relative;
-		left: 50%;
-		margin-left: -500px;
-	}	
-</style>
+<link rel="stylesheet" type="text/css" href="css/quizpages.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script type="text/javascript" src="javascript/submitquiz.js"></script>
+<%
+	Quiz quiz = (Quiz) request.getSession().getAttribute("Quiz");
+%>
+<title><%= quiz.getQuizName() %></title>
 </head>
 <body>
-<%
-	Quiz quiz = (Quiz) request.getAttribute("Quiz");
-	int numQuestions = ((ArrayList<Question>) request.getAttribute("Questions")).size();
+	<div id="toppanel">
+		<span id="quizname"><%= quiz.getQuizName() %></span>
+		<span id="clock">
+			<span id="hours"></span>hours,
+			<span id="mins"></span>mins and 
+			<span id="secs"></span>secs remaining
+		</span>
+	</div>
 	
-	for (int i=0;i<numQuestions;i++){
-		out.print("<iframe name='question" + i + "' src='Question.jsp?id=" + i + "' id='" + i + "' />");
+	<div id="bottompanel">
+		<button id="submitquiz" onclick="submitQuiz();">Submit Quiz</button>
+	</div>
+	
+	<div id="centerpanel">
+	<br>
+<%	
+	ArrayList<Question> questions = (ArrayList<Question>) request.getSession().getAttribute("Questions");
+
+	for (int i=0;i<questions.size();i++){
+		out.print("<iframe name='question" + i + "' src='Test/" + questions.get(i).getType() + ".jsp?id=" + i + "' id='" + i + "' ></iframe>");
+		out.print("<br><br>");
 	}
 %>
-	
-	
-	<script type="text/javascript">
-		
-	</script>
+
+	</div>
+
+	<script type="text/javascript"></script>
 </body>
 </html>

@@ -15,4 +15,5 @@ function submitQuiz(){
 		var doc = document.getElementById(i).contentDocument;
 		doc.getElementById("submit").click();
 	}
+	document.getElementById("infoform").submit();
 }

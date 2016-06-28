@@ -2,6 +2,7 @@ package factory;
 import java.util.List;
 import java.util.Set;
 
+import classes.Answer;
 import classes.Quiz;
 import classes.User;
 import classes.question.QuestionFB;
@@ -10,6 +11,7 @@ import classes.question.QuestionMC;
 import classes.question.QuestionMCMA;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
+import classes.question.QuestionTF;
 
 public class ClassFactory {
 	// Each method returns corresponding class.
@@ -53,4 +55,20 @@ public class ClassFactory {
 	{
 		return new QuestionMCMA(newProblem, grade, correctAnswers, wrongAnswers);
 	}
+	
+	public QuestionTF getQuestionTF(String newProblem, int grade,  List<String> propositions, List<String> answers)
+	{
+		return new QuestionTF(newProblem, grade, propositions, answers);
+	}
+	
+	public classes.Result getResult(String userName, int quizId)
+	{
+		return new classes.Result(userName, quizId);
+	}
+	
+	public Answer getAnswer(List<String> userAnswer)
+	{
+		return new Answer(userAnswer);
+	}
+	
 }
