@@ -45,15 +45,18 @@ public class CreateQuiz extends HttpServlet {
 		
 		String name = request.getParameter("name");
 		String description = request.getParameter("description");
-		boolean random = (request.getParameter("random") == null);
-		boolean onepage = (request.getParameter("onepage") == null);
-		boolean practice = (request.getParameter("practice") == null);
-		boolean correction = (request.getParameter("correction") == null);
-		int numMinutes = Integer.parseInt(request.getParameter("time"));
+		boolean random = (request.getParameter("random") != null);
+		boolean onepage = (request.getParameter("onepage") != null);
+		boolean practice = (request.getParameter("practice") != null);
+		boolean correction = (request.getParameter("correction") != null);
+		int numMinutes = 0;   // 0 Means not timed.
+		String time = request.getParameter("time");
+		if(time != "")	numMinutes = Integer.parseInt(time);
 		
 		HttpSession session = request.getSession();
 		User masterUser = (User)session.getAttribute("MasterUser");
-		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
+		
+		ArrayList<Question> createdQuestions = (ArrayList<Question>)session.getAttribute("createdQuestions");
 		
 		ClassFactory factory = (ClassFactory)request.getServletContext().getAttribute("factory");
 		classes.Quiz newQuiz = factory.getQuiz(masterUser.getUserName(), name, description);
@@ -63,10 +66,13 @@ public class CreateQuiz extends HttpServlet {
 		newQuiz.setOnePage(onepage);
 		newQuiz.setRandom(random);
 		newQuiz.setQuizTime(numMinutes);
+		System.out.println(newQuiz.toString());
 		
 		QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
+	//	int id = quizDAO.addQuiz(newQuiz, createdQuestions); //TODO we put Quiz inside with questions.
 		int id = quizDAO.addQuiz(newQuiz);
 		
+		createdQuestions.clear();
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("Quiz?id=" + id);
 		requestDispatcher.forward(request, response);	
 	}
