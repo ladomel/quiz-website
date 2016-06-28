@@ -19,23 +19,35 @@
 	<form id="form" onkeypress="return event.keyCode != 13;">
 		Text:
 		<textarea type="text" cols="60" rows="6" name="statement" id="stmnt"></textarea> <br>
-		Correct Answers:
+		Correct Answers:<br>
 		<span id="answerfield">
-			
+		
 		</span>
-	</form>	
-	<button onclick="addBlank();">Add Blank</button>
+	</form>
+	<br><br>
+	<button onclick="addAnsField();">Add Blank</button>
 	
 	<input id="submit" onclick="submit('CreateFB');" type="hidden" />
 	
 	<script type="text/javascript">
 		var count = 0;
-		function addBlank(){
+		var a = [0];
+		function addAnswer(i){
+			var field = document.createElement("input");
+			field.name = "answer" + i + "/" + a[i]; a[i]++; 
+			field.className = "ans"; field.type = "text";
+			document.getElementById(i).appendChild(field);
+		}
+		function addAnsField(){
 			document.getElementById('stmnt').value += " ______ ";
 			document.getElementById('stmnt').focus();
-			var field = document.createElement("input");
-			field.name = "answer" + count + "/" + "0"; field.className = "ans"; field.type = "text";
+			var field = document.createElement("span");
+			field.className = "entry"; field.id = count;
+			document.getElementById('answerfield').appendChild(document.createElement("br"));
 			document.getElementById('answerfield').appendChild(field);
+			a.push(1);
+			field.innerHTML += (count+1) + ". <button type='button' onclick='addAnswer(" + count + ")'>Add</button>";
+			field.innerHTML += "<input type='text' name='answer" + count + "/0' class='ans'>";
 			count++;
 		}
 	</script>
