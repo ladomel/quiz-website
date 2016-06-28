@@ -49,9 +49,7 @@ public class CreateQuiz extends HttpServlet {
 		boolean onepage = (request.getParameter("onepage") != null);
 		boolean practice = (request.getParameter("practice") != null);
 		boolean correction = (request.getParameter("correction") != null);
-		int numMinutes = 0;   // 0 Means not timed.
-		String time = request.getParameter("time");
-		if(time != "")	numMinutes = Integer.parseInt(time);
+		int numMinutes = Integer.parseInt(request.getParameter("time"));
 		
 		HttpSession session = request.getSession();
 		User masterUser = (User)session.getAttribute("MasterUser");
@@ -66,8 +64,11 @@ public class CreateQuiz extends HttpServlet {
 		newQuiz.setOnePage(onepage);
 		newQuiz.setRandom(random);
 		newQuiz.setQuizTime(numMinutes);
-		System.out.println(newQuiz.toString());
 		
+		System.out.println(newQuiz.toString());
+		for(int i = 0; i < createdQuestions.size(); i++)
+			System.out.println(createdQuestions.get(i).toString());
+			
 		QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
 	//	int id = quizDAO.addQuiz(newQuiz, createdQuestions); //TODO we put Quiz inside with questions.
 		int id = quizDAO.addQuiz(newQuiz);

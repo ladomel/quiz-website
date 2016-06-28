@@ -61,7 +61,7 @@ public class CreateMA extends HttpServlet {
 			answers.add(possibleAnswersSet);
 		}
 		
-		QuestionMA questionMA = new QuestionMA(problem, 1, true, answers, numAnswers); //////////ORDERD
+		QuestionMA questionMA = new QuestionMA(problem, 1, ordered, answers, numAnswers); //////////ORDERD
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
 		createdQuestions.add(questionMA);
 	}

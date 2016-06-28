@@ -45,7 +45,7 @@ public class CreateMCH extends HttpServlet {
 		for(int i = 0; ;i++)
 		{
 			nextAnswer = request.getParameter("question" + i);
-			if( nextAnswer == null) break;
+			if(nextAnswer == null) break;
 			questions.add(nextAnswer);
 		}
 
