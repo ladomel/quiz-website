@@ -7,6 +7,10 @@
 <title>Sorry</title>
 </head>
 <body>
-	<h1>Sorry ...</h1>
+	<% 
+		String error = (String)request.getAttribute("Error");
+		if (error == null) error = "Unknown Error!";
+	%>
+	<h1><%= error %></h1>
 </body>
 </html>
