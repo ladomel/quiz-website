@@ -25,6 +25,6 @@
 			}
 		%>
 	</form>
-	<input id="submit" onclick="submit(" + questionID +");" type="hidden" />
+	<input id="submit" onclick="submit('<%= questionID %>')" type="hidden" />
 </body>
 </html>
