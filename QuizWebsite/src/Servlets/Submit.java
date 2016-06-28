@@ -10,11 +10,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import classes.Answer;
 
 /**
  * Servlet implementation class SubmitQR
  */
-@WebServlet("/SubmitQR")
+@WebServlet("/Submit")
 public class Submit extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -32,10 +35,13 @@ public class Submit extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * 
+	 * Gets called for each question. Creates an Answer.
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
 		List<String> userAnswer = new ArrayList<String>();
-		//int position = request.getParameter("id");
+		int position = Integer.parseInt(request.getParameter("questionPosition"));
 		
 		String nextAnswer = "";
 		for(int i = 0; ; i++)
@@ -44,8 +50,9 @@ public class Submit extends HttpServlet {
 			if (nextAnswer == null) break;
 			userAnswer.add(nextAnswer);
 		}
-		
-			
-		
+		System.out.println("Goes here");
+		Answer answer = new Answer(userAnswer);
+		List<Answer> answers = (List<Answer>)session.getAttribute("userAnswers");
+		answers.set(position, answer);  // Might check it later.
 	}
 }

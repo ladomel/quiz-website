@@ -43,11 +43,19 @@ create table user_achievements(
 	primary key(user_id,achievement_id)
 );
 
-create table question(
-	id int(11) not null,
+create table questions(
+	id int(11) not null auto_increment,
+	quiz_id int(11) not null,
 	problem longtext not null,
 	type varchar(50) not null,
+	grade int(11) not null,
 	primary key(id)
+);
+
+create table answers(
+	question_id int(11) not null,
+	answer varchar(255) not null,
+	field_id int(11) default 0
 );
 
 create table quizzes(
@@ -68,9 +76,9 @@ create table quizzes(
 
 create table quiz_problems(
 	quiz_id int(11) not null,
-	index int(11) not null,
+	`index` int(11) not null,
 	question_id int(11) not null,
-	primary key(quiz_id,index)
+	primary key(quiz_id, `index`)
 );
 
 create table friendrequests(
@@ -96,11 +104,13 @@ create table notes(
 	time bigint
 );
 
+# result related below
+
 create table results(
-	id int(11) not null,
+	id int(11) not null auto_increment,
 	user_id int(11) not null,
 	quiz_id	int(11) not null,
-	score int(11) not null,
+	final_grade int(11) not null,
 	start_time bigint not null,
 	time_taken bigint not null,
 	primary key(id)
@@ -110,5 +120,5 @@ create table  user_answers(
 	result_id int(11) not null,
 	question_id int(11) not null,
 	user_answer longtext,
-	primary key(history_id,problem_id)
+	primary key(result_id, question_id)
 );

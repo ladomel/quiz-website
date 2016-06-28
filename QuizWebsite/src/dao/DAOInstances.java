@@ -1,10 +1,5 @@
 package dao;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
 //import org.apache.commons.dbcp2.BasicDataSource;  // Usual.
 
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource; // Online.
@@ -44,6 +39,14 @@ public class DAOInstances {
 	
 	public QuizDAO getQuizDAO() {
 		return new QuizDAOImpl(dataSource);
+	}
+	
+	public QuestionDAO getQuestionDAO() {
+		return new QuestionDAOImpl(dataSource);
+	}
+	
+	public ResultDAO getResultDAO() {
+		return new ResultDAOImpl(dataSource);
 	}
 	
 }
