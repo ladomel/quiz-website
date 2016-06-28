@@ -24,11 +24,12 @@
 			int i = 0;
 			while(it.hasNext()){
 				String choice = it.next();
-				out.print("<input type='checkbox' id='answer" + i + "' name='answer' value='" + choice +"'>" );
+				out.print("<input type='checkbox' id='answer" + i + "' name='answer" + i + "' value='" + choice +"'>" );
 				out.print(choice + "<br>");
+				i++;
 			}
 		%>
 	</form>
-	<input id="submit" onclick="submit(" + questionID +");" type="hidden" />
+	<input id="submit" onclick="submit('<%= questionID %>')" type="hidden" />
 </body>
 </html>
