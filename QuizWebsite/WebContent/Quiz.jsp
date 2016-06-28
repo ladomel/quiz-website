@@ -59,7 +59,7 @@
 		</div>
 		
 		<form action="TakeQuiz" method="post">
-			<input name="id" value='<%= quiz.getId() %>'>
+			<input type="hidden" name="id" value='<%= quiz.getId() %>'>
 			<button id="startquiz">Start Quiz</button>
 		</form>
 	</div>
