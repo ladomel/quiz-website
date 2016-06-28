@@ -213,12 +213,6 @@ public class QuizDAOImpl implements QuizDAO {
 	}
 
 	@Override
-	public List<Result> getRecentResults(String userName, int n) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Quiz> getCreatedQuizzes(String userName) {
 		List<Quiz> userQuizes = new ArrayList<Quiz>();
 		try {
@@ -248,24 +242,6 @@ public class QuizDAOImpl implements QuizDAO {
 				"FROM quizzes " + 
 				"INNER JOIN users " + 
 				"ON quizzes.creator_id = users.id WHERE username LIKE ?";
-	}
-
-	@Override
-	public List<Result> getResult(String userName, Integer quizId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Result> getHighestPerformance(Integer quizId, int n) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Result> getRecentResults(Integer quizId, int n) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
