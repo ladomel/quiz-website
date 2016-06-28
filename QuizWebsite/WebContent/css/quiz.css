@@ -96,7 +96,7 @@
 	position: absolute;
 	width: 500px;
 	height: 400px;
-	top: 210px;
+	top: 270px;
 	left: calc(50% - 505px);
 }
 
@@ -143,4 +143,12 @@
 	display: inline-block;
 }
 
-
+#startquiz {
+	background: green;
+	font-size: 30px;
+	width: 200px;
+	height: 50px;
+	position: absolute;
+	top: 210px;
+	left: calc(50% - 100px);	
+}
