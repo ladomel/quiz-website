@@ -23,6 +23,18 @@ public class QuestionPR extends Question {
 		setPictureURL(pictureURL);
 		setAnswers(newAnswers);
 	}
+	
+	@Override
+	public String toString() {
+		String answers = "";
+		for (String s : getAnswers()) {
+		    answers += s + " ";
+		}
+		return "Problem: " + this.getProblem() + " | " +
+				"Grade: " + getGrade() + " | " +
+				"pictureURL: " + getPictureURL() + " | " +
+				"Answers: " + answers;
+	}
 
 	@Override
 	public Integer getGrade(List<String> answer) {

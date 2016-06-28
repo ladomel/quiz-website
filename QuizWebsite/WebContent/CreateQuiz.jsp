@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="classes.question.Abstract.Question" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -12,9 +16,11 @@
 </head>
 <body>
 <%
-	String toppanel; 
+	String toppanel;
 	if (request.getSession().getAttribute("MasterUser") == null) toppanel = "toppanel-loggedout.jsp";
 	else toppanel = "toppanel-loggedin.jsp";
+	
+	request.getSession().setAttribute("createdQuestions", new ArrayList<Question>());
 %>
 	<div id="centerpanel">
 		<form id="infoform" action="CreateQuiz" method="post">

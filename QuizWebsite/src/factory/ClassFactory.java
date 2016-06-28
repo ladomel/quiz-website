@@ -2,6 +2,7 @@ package factory;
 import java.util.List;
 import java.util.Set;
 
+import classes.Answer;
 import classes.Quiz;
 import classes.User;
 import classes.question.QuestionFB;
@@ -59,4 +60,15 @@ public class ClassFactory {
 	{
 		return new QuestionTF(newProblem, grade, propositions, answers);
 	}
+	
+	public classes.Result getResult(String userName, int quizId)
+	{
+		return new classes.Result(userName, quizId);
+	}
+	
+	public Answer getAnswer(List<String> userAnswer)
+	{
+		return new Answer(userAnswer);
+	}
+	
 }
