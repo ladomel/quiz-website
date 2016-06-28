@@ -50,13 +50,17 @@ public class Quiz {
 	
 	@Override
 	public String toString() {
-		return this.getId() + " | " + this.getUserName() + " | " +
-				this.getDateCreated() + " | " + this.getDescription()
-				+ " | " + this.getQuizName() + " | "
-				+ this.getMaxScore() + " | " + this.getQuizTime() + " | "
-				+ this.isRandom() + " | " + this.isOnePage() + " | "
-				+ this.isImmediatelyCorrected() + " | "
-				+ this.isHasPracticeMode();
+		return "id: " + this.getId() + " | " + 
+				"UserName: " + this.getUserName() + " | " +
+				"DateCreated: " + this.getDateCreated() + " | " + 
+				"Description: " + this.getDescription() + " | " + 
+				"QuizName: " + this.getQuizName() + " | " +
+				"MaxScore: " + this.getMaxScore() + " | " + 
+				"QuizTime: " + this.getQuizTime() + " | " +
+				"IsRandom: " + this.isRandom() + " | " + 
+				"IsOnePage: " + this.isOnePage() + " | " +
+				"IsImmediatelyCorrected: " + this.isImmediatelyCorrected() + " | " +
+				"HasPraticeMode: " + this.isHasPracticeMode();
 	}
 	
 	public Quiz(String userName, String quizName, String description)

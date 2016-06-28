@@ -45,6 +45,7 @@ public class QuestionMCHTest {
 		grade = 5;
 		
 		question = new QuestionMCH(description, grade, questions, rightAnswers, wrongAnswers);
+		System.out.println(question.toString());
 	}
 
 	@Test

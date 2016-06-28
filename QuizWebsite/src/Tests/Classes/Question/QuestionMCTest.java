@@ -36,6 +36,7 @@ public class QuestionMCTest {
 		grade = 5;
 		
 		question = new QuestionMC(description, grade, correctAnswer, wrongAnswers);
+		System.out.println(question.toString());
 	}
 	
 	@Test

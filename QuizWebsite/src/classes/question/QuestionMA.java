@@ -27,6 +27,24 @@ public class QuestionMA extends Question {
 		setOrdered(ordered);
 		setAnswers(answers);
 	}
+	
+	@Override
+	public String toString() {
+		String answers = "";
+		List<Set<String>> setAnswers = getAnswers();
+		Iterator iterator;
+		for (int i = 0; i < setAnswers.size(); i++)
+		{
+			iterator = setAnswers.get(i).iterator();
+			answers += i + ") ";
+			while(iterator.hasNext()) answers += iterator.next() + " ";
+		}
+		return "Problem: " + this.getProblem() + " | " +
+				"Grade: " + getGrade() + " | " +
+				"Ordered: " + isOrdered() + " | " +
+				"Answers: " + answers +
+				"NumAnswers: " + getNumAnswers();
+	}
 
 	@Override
 	public ArrayList<String> getCorrectAnswers() {
