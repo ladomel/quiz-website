@@ -19,8 +19,8 @@
 	<img src='<%= question.getPictureURL() %>' id="image"> <br>
 	<h2><%= question.getProblem() %></h2>
 	<form id="form"  onkeypress="return event.keyCode != 13;">
-		<input type="text" name="answer" id="answer">
+		<input type="text" name="answer0" id="answer">
 	</form>
-	<input id="submit" onclick="submit(" + questionID +");" type="hidden" />
+	<input id="submit" onclick="submit('<%= questionID %>')" type="hidden" />
 </body>
 </html>
