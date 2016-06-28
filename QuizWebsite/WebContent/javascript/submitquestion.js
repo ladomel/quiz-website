@@ -3,7 +3,6 @@
  */
 
 function submit(questionID){
-	alert($("#form").serialize());
 	$.ajax(
 		{
 			async: false,
