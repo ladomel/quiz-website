@@ -135,22 +135,12 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setInt(9, quiz.getQuizTime());
 			preparedStatement.setInt(10, quiz.getMaxScore());
 			preparedStatement.executeUpdate();
-			id = lastInsertId(con);
+			id = MySQLUtil.getLastInsertId(con);
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return id;
-	}
-
-	private int lastInsertId(Connection con) throws SQLException {
-		int id = 0;
-		Statement stmt = (Statement) con.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID();");
-		rs.next();
-		id = rs.getInt("last_insert_id()");
-		rs.close();
 		return id;
 	}
 
