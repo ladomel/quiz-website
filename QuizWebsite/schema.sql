@@ -124,7 +124,7 @@ create table results(
 	primary key(id)
 );
 
-create table answer_of_question(
+create table answers_of_question(
 	result_id 			int(11) 		not null,
 	question_id			int(11)  		not null,
 	grade 				int(11)
