@@ -6,6 +6,14 @@ body {
 	overflow-x: hidden;
 }
 
+.entry:input {
+	display: inline-block;
+}
+
+.ans {
+	display: inline-block;
+}
+
 button {
 	width: 140px;
 	height: 30px;
