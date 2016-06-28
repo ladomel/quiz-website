@@ -17,6 +17,8 @@ create table users(
 	primary key(id)
 );
 
+insert into users(username, hash_password, salt) values('vaja', '1234', 'salt');
+
 create table friends(
 	first_user_id int(11) not null,
 	second_user_id int(11) not null,
@@ -52,11 +54,15 @@ create table questions(
 	primary key(id)
 );
 
+insert into questions (quiz_id, problem, type, grade) values(1, 'whatsup', 'QR', 5);
+
 create table answers(
 	question_id int(11) not null,
 	answer varchar(255) not null,
 	field_id int(11) default 0
 );
+
+insert into answers (question_id, answer) values(1, 'good'), (1, 'bad');
 
 create table quizzes(
 	id int(11) not null auto_increment,
@@ -73,6 +79,8 @@ create table quizzes(
 	category varchar(250),
 	primary key(id)
 );
+
+insert into quizzes (creator_id, name, creation_time, time, max_score) values(1, 'birds', 1945, 30, 100);
 
 create table quiz_problems(
 	quiz_id int(11) not null,
