@@ -6,7 +6,7 @@ public class Result {
 	
 	private int quizId;
 	private String userName;
-	private Integer finalGrade = null;
+	private int finalGrade = -1;
 	private long timeStarted; 
 	private long timeTaken;
 	private List<Answer> answers;
@@ -32,11 +32,11 @@ public class Result {
 		this.quizId = quizId;
 	}
 
-	public Integer getFinalGrade() {
+	public int getFinalGrade() {
 		return finalGrade;
 	}
 
-	public void setFinalGrade(Integer finalGrade) {
+	public void setFinalGrade(int finalGrade) {
 		this.finalGrade = finalGrade;
 	}
 
