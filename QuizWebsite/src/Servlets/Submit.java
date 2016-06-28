@@ -50,7 +50,7 @@ public class Submit extends HttpServlet {
 			if (nextAnswer == null) break;
 			userAnswer.add(nextAnswer);
 		}
-		
+		System.out.println("Goes here");
 		Answer answer = new Answer(userAnswer);
 		List<Answer> answers = (List<Answer>)session.getAttribute("userAnswers");
 		answers.set(position, answer);  // Might check it later.
