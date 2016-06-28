@@ -9,7 +9,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-<script type="text/javascript" src="../javascript/submitquestion.js"></script>
+<script type="text/javascript" src="/QuizWebsite/javascript/submitquestion.js"></script>
 </head>
 <body>
 	<% 
