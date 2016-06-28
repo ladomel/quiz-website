@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -121,27 +122,49 @@ public class QuestionDAOImpl implements QuestionDAO {
 	// here question list is filled
 	private List<Question> loadQuestions(ResultSet rs) throws SQLException {
 		List<Question> questions = new ArrayList<Question> ();
-		while(rs.next()) {
-			switch(rs.getString("type")) {
-			case "QR": questions.add(loadQR(rs)); break;
-			}
+		rs.next();
+		while(true) {
+			Question q = readQuestionFromResultSet(rs);
+			if(q == null) break;
+			questions.add(q);
 		}
 		return questions;
 	}
 
-	private Question loadQR(ResultSet questionsWirhAnswers) throws SQLException {
-		Set<String> answers = null;
-		Question q = new QuestionQR(questionsWirhAnswers.getString("problem"),
-				questionsWirhAnswers.getInt("grade"),
-				answers);
-		
+	private Question readQuestionFromResultSet(ResultSet rs)
+			throws SQLException {
+		if(rs.isAfterLast()) return null;
+		Question question = null;
+		String type = rs.getString("type");
+		switch(type) {
+		case "QR": question = loadQR(rs); break;
+		// TODO: add other types as well
+		}
+		return question;
+	}
+
+	// if this is called rs.isAfterLast() is false
+	private Question loadQR(ResultSet rs) 
+			throws SQLException {
+		// memorize question id we are working with
+		// and keep moving until we collect all the answers
+		// NOTE: SAME QUESTION ARE ADJACENT IN RS
+		int questionId = rs.getInt("id");
+		String problem = rs.getString("problem");
+		int grade = rs.getInt("grade");
+		Set<String> answers = new HashSet<String> ();	// now load this set
+		answers.add(rs.getString("answer"));
+		while(rs.next() && rs.getInt("id") == questionId) {
+			answers.add(rs.getString("answer"));
+		}
+		Question q = new QuestionQR(problem, grade, answers);
 		return q;
 	}
 
 	private String getQuestionsWithAnswersCommand() {
-		return "SELECT * FROM questions LEFT JOIN answers ON " + 
+		return "SELECT * FROM questions INNER JOIN answers ON " + 
 				"questions.id = answers.question_id " + 
-				"WHERE questions.quiz_id = ?;";
+				"WHERE questions.quiz_id = ? ORDER BY questions.id;";
 	}
 
 }
