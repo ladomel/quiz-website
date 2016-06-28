@@ -41,7 +41,7 @@ public class Profile extends HttpServlet {
 	 * 
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userName = request.getParameter("userName");
+		String userName = request.getParameter("username");
 		
 		RequestDispatcher dispatcher;
 		ServletContext ctx= getServletContext();  
