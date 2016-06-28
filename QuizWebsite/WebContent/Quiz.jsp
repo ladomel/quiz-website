@@ -12,7 +12,7 @@
 	if (request.getSession().getAttribute("MasterUser") == null) toppanel = "toppanel-loggedout.jsp";
 		else toppanel = "toppanel-loggedin.jsp";
 	
-	Quiz quiz = (Quiz)request.getAttribute("Quiz");
+	Quiz quiz = (Quiz)request.getSession().getAttribute("Quiz");
 %>
 <title><%= quiz.getQuizName() %></title>
 </head>
@@ -36,22 +36,32 @@
 			</div>
 			<div class="list">
 			<%
-				
-				out.println("<a href=\"Profile?username=" + 1 + "\" ><div class=\"listentry\">" + "jandaba" + "</div></a>");
+				out.println("<div class=\"listentry\">");
+				out.println("<span class='profile'> <a href=\"Profile?username=" + 1 + "\" >" + "jandaba" + "</a></span>");
 				out.println("<span class='score'>" + 5 + "</span>");
 				out.println("<span class='time'>" + 5 + "</span>");
+				out.println("</div>");
 			%>
 			</div>
 		</div>
 		<div id="recentscores">
 			<div class="divtitle">Recent Scores:</div>
+			<div class="inf">
+			<span class="usrname">Username</span>
+			<span class="scr">Score</span>
+			<span class="timetaken">Time</span>
+			</div>
 			<div class="list">
 			<%
-				out.println("<a href=\"Profile?username=" + 1 + "\" ><div class=\"listentry\">" + "jandaba" + "</div></a>");
-				out.println("<span class='score'>" + 5 + "</span>");
+				
 			%>
 			</div>
 		</div>
+		
+		<form action="TakeQuiz" method="post">
+			<input name="id" value='<%= quiz.getId() %>'>
+			<button id="startquiz">Start Quiz</button>
+		</form>
 	</div>
 	
 	<div id="toppanel">
