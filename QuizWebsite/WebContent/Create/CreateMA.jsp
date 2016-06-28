@@ -22,27 +22,36 @@
 	<textarea type="text" cols="60" rows="6" name="statement"></textarea> <br>
 	Number of desired input fields: <input type="text" id="answernum" name="answernum"> <br>
 	Does order matter? <input type="checkbox" id="order" name="order"> <br> <br> <br>
-	Correct Answers:
+	Correct Answers:<br>
 	<span id="answerfield">
-		<input type="text" class="ans" name="answer0">
+		<span id="0" class="entry">
+			1. <button type="button" onclick="addAnswer(0)">Add</button>
+			<input type="text" class="ans" name="answer0/0">
+		</span>
 	</span>
 	</form>
 	<br>
-	<button onclick="addAnswer();">Add Answer</button> 
+	<button onclick="addAnsField();">Add Answer</button> 
 	<input id="submit" onclick="submit('CreateMA');" type="hidden" />
 	<script type="text/javascript">
 		var count = 1;
-		function addAnswer(){
+		var a = [1];
+		function addAnswer(i){
 			var field = document.createElement("input");
-			field.name = "answer" + count; field.className = "ans"; field.type = "text";
+			field.name = "answer" + i + "/" + a[i]; a[i]++; 
+			field.className = "ans"; field.type = "text";
+			document.getElementById(i).appendChild(field);
+		}
+		function addAnsField(){
+			var field = document.createElement("span");
+			field.className = "entry"; field.id = count;
+			document.getElementById('answerfield').appendChild(document.createElement("br"));
 			document.getElementById('answerfield').appendChild(field);
+			a.push(1);
+			field.innerHTML += (count+1) + ". <button type='button' onclick='addAnswer(" + count + ")'>Add</button>";
+			field.innerHTML += "<input type='text' name='answer" + count + "/0' class='ans'>";
 			count++;
 		}
-		document.getElementById('submitquiz').addEventListener("click", function(){
-			if (isNaN(parseInt(document.getElementById('answernum').value))) {alert("Enter a number in a number field");event.preventDefault();}
-			if (parseInt(document.getElementById('answernum').value) > count) {alert("Add more corect answers");event.preventDefault();}
-			if (parseInt(document.getElementById('answernum').value) > 30) {alert("Too many desired answers");event.preventDefault();}
-		});
 	</script>
 </body>
 </html>
