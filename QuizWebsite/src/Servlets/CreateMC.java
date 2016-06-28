@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import classes.question.QuestionMC;
+import classes.question.QuestionQR;
 import classes.question.Abstract.Question;
 
 /**
@@ -47,17 +48,12 @@ public class CreateMC extends HttpServlet {
 		for(int i = 0; ;i++)
 		{
 			nextAnswer = request.getParameter("answer" + i);
-		//	System.out.println(nextAnswer);
 			if( nextAnswer == null) break;
 			answers.add(nextAnswer);
 		}
 		
 		QuestionMC questionMC = new QuestionMC(problem, 1, correctAnswer, answers);
-		
-		/*
-		HttpSession session = request.getSession();
-		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("QuestionList");
-		questions.add(questionMC);
-		*/
+		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
+		createdQuestions.add(questionMC);
 	}
 }
