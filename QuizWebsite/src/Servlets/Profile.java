@@ -41,7 +41,7 @@ public class Profile extends HttpServlet {
 	 * 
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userName = request.getParameter("userName");
+		String userName = request.getParameter("username");
 		
 		RequestDispatcher dispatcher;
 		ServletContext ctx= getServletContext();  
@@ -52,7 +52,7 @@ public class Profile extends HttpServlet {
 		if(user != null)
 		{
 			request.setAttribute("User", user);
-			dispatcher = request.getRequestDispatcher("Profile.jsp?id=" + userName);
+			dispatcher = request.getRequestDispatcher("Profile.jsp?username=" + userName);
 		}
 		dispatcher.forward(request, response);	
 	}

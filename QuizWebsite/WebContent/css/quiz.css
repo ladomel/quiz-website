@@ -23,35 +23,47 @@
 	font-size: 25px;
 	font-weight: 600;
 	background: black;
-	color: white;
+	color: white; 
 }
+
+.inf {
+	position: absolute;
+	top: 30px;
+	left: 0px;
+	width:100%;
+	height: 20px;
+	background: green;
+}
+
+.usrname, .timetaken, .scr {
+	display: inline-block;
+	width: 380px;
+	height: 20px;
+	color: white;
+	font-size: 18px;
+	line-height: 20px;
+	padding-left: 4px;
+	vertical-align: middle;
+}
+
+.scr, .timetaken {width: 50px;}
 
 .list {
 	position: absolute;
 	left: 0px;
-	top: 30px;
+	top: 50px;
 	width: 100%;
-	height: calc(100% - 30px);
+	height: calc(100% - 50px);
 	overflow-y: auto;
-	overflow-x: hidden;	
+	overflow-x: hidden;
 }
 
 .listentry {
-	overflow: hidden;
-	width: 360px;
+	width: 100%;
 	height: 30px;
-	border: none;
-	padding-top: 2px;
-	padding-left: 10px;
-	background: grey;
+	background: black;
 	text-width: 300px;
 	font-size: 20px;
-	display: inline-block;
-}
-
-
-.listentry:hover {
-	background: white;
 }
 
 #qname, #qdescription, #qauthor {
@@ -82,30 +94,61 @@
 
 #topscores , #recentscores {
 	position: absolute;
-	width: 400px;
+	width: 500px;
 	height: 400px;
-	top: 210px;
-	left: calc(50% - 405px);
+	top: 270px;
+	left: calc(50% - 505px);
 }
 
 #recentscores {
 	left: calc(50% + 5px);
 }
 
-.score {
-	position: relative;
-	float: right; 
+.time {
 	height: 30px; 
-	width: 30px;
-	color:red; 
+	width: 50px;
+	color: yellow; 
+	background: black;
+	text-align: center;
+	font-weight: 600;
+	line-height: 30px;
+	border: none;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.profile {
+	height: 30px; 
+	width: 380px;
+	color: red; 
+	background: grey;
+	border: none;
+	font-weight: 600;
+	line-height: 30px;
+	padding-left: 4px;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.score {
+	height: 30px; 
+	width: 50px;
+	color: red; 
 	background: black;
 	text-align: center;
 	border: none;
 	font-weight: 600;
 	line-height: 30px;
-	padding-top: 1px;
-	padding-bottom: 1px;
 	vertical-align: middle;
+	display: inline-block;
 }
 
-
+#startquiz {
+	background: green;
+	font-size: 30px;
+	width: 200px;
+	height: 50px;
+	position: absolute;
+	top: 210px;
+	left: calc(50% - 100px);	
+}

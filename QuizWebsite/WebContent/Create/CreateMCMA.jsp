@@ -23,14 +23,14 @@
 	<span id="correctanswerfield">
 		<input type="text"  name="correctanswer0">
 	</span>
-	<br> 
-	<button onclick="addCorrectAnswer();">Add Correct Answer</button>
 	<br> <br> <br>
 	Other Answers:
 	<span id="otheranswerfield">
 		<input type="text"  name="answer0">
 	</span>
 	</form>
+	<br>
+	<button onclick="addCorrectAnswer();">Add Correct Answer</button>
 	<br>
 	<button onclick="addAnswer();">Add Answer</button>
 	<input id="submit" onclick="submit('CreateMCMA');" type="hidden" />
