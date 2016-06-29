@@ -94,15 +94,57 @@ public class MessageDAOImpl implements MessageDAO{
 	
 	@Override
 	public void addAnnouncement(Announcement announcement) {
-		// TODO Auto-generated method stub
+		try{
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(addAnnouncementCommand());
+			preparedStatement.setString(1, announcement.getAnnouncer());
+			preparedStatement.setString(2, announcement.getAnnouncement());
+			preparedStatement.setLong(3, announcement.getDate());
+			preparedStatement.executeUpdate();
+			con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+	}
+	
+	private String addAnnouncementCommand() {
+		return "INSERT INTO announcements (announcer_username, announcement, time) VALUES(?, ?, ?);";
 	}
 
 	@Override
 	public List<Announcement> getAnnouncements() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Announcement> answer = new ArrayList<Announcement>();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+					con.prepareStatement("SELECT *"
+							+ "FROM announcements "
+							+ "ORDER BY time DESC;");
+			ResultSet rs = preparedStatement.executeQuery();
+			fillAnnouncementAnswer(answer, rs);
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return answer;
 	}
 
+	private void fillAnnouncementAnswer(List<Announcement> answer, ResultSet rs)
+	{
+		try {
+			while(rs.next())
+			{
+				Announcement nextAnnouncement = classFactory.getAnnouncement
+						(rs.getString("announcer_username"), rs.getString("announcement"), rs.getLong("time"));
+				nextAnnouncement.setId(rs.getInt("id"));
+				answer.add(nextAnnouncement);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public List<FriendRequest> getFriendRequests(String username) {
 		List<FriendRequest> answer = new ArrayList<FriendRequest>();
@@ -112,7 +154,7 @@ public class MessageDAOImpl implements MessageDAO{
 			PreparedStatement preparedStatement = 
 					con.prepareStatement("SELECT *"
 							+ "FROM friendrequests "
-							+ "WHERE friendrequests.receiver_username = ?;");
+							+ "WHERE friendrequests.receiver_username = ? ORDER BY time DESC;");
 			preparedStatement.setString(1, username);
 
 			ResultSet rs = preparedStatement.executeQuery();
@@ -132,6 +174,7 @@ public class MessageDAOImpl implements MessageDAO{
 				FriendRequest nextRequest = classFactory.getFriendRequest
 						(rs.getString("sender_username"), rs.getLong("time"), rs.getString("receiver_username"), rs.getBoolean("seen"));
 				nextRequest.setStatus(rs.getString("status"));
+				nextRequest.setId(rs.getInt("id"));
 				answer.add(nextRequest);
 			}
 		} catch (SQLException e) {
@@ -147,7 +190,7 @@ public class MessageDAOImpl implements MessageDAO{
 			PreparedStatement preparedStatement = 
 					con.prepareStatement("SELECT *"
 							+ "FROM challenges "
-							+ "WHERE receiver_username = ?;");
+							+ "WHERE receiver_username = ?  ORDER BY time DESC;");
 			preparedStatement.setString(1, username);
 
 			ResultSet rs = preparedStatement.executeQuery();
@@ -159,7 +202,6 @@ public class MessageDAOImpl implements MessageDAO{
 		return answer;
 	}
 	
-	
 	private void fillChallengeAnswer(List<Challenge> answer, ResultSet rs)
 	{
 		try {
@@ -168,6 +210,7 @@ public class MessageDAOImpl implements MessageDAO{
 				Challenge nextChallenge = classFactory.getChallenge
 						(rs.getString("sender_username"), rs.getLong("time"), rs.getString("receiver_username"), rs.getInt("quiz"), rs.getBoolean("seen"));
 				nextChallenge.setStatus(rs.getString("status"));
+				nextChallenge.setId(rs.getInt("id"));
 				answer.add(nextChallenge);
 			}
 		} catch (SQLException e) {
@@ -183,7 +226,7 @@ public class MessageDAOImpl implements MessageDAO{
 			PreparedStatement preparedStatement = 
 					con.prepareStatement("SELECT *"
 							+ "FROM notes "
-							+ "WHERE receiver_username = ?;");
+							+ "WHERE receiver_username = ?  ORDER BY time DESC;");
 			preparedStatement.setString(1, username);
 
 			ResultSet rs = preparedStatement.executeQuery();
@@ -195,7 +238,6 @@ public class MessageDAOImpl implements MessageDAO{
 		return answer;
 	}
 
-	
 	private void fillNoteAnswer(List<Note> answer, ResultSet rs)
 	{
 		try {
@@ -203,20 +245,93 @@ public class MessageDAOImpl implements MessageDAO{
 			{
 				Note nextNote = classFactory.getNote
 						(rs.getString("sender_username"), rs.getLong("time"), rs.getString("note"), rs.getString("receiver_username"), rs.getBoolean("seen"));
+				nextNote.setId(rs.getInt("id"));
 				answer.add(nextNote);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	public FriendRequest getFriendRequest(int id)
+	{
+		FriendRequest answer = null;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+					con.prepareStatement("SELECT *"
+							+ "FROM friendrequests "
+							+ "WHERE id = ? ;");
+			preparedStatement.setInt(1, id);
 
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			if(rs.next())
+			{
+				answer = classFactory.getFriendRequest
+						(rs.getString("sender_username"), rs.getLong("time"), rs.getString("receiver_username"), rs.getBoolean("seen"));
+				answer.setStatus(rs.getString("status"));
+				answer.setId(rs.getInt("id"));
+			}
+			
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return answer;
+	}
 	
+	public Note getNote(int id)
+	{
+		Note answer = null;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+					con.prepareStatement("SELECT *"
+							+ "FROM notes "
+							+ "WHERE id = ? ;");
+			preparedStatement.setInt(1, id);
+
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			if(rs.next())
+			{
+				answer = classFactory.getNote
+						(rs.getString("sender_username"), rs.getLong("time"), rs.getString("note"), rs.getString("receiver_username"), rs.getBoolean("seen"));
+				answer.setId(rs.getInt("id"));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return answer;
+	}
 	
-	
-	
-	
-	
-	
-	
-	
+	public Challenge getChallenge(int id)
+	{
+		Challenge answer = null;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+					con.prepareStatement("SELECT *"
+							+ "FROM challenges "
+							+ "WHERE id = ? ;");
+			preparedStatement.setInt(1, id);
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			if(rs.next())
+			{
+				answer = classFactory.getChallenge
+						(rs.getString("sender_username"), rs.getLong("time"), rs.getString("receiver_username"), rs.getInt("quiz"), rs.getBoolean("seen"));
+				answer.setStatus(rs.getString("status"));
+				answer.setId(rs.getInt("id"));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return answer;
+	}
+
 }

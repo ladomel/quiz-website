@@ -12,6 +12,14 @@ public final class Announcement {
 		this.date = date;
 	}
 
+	@Override
+	public String toString() {
+		return "announcement: " + this.getAnnouncement() + " | " + 
+				"announcer: " + this.getAnnouncer() + " | " +
+				"date: " + this.getDate() + " | " + 
+				"id: " + this.getId();
+	}
+	
 	public String getAnnouncer() {
 		return announcer;
 	}

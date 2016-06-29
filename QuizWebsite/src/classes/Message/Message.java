@@ -41,7 +41,8 @@ public abstract class Message{
 		return "senderUserName: " + this.getSenderUserName() + " | " + 
 				"dateSent: " + this.getDateSent() + " | " +
 				"receiverUserName: " + this.getGetterUserName() + " | " + 
-				"seen: " + this.isSeen();
+				"seen: " + this.isSeen()  + " | " + 
+				"id: " + this.getId();
 	}
 
 	public int getId() {
