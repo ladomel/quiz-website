@@ -5,8 +5,8 @@ public class Challenge extends Message {
 	private final Integer quizId;
 	private String status = "Pending";
 	
-	public Challenge(String senderUserName, long dateSent, String receiverUserName, int quizId) {
-		super(senderUserName, dateSent, receiverUserName);
+	public Challenge(String senderUserName, long dateSent, String receiverUserName, int quizId, boolean seen) {
+		super(senderUserName, dateSent, receiverUserName, seen);
 		this.quizId = quizId;
 	}
 
@@ -26,4 +26,11 @@ public class Challenge extends Message {
 		this.status = status;
 	}
 
+	@Override
+	public String toString() {
+		return super.toString() + " | " +
+				"status: " + this.getStatus() + 
+				"quizId: " + this.getQuizId();
+	}
+	
 }
