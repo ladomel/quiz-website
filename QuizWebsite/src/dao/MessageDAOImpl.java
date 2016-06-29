@@ -307,7 +307,6 @@ public class MessageDAOImpl implements MessageDAO{
 		return answer;
 	}
 	
-
 	public Challenge getChallenge(int id)
 	{
 		Challenge answer = null;
@@ -334,8 +333,5 @@ public class MessageDAOImpl implements MessageDAO{
 		}
 		return answer;
 	}
-	
-	
-	
-	
+
 }
