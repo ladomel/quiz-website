@@ -17,7 +17,6 @@ public class Quiz {
 	
 	
 	// Not necessary, might delete.
-	
 	private double averageRating; // Average rating made by users.
 	private double averageScore; // Users' average score in the quiz.
 	private long averageTimeMillis; // Users' average time in milliseconds.
@@ -60,7 +59,12 @@ public class Quiz {
 				"IsRandom: " + this.isRandom() + " | " + 
 				"IsOnePage: " + this.isOnePage() + " | " +
 				"IsImmediatelyCorrected: " + this.isImmediatelyCorrected() + " | " +
-				"HasPraticeMode: " + this.isHasPracticeMode();
+				"HasPraticeMode: " + this.isHasPracticeMode() + " | " + 
+				"AverageRating: " + this.getAverageRating() + " | " +
+				"AverageScore: " + this.getAverageScore() + " | " +
+				"AverageTimeMillis: " + this.getAverageTimeMillis() + " | " +
+				"NumTries: " + this.getNumTries() + " | " +
+				"Category: " + this.getCategory() + " | ";
 	}
 	
 	public Quiz(String userName, String quizName, String description)

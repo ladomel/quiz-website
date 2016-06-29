@@ -2,9 +2,13 @@ package dao;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Set;
 import classes.User;
 
 public class UserDAOImplTest{
@@ -56,7 +60,6 @@ public class UserDAOImplTest{
 		// make sure adding returns correct new object
 		assertTrue(	userDAO.addUser("a", "a123", "a12").getUserName().equals("a")	);// make sure updating returns correct old object
 		assertTrue(	userDAO.addUser("b", "b123", "b12").getHashedPassword().equals("b123")); // make sure updating returns correct old object
-		
 		assertTrue(	userDAO.updateUser(
 						new User("a", "a1234", "a123")
 						).getUserName().equals("a")	);  
@@ -74,4 +77,44 @@ public class UserDAOImplTest{
 		assertTrue(userDAO.deleteUser("b").getUserName().equals("b"));
 		assertTrue(userDAO.deleteUser("a") == null);
 	}
+	
+	
+	@Test
+	public void basicTest3() {
+		Set<String> friends = new HashSet<String>(Arrays.asList("b", "c"));
+		User testUser = new User("a", "a1234", "a123");
+		userDAO.deleteUser("a");
+		assertTrue(userDAO.updateUser(testUser) == null);
+		userDAO.deleteUser("b");
+		userDAO.deleteUser("c");	
+		testUser.setFriends(friends);
+		
+		userDAO.addUser("a", "a123", "a12");	
+		userDAO.addUser("b", "a123", "a12");	
+		userDAO.addUser("c", "a123", "a12");	
+		
+		userDAO.updateUser(testUser);
+		System.out.println(userDAO.getUser("a").toString());
+		
+		User user2 = userDAO.getUser("a");
+		user2.getFriends().remove("b");
+		userDAO.updateUser(user2);
+		
+		System.out.println(userDAO.getUser("a").toString());
+		System.out.println(userDAO.getUser("b").toString());
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

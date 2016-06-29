@@ -50,6 +50,8 @@ public class QuizDAOImplTest {
 		quiz.setRandom(false);
 		quiz.setDateCreated(4);
 		quiz.setId(1);
+		
+		quizDAO.deleteQuiz(1);
 		assertTrue(quizDAO.updateQuiz(quiz) == null);
 		assertTrue(quizDAO.getQuiz(1) == null);
 		
@@ -62,13 +64,58 @@ public class QuizDAOImplTest {
 		assertTrue(quiz.equals(quizDAO.deleteQuiz(lastId)));
 		
 		assertTrue(quizDAO.getQuiz(lastId) == null);
-		
-//		List<Quiz> list = quizDAO.getRecentQuizzes(1);
-//		for(Quiz q : list) System.out.println(q + "\n");
-		
-//		List<Quiz> list = quizDAO.getCreatedQuizzes("apa");
-//		for(Quiz q : list) System.out.println(q + "\n");
-		
 	}
+	
+	
+	@Test
+	public void test2() {
+		Quiz quiz = new Quiz("vaja", "Future Vulture", "quiz about 2034");
+		//quiz.setUserName("lado");
+		quiz.setDateCreated(20);
+		quiz.setDescription("desc");
+		quiz.setQuizName("name");
+		quiz.setQuizTime(10);
+		quiz.setMaxScore(100);
+		quiz.setRandom(true);
+		quiz.setOnePage(true);
+		quiz.setImmediatelyCorrected(false);
+		quiz.setHasPracticeMode(false);
+		quiz.setAverageRating(50);
+		quiz.setAverageScore(70);
+		quiz.setAverageTimeMillis(20);
+		quiz.setNumTries(3);
+		quiz.setCategory("Phys");
 
+		System.out.println("Before:              " + quiz.toString());
+		int lastId = quizDAO.addQuiz(quiz);
+		Quiz taken1 = quizDAO.getQuiz(lastId);
+		
+		System.out.println("Added and taken out: " + taken1.toString());
+
+		//taken1.setUserName("Lado");
+		taken1.setDateCreated(30);
+		taken1.setDescription("Desc");
+		taken1.setQuizName("Name");
+		taken1.setQuizTime(20);
+		taken1.setMaxScore(200);
+		taken1.setRandom(false);
+		taken1.setOnePage(false);
+		taken1.setImmediatelyCorrected(true);
+		taken1.setHasPracticeMode(true);
+		taken1.setAverageRating(60);
+		taken1.setAverageScore(80);
+		taken1.setAverageTimeMillis(30);
+		taken1.setNumTries(4);
+		taken1.setCategory("phys");
+		
+		quizDAO.updateQuiz(quiz);
+		
+		Quiz taken2 = quizDAO.getQuiz(lastId);
+		
+		System.out.println("Updat and taken out: " + taken1.toString());
+	
+		quizDAO.deleteQuiz(lastId);
+		if(quizDAO.getQuiz(lastId) == null) System.out.println("Successfully deleted");
+		
+	} 
 }
