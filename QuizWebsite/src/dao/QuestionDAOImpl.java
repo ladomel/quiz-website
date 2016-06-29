@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -169,8 +170,13 @@ public class QuestionDAOImpl implements QuestionDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			// list with correct size:
-			questions = new ArrayList<Question> (numberOfQuestions(con, quizId));
+			questions = new ArrayList<Question> ();
+			for(int i = 0; i < numberOfQuestions(con, quizId); i++)  questions.add(null);
+			
 			// TODO: hard
+			retrieveQR(con, quizId, questions);
+			
+			
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -185,7 +191,77 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	
 	
-	
+	/*
+	 * this method finds and inserts all QRs into list of questions
+	 */
+	private void retrieveQR(Connection con, int quizId, List<Question> questions) 
+			throws SQLException {
+		
+		PreparedStatement preparedStatement=
+				con.prepareStatement(	// QR only needs sort by q_id
+						"SELECT * FROM questions "
+						+ "LEFT JOIN answers ON answers.question_id = questions.id "
+						+ "WHERE quiz_id = ? AND type LIKE 'QR';"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		
+		retrieveQRFromRS(rs, questions);
+		
+		rs.close();
+	}
+
+
+	private void retrieveQRFromRS(ResultSet rs, List<Question> questions) 
+			throws SQLException {
+		
+		while(rs.next()) {
+			String problem = rs.getString("problem");
+			int grade = rs.getInt("grade");
+			int currentQuestionId = rs.getInt("id");
+			rs.previous();
+			Set<String> answers = 
+					collectAnswersUntilQuestionIsSame(rs, currentQuestionId);
+			QuestionQR qr = classFactory.getQuestionQR(problem, grade, answers);
+			// SQL runs +1 idx:
+			questions.set(currentQuestionId - 1, qr);
+		}
+	}
+
+
+	private Set<String> collectAnswersUntilQuestionIsSame(ResultSet rs, int currentQuestionId) 
+			throws SQLException {
+		
+		Set<String> answers = new HashSet<String> ();
+		while(rs.next() && rs.getInt("id") == currentQuestionId) {
+			answers.add(rs.getString("answer"));
+		}
+		rs.previous();
+		return answers;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	private int numberOfQuestions(Connection con, int quizId) 
 			throws SQLException {
 		int n = 0;
