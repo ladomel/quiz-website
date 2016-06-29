@@ -13,13 +13,6 @@ public class UserDAOImpl implements UserDAO {
 
 	DataSource dataSource;
 	
-	private static final String USER_NAME = "username";
-	private static final String HEX_PASSWORD = "hash_password";
-	private static final String USER_TABLE = "users";
-	private static final String SALT = "salt";
-	private static final String DESCRIPTION = "description";
-	private static final String IMAGE = "image";
-	
 	public UserDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;	// TODO: needs singleton data source
 	}
@@ -46,17 +39,15 @@ public class UserDAOImpl implements UserDAO {
 
 	
 	private User loadIntoUser(ResultSet rs) throws SQLException {
-		User user = new User(rs.getString(USER_NAME),
-				rs.getString(HEX_PASSWORD),
-				rs.getString(SALT));
+		User user = new User(rs.getString("username"),
+				rs.getString("hash_password"),
+				rs.getString("salt"));
 		// TODO: additional info goes here (user class does not support image)
 		return user;
 	}
 
 	private String selectCommand() {
-		return "SELECT * FROM " + 
-				USER_TABLE + " WHERE " + 
-				USER_NAME + " LIKE ?;";
+		return "SELECT * FROM users WHERE username LIKE ?;";
 	}
 
 	@Override
@@ -79,9 +70,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	private String deleteCommand() {
-		return "DELETE FROM " + 
-				USER_TABLE + " WHERE " + 
-				USER_NAME + " LIKE ?;";
+		return "DELETE FROM users WHERE username LIKE ?;";
 	}
 
 	@Override
@@ -111,10 +100,8 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	private String updateCommand() {
-		return "UPDATE " + USER_TABLE + 
-				" SET " + HEX_PASSWORD + " = ?, " +
-				SALT + " = ? WHERE " + 
-				USER_NAME + " LIKE ?;";
+		return "UPDATE users SET hash_password = ?, salt = ? "
+				+ "WHERE username LIKE ?;";
 	}
 
 	@Override
@@ -140,11 +127,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	private String addingCommand() {
-		return "INSERT INTO " + 
-				USER_TABLE + " (" + 
-				USER_NAME + ", " + 
-				HEX_PASSWORD + ", " + 
-				SALT + ") VALUES(?, ?, ?);";
+		return "INSERT INTO users (username, hash_password, salt) VALUES(?, ?, ?);";
 	}
 
 }
