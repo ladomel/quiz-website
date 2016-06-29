@@ -6,10 +6,17 @@ public class Result {
 	
 	private int quizId;
 	private String userName;
-	private Integer finalGrade = null;
+	private int finalGrade = -1;
 	private long timeStarted; 
 	private long timeTaken;
 	private List<Answer> answers;
+	
+	@Override
+	public String toString() {
+		return "quiz: " + quizId + ", user: " + userName + ", quiz grade: " + 
+				finalGrade + ", started: " + timeStarted + ", elapsed: " + 
+				timeTaken + " ms, answers: " + answers;
+	}
 	
 	public Result(String userName, int quizId)
 	{
@@ -32,11 +39,11 @@ public class Result {
 		this.quizId = quizId;
 	}
 
-	public Integer getFinalGrade() {
+	public int getFinalGrade() {
 		return finalGrade;
 	}
 
-	public void setFinalGrade(Integer finalGrade) {
+	public void setFinalGrade(int finalGrade) {
 		this.finalGrade = finalGrade;
 	}
 

@@ -47,20 +47,9 @@ public interface QuizDAO {
 	
 	public List<Quiz> getRecentQuizzes(int n);
 	
-	public List<Result> getRecentResults(String userName, int n);
-	
 	/**
 	 * Quizes ordered by date (new to old).
 	 */
 	public List<Quiz> getCreatedQuizzes(String userName);	
-	
-	/**
-	 * User can take same quiz several times.
-	 */
-	public List<Result> getResult(String userName, Integer quizId);
-	
-	public List<Result> getHighestPerformance(Integer quizId, int n);
-	
-	public List<Result> getRecentResults(Integer quizId, int n);
 	
 }

@@ -135,22 +135,12 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setInt(9, quiz.getQuizTime());
 			preparedStatement.setInt(10, quiz.getMaxScore());
 			preparedStatement.executeUpdate();
-			id = lastInsertId(con);
+			id = MySQLUtil.getLastInsertId(con);
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return id;
-	}
-
-	private int lastInsertId(Connection con) throws SQLException {
-		int id = 0;
-		Statement stmt = (Statement) con.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID();");
-		rs.next();
-		id = rs.getInt("last_insert_id()");
-		rs.close();
 		return id;
 	}
 
@@ -223,12 +213,6 @@ public class QuizDAOImpl implements QuizDAO {
 	}
 
 	@Override
-	public List<Result> getRecentResults(String userName, int n) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Quiz> getCreatedQuizzes(String userName) {
 		List<Quiz> userQuizes = new ArrayList<Quiz>();
 		try {
@@ -258,24 +242,6 @@ public class QuizDAOImpl implements QuizDAO {
 				"FROM quizzes " + 
 				"INNER JOIN users " + 
 				"ON quizzes.creator_id = users.id WHERE username LIKE ?";
-	}
-
-	@Override
-	public List<Result> getResult(String userName, Integer quizId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Result> getHighestPerformance(Integer quizId, int n) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Result> getRecentResults(Integer quizId, int n) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
