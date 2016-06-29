@@ -152,7 +152,6 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setLong(13, quiz.getAverageTimeMillis());
 			preparedStatement.setInt(14, quiz.getNumTries());
 			preparedStatement.setString(15, quiz.getCategory());
-			preparedStatement.setInt(16, quiz.getId());
 			preparedStatement.executeUpdate();
 			id = MySQLUtil.getLastInsertId(con);
 			con.close();

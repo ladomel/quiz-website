@@ -72,7 +72,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 							"VALUES(?, ?, ?);");
 			preparedStatement.setInt(1, lastId);
 			preparedStatement.setString(2, s);
-			preparedStatement.setInt(3, fieldId);
+			preparedStatement.setInt(3, 0);
 			preparedStatement.executeUpdate();
 			con.close();
 		} catch (SQLException e) {
@@ -229,7 +229,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
 	private String getQuestionsWithAnswersCommand() {
 		return "SELECT * FROM questions INNER JOIN answers ON " + 
-				"questions.id = answers.question_id " + 
+				"questions.id = answers.question_id LEFT JOIN answers_wrong ON answers_wrong.question_id = answers.question_id " + 
 				"WHERE questions.quiz_id = ? ORDER BY questions.id;";
 	}
 
