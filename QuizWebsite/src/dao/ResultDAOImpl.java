@@ -2,20 +2,25 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
 import classes.Answer;
 import classes.Result;
+import factory.ClassFactory;
 
 public class ResultDAOImpl implements ResultDAO {
 
 	private DataSource dataSource;
+	private ClassFactory classFactory;
 	
 	public ResultDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
+		classFactory = new ClassFactory();	// TODO: get this as an argument
 	}
 
 	@Override
@@ -99,8 +104,71 @@ public class ResultDAOImpl implements ResultDAO {
 
 	@Override
 	public List<Result> getResult(String userName, int quizId) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Result> results = new ArrayList<Result> ();
+		try {
+			Connection con = dataSource.getConnection();
+			ResultSet rs = getResultSortGradeFirst(con, userName, quizId);
+			while(rs.next()) {
+				Result result = classFactory.getResult(userName, quizId);
+				results.add(result);
+				int resultId = rs.getInt("id");
+				rs.previous();
+				loadAnswersIntoResult(result, rs, resultId);
+			}
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
+	}
+	
+	private void loadAnswersIntoResult(Result result, ResultSet rs, 
+			int resultId) throws SQLException {
+		List<Answer> answers = new ArrayList<Answer> ();
+		while(rs.next() && rs.getInt("id") != resultId) {
+			int questionId = rs.getInt("question_id");
+			rs.previous();
+			answers.add(getAnswer(rs, questionId));
+		}
+		rs.previous();
+		result.setAnswers(answers);
+	}
+
+	private Answer getAnswer(ResultSet rs, int questionId) 
+			throws SQLException {
+		List<String> userAnswers = new ArrayList<String> ();
+		while(rs.next() && rs.getInt("question_id") != questionId) {
+			String userAnswer = rs.getString("user_answer");
+			System.out.println(userAnswer);
+			userAnswers.add(userAnswer);
+		}
+		// TODO: it gets funky if no empty user answers are allowed,
+		// but this is more than enough soice it is not.
+		rs.previous();
+		Answer answer = classFactory.getAnswer(userAnswers);
+		answer.setGrade(rs.getInt("grade"));
+		return answer ;
+	}
+
+	private ResultSet getResultSortGradeFirst(Connection con, String userName, 
+			int quizId)	throws SQLException {
+		PreparedStatement preparedStatement =
+				con.prepareStatement("SELECT results.id, "
+						+ "quiz_id, username, final_grade, start_time, time_taken, "
+						+ "grade, answers_of_question.question_id, "
+						+ "field_id, user_answer "
+						+ "FROM results "
+						+ "JOIN answers_of_question ON results.id = result_id "
+						+ "LEFT JOIN user_answers ON answers_of_question.question_id = user_answers.question_id "
+						+ "JOIN users ON users.id = results.user_id "
+						+ "WHERE username LIKE ? "
+						+ "AND results.quiz_id = ? "
+						+ "ORDER BY final_grade DESC, time_taken ASC;");
+		preparedStatement.setString(1, userName);
+		preparedStatement.setInt(2, quizId);
+		return preparedStatement.executeQuery();
 	}
 
 	@Override
