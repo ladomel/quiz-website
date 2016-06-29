@@ -5,6 +5,10 @@ import java.util.Set;
 import classes.Answer;
 import classes.Quiz;
 import classes.User;
+import classes.Message.Announcement;
+import classes.Message.Challenge;
+import classes.Message.FriendRequest;
+import classes.Message.Note;
 import classes.question.QuestionFB;
 import classes.question.QuestionMA;
 import classes.question.QuestionMC;
@@ -70,5 +74,16 @@ public class ClassFactory {
 	{
 		return new Answer(userAnswer);
 	}
-	
+	public Announcement getAnnouncement(String announcer, String announcement, long date){
+		return new Announcement(announcer, date, announcement); 
+	}
+	public Note getNote(String sender,  long date, String note, String getter){
+		return new Note(sender,date,note,getter); 
+	}
+	public Challenge getChallenge(String sender,  long date, String getter, int quizId){
+		return new Challenge(sender,date,getter,quizId); 
+	}
+	public FriendRequest getFriendRequest(String sender,  long date, String getter){
+		return new FriendRequest(sender,date,getter); 
+	}
 }
