@@ -19,7 +19,6 @@ public abstract class Message{
 		return senderUserName;
 	}
 
-
 	public long getDateSent() {
 		return dateSent;
 	}
