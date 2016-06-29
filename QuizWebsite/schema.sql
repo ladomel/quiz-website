@@ -62,6 +62,12 @@ create table answers(
 	field_id 			int(11) 		default 0
 );
 
+create table answers_wrong(
+	question_id 		int(11) 		not null,
+	answer_wrong		varchar(255) 	not null,
+	field_id 			int(11) 		default 0
+);
+
 insert into answers (question_id, answer) values(1, 'good'), (1, 'bad');
 
 create table quizzes(
