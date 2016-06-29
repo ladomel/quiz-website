@@ -171,9 +171,26 @@ public class QuestionDAOImpl implements QuestionDAO {
 		switch(type) {
 		case "QR": question = loadQR(rs); break;
 		case "PR": question = loadPR(rs); break;
+		case "MC": question = loadMC(rs); break;
 		// TODO: add other types as well
 		}
 		return question;
+	}
+
+	private Question loadMC(ResultSet rs) throws SQLException {
+		// common
+		int questionId = rs.getInt("id");
+		String problem = rs.getString("problem");
+		int grade = rs.getInt("grade");
+		//
+		Set<String> wrongAnswers = new HashSet<String> ();	// now load this set
+		String answer = rs.getString("answer");
+		wrongAnswers.add(rs.getString("answer_wrong"));
+		while(rs.next() && rs.getInt("id") == questionId) {
+			wrongAnswers.add(rs.getString("answer_wrong"));
+		}
+		Question q = classFactory.getQuestionMC(problem, grade, answer, wrongAnswers);
+		return q;
 	}
 
 	private Question loadPR(ResultSet rs) throws SQLException {
