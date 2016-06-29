@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import classes.question.QuestionFB;
 import classes.question.QuestionMA;
 import classes.question.QuestionMC;
+import classes.question.QuestionMCMA;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
 import classes.question.Abstract.Question;
@@ -75,6 +76,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		}
 	}
 
+	////////////// done
 	@Override
 	public void addFB(int quizId, QuestionFB fb) {
 		try {
@@ -88,6 +90,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		}
 	}
 	
+	//////////////// done
 	@Override
 	public void addMA(int quizId, QuestionMA ma) {
 		try {
@@ -101,6 +104,13 @@ public class QuestionDAOImpl implements QuestionDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void addMCMA(int quizId, QuestionMCMA mcma) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 
 
 
@@ -229,6 +239,26 @@ public class QuestionDAOImpl implements QuestionDAO {
 		preparedStatement.setBoolean(3, ordered);
 		preparedStatement.executeUpdate();
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 	
