@@ -62,7 +62,7 @@ public class User {
 		return description;
 	}
 
-	public void getDescription(String status) {
-		this.description = status;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }
