@@ -62,7 +62,13 @@ public class MessageDAOImplTest {
 		System.out.println(messageDAO.getAnnouncements().toString());
 	}
 	
-	
+	@Test
+	public void testFriendRequest2() {
+		FriendRequest request = classFactory.getFriendRequest("a", 20, "b", false);
+		System.out.println(messageDAO.friendRequestExists("a", "b"));
+		System.out.println(messageDAO.friendRequestExists("b", "a"));
+		System.out.println(messageDAO.friendRequestExists("a", "c"));
+	}
 	
 	
 	
