@@ -4,6 +4,7 @@ public final class Announcement {
 
 	private final String announcer,announcement;
 	private final long date;
+	private int id;
 	
 	public Announcement(String announcer, long date, String announcement) {
 		this.announcement = announcement;
@@ -21,5 +22,13 @@ public final class Announcement {
 
 	public long getDate() {
 		return date;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
