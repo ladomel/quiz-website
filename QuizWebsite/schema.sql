@@ -105,10 +105,11 @@ create table quiz_problems(
 );
 
 create table friendrequests(
-	sender_id 			int(11) 		not null,
-	receiver_id 		int(11) 		not null,
+	sender_username 	varchar(256) 		not null,
+	receiver_username 	varchar(256) 		not null,
 	status 				varchar(50), /* Active, Declined, Accepted */
-	time bigint
+	time				bigint,
+	seen				boolean
 );
 
 create table challenges(
@@ -116,15 +117,16 @@ create table challenges(
 	receiver_id 		int(11) 		not null,
 	quiz 				int(11) 		not null,
 	status 				varchar(50), /* Active, Declined, Accepted */
-	time 				bigint
+	time 				bigint,
+	seen				boolean
 );
 
 create table notes(
 	sender_id 			int(11) 		not null,
 	receiver_id 		int(11) 		not null,
 	note 				longtext,
-	status 				varchar(50), /* Seen, New */
-	time 				bigint
+	time 				bigint,
+	seen				boolean
 );
 
 # result related tables below
