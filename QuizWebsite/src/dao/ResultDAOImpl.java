@@ -127,7 +127,7 @@ public class ResultDAOImpl implements ResultDAO {
 	private void loadAnswersIntoResult(Result result, ResultSet rs, 
 			int resultId) throws SQLException {
 		List<Answer> answers = new ArrayList<Answer> ();
-		while(rs.next() && rs.getInt("id") != resultId) {
+		while(rs.next() && rs.getInt("id") == resultId) {
 			int questionId = rs.getInt("question_id");
 			rs.previous();
 			answers.add(getAnswer(rs, questionId));
@@ -139,9 +139,8 @@ public class ResultDAOImpl implements ResultDAO {
 	private Answer getAnswer(ResultSet rs, int questionId) 
 			throws SQLException {
 		List<String> userAnswers = new ArrayList<String> ();
-		while(rs.next() && rs.getInt("question_id") != questionId) {
+		while(rs.next() && rs.getInt("question_id") == questionId) {
 			String userAnswer = rs.getString("user_answer");
-			System.out.println(userAnswer);
 			userAnswers.add(userAnswer);
 		}
 		// TODO: it gets funky if no empty user answers are allowed,
