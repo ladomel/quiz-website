@@ -81,6 +81,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			Connection con = dataSource.getConnection();
 			loadCommonFields(con, fb, quizId);
 			int questionId = MySQLUtil.getLastInsertId(con);
+			loadFieldAnswers(con, questionId, fb.getAnswers());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,9 +90,38 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	@Override
 	public void addMA(int quizId, QuestionMA ma) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = dataSource.getConnection();
+			loadCommonFields(con, ma, quizId);
+			int questionId = MySQLUtil.getLastInsertId(con);
+			loadFieldAnswers(con, questionId, ma.getAnswers());
+			loadMAMetadata(con, questionId, ma.getNumAnswers(), ma.isOrdered());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	@Override
 	public List<Question> getQuestions(int quizId) {
@@ -178,7 +208,27 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	/////////////////////////////////// type 2 utils
 	
-	
+	private void loadFieldAnswers(Connection con, int questionId, 
+			List<Set<String>> answers) throws SQLException {
+		
+		for(int fieldId = 0; fieldId < answers.size(); fieldId++) {
+			loadAnswersOfField(con, answers.get(fieldId), questionId, fieldId);
+		}
+	}
+
+	private void loadMAMetadata(Connection con, 
+			int questionId, int numAnswers, boolean ordered) 
+					throws SQLException {
+
+		PreparedStatement preparedStatement =
+				con.prepareStatement("INSERT INTO multiple_choice_metadata "
+						+ "(question_id, nfields, ordered) "
+						+ "VALUES(?, ?, ?);");
+		preparedStatement.setInt(1, questionId);
+		preparedStatement.setInt(2, numAnswers);
+		preparedStatement.setBoolean(3, ordered);
+		preparedStatement.executeUpdate();
+	}
 	
 	
 	
