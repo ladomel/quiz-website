@@ -43,10 +43,7 @@ public class UserDAOImpl implements UserDAO {
 			user = loadIntoUser(rs);
 			rs.close();
 			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (SQLException e) {	e.printStackTrace();}
 		return user;
 	}
 
@@ -60,6 +57,7 @@ public class UserDAOImpl implements UserDAO {
 					rs.getString("hash_password"), 
 					rs.getString("salt"));
 			user.setDescription(rs.getString("description"));
+			user.setImage(rs.getString("image"));//Added this.
 			rs.previous();
 			}
 		Set<String> friends = new HashSet<String> ();
@@ -85,10 +83,7 @@ public class UserDAOImpl implements UserDAO {
 			deleteFromFriendLists(con, userName);
 			
 			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (SQLException e) {	e.printStackTrace();}
 		return oldUser;
 	}
 
@@ -138,10 +133,7 @@ public class UserDAOImpl implements UserDAO {
 			// add users friends
 			addFriends(con, user.getUserName(), user.getFriends());
 			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (SQLException e) {	e.printStackTrace();}
 		return oldUser;
 	}
 
@@ -162,15 +154,16 @@ public class UserDAOImpl implements UserDAO {
 	private void updateUser(Connection con, User user) throws SQLException {
 		PreparedStatement preparedStatement = 
 				con.prepareStatement(updateCommand());
-		preparedStatement.setString(4, user.getUserName());
+		preparedStatement.setString(5, user.getUserName());
 		preparedStatement.setString(1, user.getHashedPassword());
 		preparedStatement.setString(2, user.getSalt());
 		preparedStatement.setString(3, user.getDescription());
+		preparedStatement.setString(4, user.getImage());
 		preparedStatement.executeUpdate();		
 	}
 
 	private String updateCommand() {
-		return "UPDATE users SET hash_password = ?, salt = ?, description = ? "
+		return "UPDATE users SET hash_password = ?, salt = ?, description = ?, image = ? "
 				+ "WHERE username LIKE ?;";
 	}
 
@@ -188,10 +181,7 @@ public class UserDAOImpl implements UserDAO {
 			preparedStatement.setString(3, salt);
 			preparedStatement.executeUpdate();
 			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (SQLException e) {	e.printStackTrace();}
 		
 		return getUser(userName);
 	}
