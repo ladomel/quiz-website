@@ -74,7 +74,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			Set<String> answers = new HashSet<String>  ();
 			answers.add(mc.getCorrectAnswer());
 			loadAnswersOfField(con, answers, questionId, 0);
-			loadWrongAnswersOfField(con, answers, questionId, 0);
+			loadWrongAnswersOfField(con, mc.getWrongAnswers(), questionId, 0);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
