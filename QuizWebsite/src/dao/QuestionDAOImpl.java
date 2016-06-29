@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import classes.question.QuestionMC;
+import classes.question.QuestionPR;
 import classes.question.QuestionQR;
 import classes.question.Abstract.Question;
 
@@ -165,6 +166,12 @@ public class QuestionDAOImpl implements QuestionDAO {
 		return "SELECT * FROM questions INNER JOIN answers ON " + 
 				"questions.id = answers.question_id " + 
 				"WHERE questions.quiz_id = ? ORDER BY questions.id;";
+	}
+
+	@Override
+	public void addPR(int quizId, QuestionPR pr) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
