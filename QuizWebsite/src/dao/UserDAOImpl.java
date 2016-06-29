@@ -149,7 +149,9 @@ public class UserDAOImpl implements UserDAO {
 			throws SQLException {
 		PreparedStatement preparedStatement =
 				con.prepareStatement("INSERT INTO friends "
-						+ "(first_user_id, second_user_id) VALUES(?, ?);");
+						+ "(first_user_id, second_user_id) VALUES(("
+						+ "SELECT id FROM users WHERE username LIKE ?), ("
+						+ "SELECT id FROM users WHERE username LIKE ?));");
 		for(String friend : friends) {
 			preparedStatement.setString(1, userName);
 			preparedStatement.setString(2, friend);
@@ -195,7 +197,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	private String addingCommand() {
-		return "INSERT INTO users (username, hash_password, salt, description) VALUES(?, ?, ?);";
+		return "INSERT INTO users (username, hash_password, salt) VALUES(?, ?, ?);";
 	}
 
 }
