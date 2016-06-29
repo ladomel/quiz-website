@@ -76,8 +76,17 @@ create table quizzes(
 	creation_time 		bigint 			not null,
 	time 				bigint 			not null,
 	max_score 			int(11) 		not null,
+	avg_rating			double,
+	avg_score			double,
+	avg_time			bigint,
+	tries				int(11),
 	category 			varchar(250),
 	primary key(id)
+);
+
+create table tags(
+	quiz_id				int(11)			not null,
+	tag					varchar(255)	not null
 );
 
 insert into quizzes (creator_id, name, creation_time, time, max_score) values(1, 'birds', 1945, 30, 100);
