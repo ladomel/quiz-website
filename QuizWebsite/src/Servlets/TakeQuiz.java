@@ -94,7 +94,12 @@ public class TakeQuiz extends HttpServlet {
 		//Result result = new Result(user.getUserName(), takenQuizId);
 		Result result = new Result("a", takenQuizId); 
 		result.setTimeStarted(startTime);
+
 		List<Answer> answers = new ArrayList<Answer>();
+		for (int i=0;i<((List<Question>)session.getAttribute("Questions")).size();i++){
+			answers.add(null);
+		}
+		
 		result.setAnswers(answers);
 		session.setAttribute("Result", result); 
 	}

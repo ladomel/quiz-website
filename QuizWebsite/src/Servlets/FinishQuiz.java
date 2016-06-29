@@ -37,7 +37,7 @@ public class FinishQuiz extends HttpServlet {
 
     	Date date = new Date();
     	Result result = (Result)session.getAttribute("Result");
-    	result.setTimeTaken(result.getTimeStarted() - date.getTime());
+    	result.setTimeTaken( date.getTime()  -result.getTimeStarted() );
 
     	int finalGrade = 0;
     	List<Answer> answers = result.getAnswers();
@@ -48,10 +48,10 @@ public class FinishQuiz extends HttpServlet {
 		request.setAttribute("Quiz", session.getAttribute("Quiz"));
     	// if not practice mode send to database.
 		
-//		//session.setAttribute("questionPositions", null);
-//		session.setAttribute("Result", null); 
-//		session.setAttribute("Questions", null); 
-//		session.setAttribute("Quiz", null);
+		session.setAttribute("questionPositions", null);
+		session.setAttribute("Result", null); 
+		session.setAttribute("Questions", null); 
+		session.setAttribute("Quiz", null);
 
     	RequestDispatcher requestDispatcher = request.getRequestDispatcher("quizResult.jsp");
     	requestDispatcher.forward(request, response);	

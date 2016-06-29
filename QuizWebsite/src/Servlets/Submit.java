@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.annotation.WebServlet;
@@ -64,7 +65,16 @@ public class Submit extends HttpServlet {
 		answer.setGrade(grade);
 
 		Result result = (Result)session.getAttribute("Result");
-		result.getAnswers().add(position, answer);
+		System.out.println(questions.size());
+		result.getAnswers().set(position, answer);
 		System.out.println(answer.toString());
+
+		classes.Quiz quiz = (classes.Quiz) (request.getSession().getAttribute("Quiz"));
+		if (!quiz.isImmediatelyCorrected()) {
+			request.setAttribute("grade", grade);
+			request.setAttribute("maxGrade", questions.get(position).getMaxGrade());
+			RequestDispatcher rd = request.getRequestDispatcher("questionResult.jsp?id=" + position);
+			rd.forward(request, response);
+		}
 	}
 }
