@@ -37,10 +37,6 @@ public interface QuizDAO {
 	 * @return oldQuiz - deleted Quiz object, null if does not exist
 	 */
 	public Quiz deleteQuiz(int quizId);
-
-
-	////////////////////////////////////////
-	// new functions
 	
 	/**
 	 * Returns a list with Quizzes in it sorted by popularity.
@@ -59,9 +55,9 @@ public interface QuizDAO {
 	public List<Quiz> getRecentQuizzes(int n);
 	
 	/**
-	 * Returns a list with Quizzes created by user.
+	 * Returns a list with recent Quizzes created by user.
 	 * 
-	 * @return list with Quizzes created by user
+	 * @return list with recent Quizzes created by user
 	 */
 	public List<Quiz> getCreatedQuizzes(String userName);	
 }

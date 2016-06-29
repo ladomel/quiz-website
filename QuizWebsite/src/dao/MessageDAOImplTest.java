@@ -69,18 +69,4 @@ public class MessageDAOImplTest {
 		System.out.println(messageDAO.friendRequestExists("b", "a"));
 		System.out.println(messageDAO.friendRequestExists("a", "c"));
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

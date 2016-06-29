@@ -268,6 +268,6 @@ public class QuizDAOImpl implements QuizDAO {
 				"practice_mode, creation_time, category, time, max_score " + 
 				"FROM quizzes " + 
 				"INNER JOIN users " + 
-				"ON quizzes.creator_id = users.id WHERE username LIKE ?";
+				"ON quizzes.creator_id = users.id WHERE username LIKE ? ORDER BY creation_time ";
 	}
 }
