@@ -182,7 +182,6 @@ public class UserDAOImpl implements UserDAO {
 			preparedStatement.executeUpdate();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
-		
 		return getUser(userName);
 	}
 
@@ -190,4 +189,43 @@ public class UserDAOImpl implements UserDAO {
 		return "INSERT INTO users (username, hash_password, salt) VALUES(?, ?, ?);";
 	}
 
+	@Override
+	public boolean isAdmin(String userName) {
+		boolean answer = false;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+					con.prepareStatement("SELECT * FROM admins WHERE username = ? ;");
+			preparedStatement.setString(1, userName);
+			ResultSet rs = preparedStatement.executeQuery();
+			if(rs.next()) answer = true;
+			rs.close();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+		return answer;
+	}
+
+	@Override
+	public void addAdmin(String userName) {
+		try {
+			Connection con = dataSource.getConnection();
+			String statement = "INSERT INTO admins(username) VALUES(?)";
+			PreparedStatement preparedStatement = 	con.prepareStatement(statement);
+			preparedStatement.setString(1, userName);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+	}
+
+	@Override
+	public void removeAdmin(String userName) {
+		try {
+			Connection con = dataSource.getConnection();
+			String statement = "DELETE FROM admins WHERE username = ?";
+			PreparedStatement preparedStatement = 	con.prepareStatement(statement);
+			preparedStatement.setString(1, userName);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+	}
 }
