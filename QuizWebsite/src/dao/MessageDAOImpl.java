@@ -334,4 +334,24 @@ public class MessageDAOImpl implements MessageDAO{
 		return answer;
 	}
 
+	@Override
+	public boolean friendRequestExists(String senderUserName, String receiverUserName) {
+		boolean answer = false;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+					con.prepareStatement("SELECT *"
+							+ "FROM friendrequests "
+							+ "WHERE sender_username = ? AND receiver_username = ? ;"); // AND receiver_username = ?;");
+			preparedStatement.setString(1, senderUserName);
+			preparedStatement.setString(2, receiverUserName);
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			if(rs.next()) return true;
+			rs.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+		return answer;
+	}
+
 }

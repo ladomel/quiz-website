@@ -51,37 +51,32 @@ public class QuizDAOImplTest {
 		quiz.setDateCreated(4);
 		quiz.setId(1);
 		
-		quizDAO.deleteQuiz(1);
 		assertTrue(quizDAO.updateQuiz(quiz) == null);
-		assertTrue(quizDAO.getQuiz(1) == null);
-		
+
 		int lastId = quizDAO.addQuiz(quiz);
-		quiz.setId(lastId);
-		assertTrue(quiz.equals(quizDAO.getQuiz(lastId)));
+		assertTrue(quiz.equals(quizDAO.getQuiz(lastId)));		
 		
 		assertEquals(lastId + 1, quizDAO.addQuiz(quiz));
 		
-		assertTrue(quiz.equals(quizDAO.deleteQuiz(lastId)));
+		//assertTrue(quiz.equals(quizDAO.deleteQuiz(lastId)));		
 		
 		assertTrue(quizDAO.getQuiz(lastId) == null);
 	}
 	
-	
 	@Test
 	public void test2() {
-		Quiz quiz = new Quiz("vaja", "Future Vulture", "quiz about 2034");
-		//quiz.setUserName("lado");
+		Quiz quiz = new Quiz("vaja", "Future Vulture1", "quiz about 2034");
 		quiz.setDateCreated(20);
 		quiz.setDescription("desc");
 		quiz.setQuizName("name");
 		quiz.setQuizTime(10);
-		quiz.setMaxScore(100);
+		quiz.setMaxScore(110);
 		quiz.setRandom(true);
 		quiz.setOnePage(true);
 		quiz.setImmediatelyCorrected(false);
 		quiz.setHasPracticeMode(false);
 		quiz.setAverageRating(50);
-		quiz.setAverageScore(70);
+		quiz.setAverageScore(170);
 		quiz.setAverageTimeMillis(20);
 		quiz.setNumTries(3);
 		quiz.setCategory("Phys");
@@ -92,7 +87,6 @@ public class QuizDAOImplTest {
 		
 		System.out.println("Added and taken out: " + taken1.toString());
 
-		//taken1.setUserName("Lado");
 		taken1.setDateCreated(30);
 		taken1.setDescription("Desc");
 		taken1.setQuizName("Name");
@@ -108,14 +102,47 @@ public class QuizDAOImplTest {
 		taken1.setNumTries(4);
 		taken1.setCategory("phys");
 		
-		quizDAO.updateQuiz(quiz);
+		quizDAO.updateQuiz(taken1);
 		
-		Quiz taken2 = quizDAO.getQuiz(lastId);
+		Quiz q2 = new Quiz("vaja", "Name2", "desc2");
+				q2.setDateCreated(30);
+		q2.setDescription("Desc");
+		q2.setQuizName("Name");
+		q2.setQuizTime(20);
+		q2.setMaxScore(200);
+		q2.setRandom(false);
+		q2.setOnePage(false);
+		q2.setImmediatelyCorrected(true);
+		q2.setHasPracticeMode(true);
+		q2.setAverageRating(60);
+		q2.setAverageScore(80);
+		q2.setAverageTimeMillis(30);
+		q2.setNumTries(400);
+		q2.setCategory("phys");
+		quizDAO.addQuiz(q2);
 		
-		System.out.println("Updat and taken out: " + taken1.toString());
-	
-		quizDAO.deleteQuiz(lastId);
-		if(quizDAO.getQuiz(lastId) == null) System.out.println("Successfully deleted");
+
+		Quiz q3 = new Quiz("vaja", "Name2", "desc2");
+		q3.setDateCreated(30);
+		q3.setDescription("Desc");
+		q3.setQuizName("Name");
+		q3.setQuizTime(20);
+		q3.setMaxScore(200);
+		q3.setRandom(false);
+		q3.setOnePage(false);
+		q3.setImmediatelyCorrected(true);
+		q3.setHasPracticeMode(true);
+		q3.setAverageRating(60);
+		q3.setAverageScore(80);
+		q3.setAverageTimeMillis(30);
+		q3.setNumTries(40);
+		q3.setCategory("phys");
+		quizDAO.addQuiz(q3);
+
 		
+		Quiz taken2 = quizDAO.getQuiz(lastId);		
+		System.out.println("Updat and taken out: " + taken2.toString());
+		
+		System.out.println(quizDAO.getPopularQuizzes(2).toString());
 	} 
 }

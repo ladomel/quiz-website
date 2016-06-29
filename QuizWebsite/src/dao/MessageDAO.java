@@ -38,4 +38,11 @@ public interface MessageDAO {
 	 * @return Challenge - Challenge with id.
 	 */
 	public Challenge getChallenge(int id);
+	
+	/**
+	 * Returns true if friend request was sent
+	 * 
+	 * @return true if friend request was sent
+	 */
+	public boolean friendRequestExists(String senderUserName, String receiverUserName);
 }
