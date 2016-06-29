@@ -12,5 +12,11 @@ public final class Note extends Message {
 	public String getNote() {
 		return note;
 	}
-
+	
+	@Override
+	public String toString() {
+		return super.toString() + " | " +
+				"note: " + this.getNote();
+	}
+	
 }
