@@ -76,22 +76,14 @@ public class UserDAOImpl implements UserDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			// delete user
-			PreparedStatement preparedStatement = 
-					con.prepareStatement("DELETE FROM users WHERE username LIKE ?;");
-			preparedStatement.setString(1, userName);
-			preparedStatement.executeUpdate();
+			deleteUser(con, userName);
+			
 			// delete his friends
-			preparedStatement = con.prepareStatement("DELETE FROM "
-					+ "friends WHERE first_user_id = "
-					+ "(SELECT id FROM users WHERE username LIKE ?);");
-			preparedStatement.setString(1, userName);
-			preparedStatement.executeUpdate();
+			deleteUsersFriends(con, userName);
+			
 			// deletefrom friends friendlist
-			preparedStatement = con.prepareStatement("DELETE FROM "
-					+ "friends WHERE second_user_id = "
-					+ "(SELECT id FROM users WHERE username LIKE ?);");
-			preparedStatement.setString(1, userName);
-			preparedStatement.executeUpdate();
+			deleteFromFriendLists(con, userName);
+			
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -100,31 +92,79 @@ public class UserDAOImpl implements UserDAO {
 		return oldUser;
 	}
 
+	private void deleteFromFriendLists(Connection con, String userName) 
+			throws SQLException {
+		PreparedStatement preparedStatement = con.prepareStatement("DELETE FROM "
+				+ "friends WHERE second_user_id = "
+				+ "(SELECT id FROM users WHERE username LIKE ?);");
+		preparedStatement.setString(1, userName);
+		preparedStatement.executeUpdate();
+	}
+
+	private void deleteUsersFriends(Connection con, String userName) 
+			throws SQLException {
+		PreparedStatement preparedStatement = con.prepareStatement("DELETE FROM "
+				+ "friends WHERE first_user_id = "
+				+ "(SELECT id FROM users WHERE username LIKE ?);");
+		preparedStatement.setString(1, userName);
+		preparedStatement.executeUpdate();		
+	}
+
+	private void deleteUser(Connection con, String userName) 
+			throws SQLException {
+		PreparedStatement preparedStatement = 
+				con.prepareStatement("DELETE FROM users WHERE username LIKE ?;");
+		preparedStatement.setString(1, userName);
+		preparedStatement.executeUpdate();		
+	}
+
 	@Override
 	public User updateUser(User user) {
 		User oldUser = getUser(user.getUserName());
 		// return null if there is no such user
 		if(oldUser == null) return null;	
-		// delete old, put in new and add additional data
-		deleteUser(user.getUserName());
-		addUser(user.getUserName(),
-				user.getHashedPassword(),
-				user.getSalt());
+		
 		try {
 			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement = 
-					con.prepareStatement(updateCommand());
-			preparedStatement.setString(4, user.getUserName());
-			preparedStatement.setString(1, user.getHashedPassword());
-			preparedStatement.setString(2, user.getSalt());
-			preparedStatement.setString(3, user.getDescription());
-			preparedStatement.executeUpdate();
+			// delete old user and remove his friends
+			deleteUser(con, user.getUserName());
+			deleteUsersFriends(con, user.getUserName());
+			// add user
+			addUser(user.getUserName(),
+					user.getHashedPassword(),
+					user.getSalt());
+			// update user
+			updateUser(con, user);
+			// add users friends
+			addFriends(con, user.getUserName(), user.getFriends());
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return oldUser;
+	}
+
+	private void addFriends(Connection con, String userName, Set<String> friends) 
+			throws SQLException {
+		PreparedStatement preparedStatement =
+				con.prepareStatement("INSERT INTO friends "
+						+ "(first_user_id, second_user_id) VALUES(?, ?);");
+		for(String friend : friends) {
+			preparedStatement.setString(1, userName);
+			preparedStatement.setString(2, friend);
+			preparedStatement.executeUpdate();
+		}
+	}
+
+	private void updateUser(Connection con, User user) throws SQLException {
+		PreparedStatement preparedStatement = 
+				con.prepareStatement(updateCommand());
+		preparedStatement.setString(4, user.getUserName());
+		preparedStatement.setString(1, user.getHashedPassword());
+		preparedStatement.setString(2, user.getSalt());
+		preparedStatement.setString(3, user.getDescription());
+		preparedStatement.executeUpdate();		
 	}
 
 	private String updateCommand() {
