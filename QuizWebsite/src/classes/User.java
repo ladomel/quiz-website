@@ -32,6 +32,11 @@ public class User {
         return this.getUserName().hashCode();
     }
 	
+	@Override
+	public String toString() {
+		return "u: " + userName + ", p: " + hashedPassword + ", salt: " + salt + " , friends: " + friends + ".";	
+	}
+	
 	public User(String userName, String hashedPassword, String salt)
 	{
 		setUserName(userName);
