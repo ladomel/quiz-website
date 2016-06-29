@@ -75,19 +75,19 @@ public class ClassFactory {
 		return new Answer(userAnswer);
 	}
 	
-	public Announcement getAnnouncement(String announcer, String announcement, long date, boolean seen){
-		return new Announcement(announcer, date, announcement, seen); 
+	public Announcement getAnnouncement(String announcer, String announcement, long date){
+		return new Announcement(announcer, date, announcement); 
 	}
 	
-	public Note getNote(String sender,  long date, String note, String getter){
+	public Note getNote(String sender,  long date, String note, String getter, boolean seen){
 		return new Note(sender,date,note,getter, seen); 
 	}
 	
-	public Challenge getChallenge(String sender,  long date, String getter, int quizId){
+	public Challenge getChallenge(String sender,  long date, String getter, int quizId, boolean seen){
 		return new Challenge(sender,date,getter,quizId, seen); 
 	}
 	
-	public FriendRequest getFriendRequest(String sender,  long date, String getter){
+	public FriendRequest getFriendRequest(String sender,  long date, String getter, boolean seen){
 		return new FriendRequest(sender,date,getter, seen); 
 	}
 }
