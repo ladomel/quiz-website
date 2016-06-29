@@ -8,6 +8,7 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
+import classes.question.QuestionMC;
 import factory.ClassFactory;
 
 public class QuestionDAOImplTest {
@@ -30,8 +31,20 @@ public class QuestionDAOImplTest {
 //		set.add("bonapart");
 //		set.add("neipl");
 //		questionDAO.addQR(4, classFactory.getQuestionQR("didie", 2, set));
-		questionDAO.getQuestions(4);
-		System.out.println(questionDAO.getQuestions(4));
+//		questionDAO.getQuestions(4);
+//		System.out.println(questionDAO.getQuestions(4));
+//		Set<String> set = new HashSet<String>();
+//		set.add("yes");
+//		set.add("bird");
+//		questionDAO.addQR(4, classFactory.getQuestionQR("pic", 2, set));
+//		questionDAO.getQuestions(4);
+//		System.out.println(questionDAO.getQuestions(4));
+//		Set<String> set = new HashSet<String>();
+//		set.add("bad1");
+//		set.add("bad bic");
+//		QuestionMC mc = classFactory.getQuestionMC("mc1", 2, "le", set);
+//		questionDAO.addMC(4, mc);
+//		System.out.println(questionDAO.getQuestions(4));
 	}
 
 }
