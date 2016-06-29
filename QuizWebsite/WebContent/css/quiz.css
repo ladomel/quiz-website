@@ -12,7 +12,19 @@
 	background: #e6e6e6;
 }
 
+#sendchallenge {
+	border: none;
+	outline: 0;
+	position: absolute;
+	top: 3px;
+	right: 2px;
+	width: 180px;
+	height: 40px;
+	font-size: 15px;
+	background: grey;
+}
 
+#sendchallenge:hover {background: green;}
 .divtitle {
 	position: absolute;
 	top: 0px;
