@@ -2,12 +2,7 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,283 +17,160 @@ import factory.ClassFactory;
 
 public class QuestionDAOImpl implements QuestionDAO {
 
-	private DataSource dataSource;
-	private ClassFactory classFactory;
+	DataSource dataSource;
+	ClassFactory classFactory;
 	
 	public QuestionDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
-		classFactory = new ClassFactory();
+		classFactory = new ClassFactory();	// TODO: should receive as parameter
 	}
+
 	
+	
+	
+	
+	
+	
+	
+	
+	///////////////// done
 	@Override
 	public void addQR(int quizId, QuestionQR qr) {
-		// keep ID of where question was saved to add answers
-		int lastId = commonFields(quizId, qr.getProblem(),
-				qr.getGrade(), qr.getType());
-		correctAnswers(lastId, qr.getAnswers());
+		try {
+			Connection con = dataSource.getConnection();
+			loadCommonFields(con, qr, quizId);
+			int questionId = MySQLUtil.getLastInsertId(con);
+			loadAnswersOfField(con, qr.getAnswers(), questionId, 0);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+
+	//////////////// done
 	@Override
 	public void addPR(int quizId, QuestionPR pr) {
-		// keep ID of where question was saved to add answers
-		int lastId = commonFields(quizId, pr.getProblem(),
-				pr.getGrade(), pr.getType());
-		correctAnswers(lastId, pr.getAnswers());
+		try {
+			Connection con = dataSource.getConnection();
+			loadCommonFields(con, pr, quizId);
+			int questionId = MySQLUtil.getLastInsertId(con);
+			loadAnswersOfField(con, pr.getAnswers(), questionId, 0);
+			loadPictureUrl(con, questionId, pr.getPictureURL());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+
 	@Override
 	public void addMC(int quizId, QuestionMC mc) {
-		// keep ID of where question was saved to add answers
-		int lastId = commonFields(quizId, mc.getProblem(),
-				mc.getGrade(), mc.getType());
-		correctAnswers(lastId, mc.getCorrectAnswers());
-		wrongAnswers(lastId, mc.getWrongAnswers());
+		try {
+			Connection con = dataSource.getConnection();
+			loadCommonFields(con, mc, quizId);
+			int questionId = MySQLUtil.getLastInsertId(con);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+
 	@Override
 	public void addFB(int quizId, QuestionFB fb) {
-		// keep ID of where question was saved to add answers
-		int lastId = commonFields(quizId, fb.getProblem(),
-				fb.getGrade(), fb.getType());
-		correctAnswersFB(lastId, fb.getAnswers());
-	}
-
-	private void correctAnswersFB(int lastId, List<Set<String>> answers) {
-		int fieldId = 0;
-		for(Set<String> s : answers) 
-		{ 
-			putAnswersSetOnField(s, lastId, fieldId); 
-			fieldId++; 
-		}
-	}
-
-	private void putAnswersSetOnField(Set<String> s, int lastId, int fieldId) {
-		for(String ans : s) {
-			putAnswerInField(ans, lastId, fieldId);
-		}
-	}
-
-	private void putAnswerInField(String ans, int lastId, int fieldId) {
 		try {
 			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement =
-					con.prepareStatement("INSERT INTO answers " + 
-							"(question_id, answer, field_id) " + 
-							"VALUES(?, ?, ?);");
-			preparedStatement.setInt(1, lastId);
-			preparedStatement.setString(2, ans);
-			preparedStatement.setInt(3, fieldId);
-			preparedStatement.executeUpdate();
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-	}
-
-	private void wrongAnswers(int lastId, Collection<String> wrongAnswers) {
-		int fieldId = 0;
-		for(String s : wrongAnswers) 
-		{ 
-			putWrongAnswer(s, lastId, fieldId); 
-			fieldId++; 
-		}
-	}
-
-	private void putWrongAnswer(String s, int lastId, int fieldId) {
-		try {
-			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement =
-					con.prepareStatement("INSERT INTO answers_wrong " + 
-							"(question_id, answer_wrong, field_id) " + 
-							"VALUES(?, ?, ?);");
-			preparedStatement.setInt(1, lastId);
-			preparedStatement.setString(2, s);
-			preparedStatement.setInt(3, 0);
-			preparedStatement.executeUpdate();
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-	}
-
-	private void correctAnswers(int lastId, Collection<String> answers) {
-		for(String s : answers) putAnswerZerothField(s, lastId);
-	}
-
-	// TODO: one can insert all in single query.
-	// but to save time we leave it as is
-	private void putAnswerZerothField(String s, int lastId) {
-		try {
-			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement =
-					con.prepareStatement("INSERT INTO answers " + 
-							"(question_id, answer, field_id) " + 
-							"VALUES(?, ?, ?);");
-			preparedStatement.setInt(1, lastId);
-			preparedStatement.setString(2, s);
-			preparedStatement.setInt(3, 0);
-			preparedStatement.executeUpdate();
-			con.close();
+			loadCommonFields(con, fb, quizId);
+			int questionId = MySQLUtil.getLastInsertId(con);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-
-	private int commonFields(int quizId, String problem,
-			int grade, String type) {
-		Connection con;
-		int lastId = 0;
-		try {
-			con = dataSource.getConnection();
-			PreparedStatement preparedStatement =
-					con.prepareStatement(commonCommand());
-			preparedStatement.setInt(1, quizId);
-			preparedStatement.setString(2, problem);
-			preparedStatement.setString(3, type);
-			preparedStatement.setInt(4, grade);
-			preparedStatement.executeUpdate();
-			lastId = MySQLUtil.getLastInsertId(con);
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return lastId;
-	}
-
-	private String commonCommand() {
-		return "INSERT INTO questions (quiz_id, problem, type, grade) " + 
-				"VALUES(?, ?, ?, ?);";
 	}
 
 	@Override
 	public List<Question> getQuestions(int quizId) {
 		List<Question> questions = null;
-		try {
-			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement = 
-					con.prepareStatement(getQuestionsWithAnswersCommand());
-			preparedStatement.setInt(1, quizId);
-			ResultSet rs = preparedStatement.executeQuery();
-			questions = loadQuestions(rs);
-			rs.close();
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// TODO: this is hard
 		return questions;
 	}
 
-	// here question list is filled
-	private List<Question> loadQuestions(ResultSet rs) throws SQLException {
-		List<Question> questions = new ArrayList<Question> ();
-		rs.next();
-		while(true) {
-			Question q = readQuestionFromResultSet(rs);
-			if(q == null) break;
-			questions.add(q);
-		}
-		return questions;
-	}
-
-	private Question readQuestionFromResultSet(ResultSet rs)
+	
+	
+	
+	
+	
+	
+	
+	////////////////// type 1 utils
+	
+	/*
+	 * this method loads quiz id, problem, type and grade
+	 */
+	private void loadCommonFields(Connection con, Question q, int quizId) 
 			throws SQLException {
-		if(rs.isAfterLast()) return null;
-		Question question = null;
-		String type = rs.getString("type");
-		switch(type) {
-		case "QR": question = loadQR(rs); break;
-		case "PR": question = loadPR(rs); break;
-		case "MC": question = loadMC(rs); break;
-		case "FB": question = loadFB(rs); break;
-		// TODO: add other types as well
-		}
-		return question;
+		
+		PreparedStatement preparedStatement =
+				con.prepareStatement(
+						"INSERT INTO questions "
+						+ "(quiz_id, problem, type, grade) "
+						+ "VALUES(?, ?, ?, ?);");
+		preparedStatement.setLong(1, quizId);
+		preparedStatement.setString(2, q.getProblem());
+		preparedStatement.setString(3, q.getType());	// sorry no enum
+		preparedStatement.setLong(4, q.getGrade());
+		preparedStatement.executeUpdate();
 	}
-
-	private Question loadFB(ResultSet rs) throws SQLException {
-		// common
-		int questionId = rs.getInt("id");
-		String problem = rs.getString("problem");
-		int grade = rs.getInt("grade");
-		//
-		List<Set<String>> answers = new ArrayList<Set<String> > ();
-		int fieldId = 0;	// we know each quetion starts with field # 0
-		Set<String> fieldAnswers = new HashSet<String> ();
-		fieldAnswers.add(rs.getString("answers.answer"));
-		while(rs.next() && rs.getInt("id") == questionId) {
-			if(rs.getInt("answers.field_id") != fieldId) {
-				answers.add(fieldAnswers);
-				fieldAnswers = new HashSet<String> ();
-				fieldAnswers.add(rs.getString("answers.answer"));
-				fieldId = rs.getInt("answers.field_id");
-			} else {
-				fieldAnswers.add(rs.getString("answers.answer"));
-			}
-		}
-		QuestionFB q = classFactory.getQuestionFB(problem, grade, answers);
-		return q;
-	}
-
-	private Question loadMC(ResultSet rs) throws SQLException {
-		// common
-		int questionId = rs.getInt("id");
-		String problem = rs.getString("problem");
-		int grade = rs.getInt("grade");
-		//
-		Set<String> wrongAnswers = new HashSet<String> ();	// now load this set
-		String answer = rs.getString("answer");
-		wrongAnswers.add(rs.getString("answer_wrong"));
-		while(rs.next() && rs.getInt("id") == questionId) {
-			wrongAnswers.add(rs.getString("answer_wrong"));
-		}
-		Question q = classFactory.getQuestionMC(problem, grade, answer, wrongAnswers);
-		return q;
-	}
-
-	private Question loadPR(ResultSet rs) throws SQLException {
-		/*
-		 * COPIED FROM loadQR() TO DO IT FAST
-		 */
-		int questionId = rs.getInt("id");
-		String problem = rs.getString("problem");
-		int grade = rs.getInt("grade");
-		Set<String> answers = new HashSet<String> ();	// now load this set
-		answers.add(rs.getString("answer"));
-		while(rs.next() && rs.getInt("id") == questionId) {
-			answers.add(rs.getString("answer"));
-		}
-		Question q = classFactory.getQuestionQR(problem, grade, answers);
-		return q;
-	}
-
-	// if this is called rs.isAfterLast() is false
-	private Question loadQR(ResultSet rs) 
+	
+	/*
+	 * this will load answers set as fields possible correct answers
+	 */
+	private void loadAnswersOfField(Connection con, Set<String> answers,
+			int questionId, int fieldId)
 			throws SQLException {
-		// memorize question id we are working with
-		// and keep moving until we collect all the answers
-		// NOTE: SAME QUESTION ARE ADJACENT IN RS
-		int questionId = rs.getInt("id");
-		String problem = rs.getString("problem");
-		int grade = rs.getInt("grade");
-		Set<String> answers = new HashSet<String> ();	// now load this set
-		answers.add(rs.getString("answer"));
-		while(rs.next() && rs.getInt("id") == questionId) {
-			answers.add(rs.getString("answer"));
-		}
-		Question q = classFactory.getQuestionQR(problem, grade, answers);
-		return q;
+		
+		for(String answer : answers) loadAnswerIntoField(con, answer, 
+				questionId, fieldId);
 	}
 
-	private String getQuestionsWithAnswersCommand() {
-		return "SELECT * FROM questions INNER JOIN answers ON " + 
-				"questions.id = answers.question_id "
-				+ "LEFT JOIN answers_wrong ON answers_wrong.question_id = answers.question_id " + 
-				"WHERE questions.quiz_id = ? ORDER BY questions.id, answers.field_id;";
+	// single queries are preferred, but hey, do we have time for that?
+	private void loadAnswerIntoField(Connection con, String answer, 
+			int questionId, int fieldId)
+			throws SQLException {
+		
+		PreparedStatement preparedStatement =
+				con.prepareStatement("INSERT INTO answers "
+						+ "(question_id, answer, field_id) "
+						+ "VALUES(?, ?, ?);");
+		preparedStatement.setInt(1, questionId);
+		preparedStatement.setString(2, answer);
+		preparedStatement.setInt(3, fieldId);
+		preparedStatement.executeUpdate();
 	}
+	
+	/*
+	 * load picture url
+	 */
+	private void loadPictureUrl(Connection con, int questionId, 
+			String pictureURL) throws SQLException {
+		
+		PreparedStatement preparedStatement =
+				con.prepareStatement("INSERT INTO images (question_id, image) VALUES(?, ?);");
+		preparedStatement.setInt(1, questionId);
+		preparedStatement.setString(2, pictureURL);
+		preparedStatement.executeUpdate();
+	}
+	
+	/////////////////////////////////// type 2 utils
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 
 }
