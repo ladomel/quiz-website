@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -26,11 +28,19 @@ public class UserDAOImpl implements UserDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement = 
-					con.prepareStatement(selectCommand());
+					con.prepareStatement("SELECT "
+							+ "users.username, users.hash_password, "
+							+ "users.salt, users.description, users.image, "
+							+ "users2.username AS username2 "
+							+ "FROM users "
+							+ "LEFT JOIN friends "
+							+ "ON users.id = friends.first_user_id "
+							+ "LEFT JOIN users AS users2 "
+							+ "ON users2.id = friends.second_user_id "
+							+ "WHERE users.username like ?;");
 			preparedStatement.setString(1, userName);
 			ResultSet rs = preparedStatement.executeQuery();
-			// we need only one row (there should not be more)
-			if(rs.next()) user = loadIntoUser(rs);
+			user = loadIntoUser(rs);
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
@@ -40,17 +50,22 @@ public class UserDAOImpl implements UserDAO {
 		return user;
 	}
 
-	
-	private User loadIntoUser(ResultSet rs) throws SQLException {
-		User user = classFactory.getUser(rs.getString("username"),
-				rs.getString("hash_password"),
-				rs.getString("salt"));
-		user.setDescription(rs.getString("description"));
-				return user;
-	}
 
-	private String selectCommand() {
-		return "SELECT * FROM users WHERE username LIKE ?;";
+	private User loadIntoUser(ResultSet rs) throws SQLException {
+		User user = null;
+		if(!rs.next())
+			return null; 
+		else {
+			user = classFactory.getUser(rs.getString("username"), 
+					rs.getString("hash_password"), 
+					rs.getString("salt"));
+			user.setDescription(rs.getString("description"));
+			rs.previous();
+			}
+		Set<String> friends = new HashSet<String> ();
+		while(rs.next()) friends.add(rs.getString("username2"));
+		user.setFriends(friends);
+		return user;
 	}
 
 	@Override
@@ -61,7 +76,7 @@ public class UserDAOImpl implements UserDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement = 
-					con.prepareStatement(deleteCommand());
+					con.prepareStatement("DELETE FROM users WHERE username LIKE ?;");
 			preparedStatement.setString(1, userName);
 			preparedStatement.executeUpdate();
 			con.close();
@@ -70,10 +85,6 @@ public class UserDAOImpl implements UserDAO {
 			e.printStackTrace();
 		}
 		return oldUser;
-	}
-
-	private String deleteCommand() {
-		return "DELETE FROM users WHERE username LIKE ?;";
 	}
 
 	@Override
