@@ -41,7 +41,7 @@ public class AcceptFriendRequest extends HttpServlet {
 		int requestId = Integer.parseInt(request.getParameter("requestId"));
 		String status = request.getParameter("status");
 		FriendRequest ch = null; // get
-		ch.setStatus(status);
+		//ch.setStatus(status);
 		// insrt to database
 		// insert friends into database
 	}

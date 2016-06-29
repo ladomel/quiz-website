@@ -30,8 +30,7 @@ public class AcceptChallenge extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
 	}
 
 	/**
@@ -41,10 +40,10 @@ public class AcceptChallenge extends HttpServlet {
 		int challengeId = Integer.parseInt(request.getParameter("challengeId"));
 		String status = request.getParameter("status");
 		Challenge ch = null; // get
-		ch.setStatus(status);
+		ch.setStatus(status); 
 		// insrt to database
-		RequestDispatcher rd = request.getRequestDispatcher("Quiz?id=" + ch.getQuizId());
-		if (status.equals("Accepted")) rd.forward(request, response);
+		RequestDispatcher rd = request.getRequestDispatcher("Quiz?id=1" + ch.getQuizId());
+		if (status.equals("Accept")) rd.forward(request, response);
 	}
 
 }
