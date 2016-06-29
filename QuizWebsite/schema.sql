@@ -62,6 +62,12 @@ create table answers(
 	field_id 			int(11) 		default 0
 );
 
+create table answers_wrong(
+	question_id 		int(11) 		not null,
+	answer_wrong		varchar(255) 	not null,
+	field_id 			int(11) 		default 0
+);
+
 insert into answers (question_id, answer) values(1, 'good'), (1, 'bad');
 
 create table quizzes(
@@ -76,8 +82,17 @@ create table quizzes(
 	creation_time 		bigint 			not null,
 	time 				bigint 			not null,
 	max_score 			int(11) 		not null,
+	avg_rating			double,
+	avg_score			double,
+	avg_time			bigint,
+	tries				int(11),
 	category 			varchar(250),
 	primary key(id)
+);
+
+create table tags(
+	quiz_id				int(11)			not null,
+	tag					varchar(255)	not null
 );
 
 insert into quizzes (creator_id, name, creation_time, time, max_score) values(1, 'birds', 1945, 30, 100);

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,15 +14,19 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import classes.question.QuestionMC;
+import classes.question.QuestionPR;
 import classes.question.QuestionQR;
 import classes.question.Abstract.Question;
+import factory.ClassFactory;
 
 public class QuestionDAOImpl implements QuestionDAO {
 
 	private DataSource dataSource;
+	private ClassFactory classFactory;
 	
 	public QuestionDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
+		classFactory = new ClassFactory();
 	}
 	
 	@Override
@@ -31,8 +36,52 @@ public class QuestionDAOImpl implements QuestionDAO {
 				qr.getGrade(), qr.getType());
 		correctAnswers(lastId, qr.getAnswers());
 	}
+	
+	@Override
+	public void addPR(int quizId, QuestionPR pr) {
+		// keep ID of where question was saved to add answers
+		int lastId = commonFields(quizId, pr.getProblem(),
+				pr.getGrade(), pr.getType());
+		correctAnswers(lastId, pr.getAnswers());
+	}
+	
+	@Override
+	public void addMC(int quizId, QuestionMC mc) {
+		// keep ID of where question was saved to add answers
+		int lastId = commonFields(quizId, mc.getProblem(),
+				mc.getGrade(), mc.getType());
+		correctAnswers(lastId, mc.getCorrectAnswers());
+		wrongAnswers(lastId, mc.getWrongAnswers());
+	}
 
-	private void correctAnswers(int lastId, Set<String> answers) {
+	private void wrongAnswers(int lastId, Collection<String> wrongAnswers) {
+		int fieldId = 0;
+		for(String s : wrongAnswers) 
+		{ 
+			putWrongAnswer(s, lastId, fieldId); 
+			fieldId++; 
+		}
+	}
+
+	private void putWrongAnswer(String s, int lastId, int fieldId) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement("INSERT INTO answers_wrong " + 
+							"(question_id, answer_wrong, field_id) " + 
+							"VALUES(?, ?, ?);");
+			preparedStatement.setInt(1, lastId);
+			preparedStatement.setString(2, s);
+			preparedStatement.setInt(3, fieldId);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+
+	private void correctAnswers(int lastId, Collection<String> answers) {
 		for(String s : answers) putAnswer(s, lastId);
 	}
 
@@ -45,7 +94,6 @@ public class QuestionDAOImpl implements QuestionDAO {
 					con.prepareStatement("INSERT INTO answers " + 
 							"(question_id, answer, field_id) " + 
 							"VALUES(?, ?, ?);");
-			System.out.println(lastId);
 			preparedStatement.setInt(1, lastId);
 			preparedStatement.setString(2, s);
 			preparedStatement.setInt(3, 0);
@@ -70,7 +118,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			preparedStatement.setString(3, type);
 			preparedStatement.setInt(4, grade);
 			preparedStatement.executeUpdate();
-			lastId = getLastId(con);
+			lastId = MySQLUtil.getLastInsertId(con);
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -79,25 +127,9 @@ public class QuestionDAOImpl implements QuestionDAO {
 		return lastId;
 	}
 
-	private int getLastId(Connection con) throws SQLException {
-		Statement stmt = con.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID();");
-		rs.next();
-		int lastId = rs.getInt("LAST_INSERT_ID()");
-		rs.close();
-		return lastId;
-		
-	}
-
 	private String commonCommand() {
 		return "INSERT INTO questions (quiz_id, problem, type, grade) " + 
 				"VALUES(?, ?, ?, ?);";
-	}
-
-	@Override
-	public void addMC(int quizId, QuestionMC mc) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -138,9 +170,43 @@ public class QuestionDAOImpl implements QuestionDAO {
 		String type = rs.getString("type");
 		switch(type) {
 		case "QR": question = loadQR(rs); break;
+		case "PR": question = loadPR(rs); break;
+		case "MC": question = loadMC(rs); break;
 		// TODO: add other types as well
 		}
 		return question;
+	}
+
+	private Question loadMC(ResultSet rs) throws SQLException {
+		// common
+		int questionId = rs.getInt("id");
+		String problem = rs.getString("problem");
+		int grade = rs.getInt("grade");
+		//
+		Set<String> wrongAnswers = new HashSet<String> ();	// now load this set
+		String answer = rs.getString("answer");
+		wrongAnswers.add(rs.getString("answer_wrong"));
+		while(rs.next() && rs.getInt("id") == questionId) {
+			wrongAnswers.add(rs.getString("answer_wrong"));
+		}
+		Question q = classFactory.getQuestionMC(problem, grade, answer, wrongAnswers);
+		return q;
+	}
+
+	private Question loadPR(ResultSet rs) throws SQLException {
+		/*
+		 * COPIED FROM loadQR() TO DO IT FAST
+		 */
+		int questionId = rs.getInt("id");
+		String problem = rs.getString("problem");
+		int grade = rs.getInt("grade");
+		Set<String> answers = new HashSet<String> ();	// now load this set
+		answers.add(rs.getString("answer"));
+		while(rs.next() && rs.getInt("id") == questionId) {
+			answers.add(rs.getString("answer"));
+		}
+		Question q = classFactory.getQuestionQR(problem, grade, answers);
+		return q;
 	}
 
 	// if this is called rs.isAfterLast() is false
@@ -157,7 +223,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		while(rs.next() && rs.getInt("id") == questionId) {
 			answers.add(rs.getString("answer"));
 		}
-		Question q = new QuestionQR(problem, grade, answers);
+		Question q = classFactory.getQuestionQR(problem, grade, answers);
 		return q;
 	}
 

@@ -1,8 +1,25 @@
 package classes.Message;
 
-public class Announcement extends Message{
+public final class Announcement {
 
-	public Announcement(String senderUserName, long dateSent, String message) {
-		super(senderUserName, dateSent, message);
+	private final String announcer,announcement;
+	private final long date;
+	
+	public Announcement(String announcer, long date, String announcement) {
+		this.announcement = announcement;
+		this.announcer = announcer;
+		this.date = date;
+	}
+
+	public String getAnnouncer() {
+		return announcer;
+	}
+
+	public String getAnnouncement() {
+		return announcement;
+	}
+
+	public long getDate() {
+		return date;
 	}
 }

@@ -22,13 +22,21 @@
 		<img id="profileimage" src="http://vignette3.wikia.nocookie.net/whentheycry/images/5/50/Fuck_you.jpg">
 		<span id="profilename">JANDABA</span>
 		<span id="description">YLEA ES CHEMISA</span>
-		<button id="editdescr">Edit Status</button>
 		<button id="addfriendb"  <%= disabled %>>
 			<% 
 				if (disabled.equals("disabled")) out.print("Already your friend!"); 
 					else out.print("Add as a friend!"); 
 			%>
 		</button>
+		<%
+			if (request.getSession().getAttribute("MasterUser")!=null) {
+				out.println("<button id='sendnote'>Send Note</button>");
+			}
+			
+			if (request.getSession().getAttribute("MasterUser").equals(user)){
+				out.println("<button id='editdescr'>Edit Status</button>");
+			}
+		%>
 		<div id="achievements">
 			<img class="achimage" src="http://vignette3.wikia.nocookie.net/whentheycry/images/5/50/Fuck_you.jpg" onclick="alert('yleo')">
 			<img class="achimage" src="http://vignette3.wikia.nocookie.net/whentheycry/images/5/50/Fuck_you.jpg" onclick="alert('yleo')">
@@ -39,7 +47,7 @@
 			<div class="divtitle">Friends:</div>
 			<div class="list">
 			<%
-				out.println("<a href=\"Profile?id=" + 1 + "\" ><div class=\"listentry\">" + "jandaba" + "</div></a>");	
+				out.println("<a href=\"Profile?username=" + "ja" + "\" ><div class=\"listentry\">" + "jandaba" + "</div></a>");	
 			%>
 			</div>
 		</div>

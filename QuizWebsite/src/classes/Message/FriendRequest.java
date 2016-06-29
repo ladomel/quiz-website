@@ -1,25 +1,23 @@
 package classes.Message;
 
-public class FriendRequest extends Message{
-
-	private String receiverUserName;
+public final class FriendRequest extends Message{
 	
-	public FriendRequest(String senderUserName, long dateSent, String message, String receiverUserName) {
-		super(senderUserName, dateSent, senderUserName);
-		super.setMessage(generateMessage(senderUserName));
-		setReceiverUserName(receiverUserName);
+	private String status = "Pending";
+
+	public FriendRequest(String senderUserName, long dateSent, String receiverUserName) {
+		super(senderUserName, dateSent,receiverUserName);
 	}
 	
-	private String generateMessage(String senderUserName)
-	{
-		return "User " + senderUserName + " wants to be your friend ";
+	public String generateMessage(String senderUserName){
+		return "User " + senderUserName + " wants to be your friend!";
 	}
 
-	public String getReceiverUserName() {
-		return receiverUserName;
+	public String getStatus() {
+		return status;
 	}
 
-	public void setReceiverUserName(String receiverUserName) {
-		this.receiverUserName = receiverUserName;
+	public void setStatus(String status) {
+		this.status = status;
 	}
+
 }
