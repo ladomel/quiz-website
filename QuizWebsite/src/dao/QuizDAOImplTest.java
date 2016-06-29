@@ -143,6 +143,6 @@ public class QuizDAOImplTest {
 		Quiz taken2 = quizDAO.getQuiz(lastId);		
 		System.out.println("Updat and taken out: " + taken2.toString());
 		
-		System.out.println(quizDAO.getPopularQuizzes(2).toString());
+		System.out.println(quizDAO.getCreatedQuizzes("vaja").toString());
 	} 
 }
