@@ -8,13 +8,16 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import classes.User;
+import factory.ClassFactory;
 
 public class UserDAOImpl implements UserDAO {
 
 	DataSource dataSource;
+	ClassFactory classFactory;
 	
 	public UserDAOImpl(DataSource dataSource) {
-		this.dataSource = dataSource;	// TODO: needs singleton data source
+		this.dataSource = dataSource;
+		classFactory = new ClassFactory();	// TODO: pass as parameter
 	}
 	
 	@Override
@@ -39,11 +42,11 @@ public class UserDAOImpl implements UserDAO {
 
 	
 	private User loadIntoUser(ResultSet rs) throws SQLException {
-		User user = new User(rs.getString("username"),
+		User user = classFactory.getUser(rs.getString("username"),
 				rs.getString("hash_password"),
 				rs.getString("salt"));
-		// TODO: additional info goes here (user class does not support image)
-		return user;
+		user.setDescription(rs.getString("description"));
+				return user;
 	}
 
 	private String selectCommand() {
@@ -87,9 +90,10 @@ public class UserDAOImpl implements UserDAO {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement = 
 					con.prepareStatement(updateCommand());
-			preparedStatement.setString(3, user.getUserName());
+			preparedStatement.setString(4, user.getUserName());
 			preparedStatement.setString(1, user.getHashedPassword());
 			preparedStatement.setString(2, user.getSalt());
+			preparedStatement.setString(3, user.getDescription());
 			preparedStatement.executeUpdate();
 			con.close();
 		} catch (SQLException e) {
@@ -100,7 +104,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	private String updateCommand() {
-		return "UPDATE users SET hash_password = ?, salt = ? "
+		return "UPDATE users SET hash_password = ?, salt = ?, description = ? "
 				+ "WHERE username LIKE ?;";
 	}
 
@@ -127,7 +131,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	private String addingCommand() {
-		return "INSERT INTO users (username, hash_password, salt) VALUES(?, ?, ?);";
+		return "INSERT INTO users (username, hash_password, salt, description) VALUES(?, ?, ?);";
 	}
 
 }
