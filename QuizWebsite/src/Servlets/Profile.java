@@ -9,8 +9,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import classes.User;
+import dao.QuizDAO;
 import dao.UserDAO;
 
 /**
@@ -47,6 +49,10 @@ public class Profile extends HttpServlet {
 		ServletContext ctx= getServletContext();  
 		UserDAO userDAO = (UserDAO)ctx.getAttribute("userDAO");
 		dispatcher = request.getRequestDispatcher("notfound.jsp");	
+		
+		QuizDAO quizDao= (QuizDAO)ctx.getAttribute("quizDAO");
+		HttpSession s = request.getSession();
+		s.setAttribute("createdQuizzes", quizDao.getCreatedQuizzes(userName));
 		
 		User user = userDAO.getUser(userName);
 		if(user != null)
