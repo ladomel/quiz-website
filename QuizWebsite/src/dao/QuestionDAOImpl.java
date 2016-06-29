@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,8 +44,44 @@ public class QuestionDAOImpl implements QuestionDAO {
 				pr.getGrade(), pr.getType());
 		correctAnswers(lastId, pr.getAnswers());
 	}
+	
+	@Override
+	public void addMC(int quizId, QuestionMC mc) {
+		// keep ID of where question was saved to add answers
+		int lastId = commonFields(quizId, mc.getProblem(),
+				mc.getGrade(), mc.getType());
+		correctAnswers(lastId, mc.getCorrectAnswers());
+		wrongAnswers(lastId, mc.getWrongAnswers());
+	}
 
-	private void correctAnswers(int lastId, Set<String> answers) {
+	private void wrongAnswers(int lastId, Collection<String> wrongAnswers) {
+		int fieldId = 0;
+		for(String s : wrongAnswers) 
+		{ 
+			putWrongAnswer(s, lastId, fieldId); 
+			fieldId++; 
+		}
+	}
+
+	private void putWrongAnswer(String s, int lastId, int fieldId) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement("INSERT INTO answers_wrong " + 
+							"(question_id, answer_wrong, field_id) " + 
+							"VALUES(?, ?, ?);");
+			preparedStatement.setInt(1, lastId);
+			preparedStatement.setString(2, s);
+			preparedStatement.setInt(3, 0);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+
+	private void correctAnswers(int lastId, Collection<String> answers) {
 		for(String s : answers) putAnswer(s, lastId);
 	}
 
@@ -57,7 +94,6 @@ public class QuestionDAOImpl implements QuestionDAO {
 					con.prepareStatement("INSERT INTO answers " + 
 							"(question_id, answer, field_id) " + 
 							"VALUES(?, ?, ?);");
-			System.out.println(lastId);
 			preparedStatement.setInt(1, lastId);
 			preparedStatement.setString(2, s);
 			preparedStatement.setInt(3, 0);
@@ -94,12 +130,6 @@ public class QuestionDAOImpl implements QuestionDAO {
 	private String commonCommand() {
 		return "INSERT INTO questions (quiz_id, problem, type, grade) " + 
 				"VALUES(?, ?, ?, ?);";
-	}
-
-	@Override
-	public void addMC(int quizId, QuestionMC mc) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -141,9 +171,26 @@ public class QuestionDAOImpl implements QuestionDAO {
 		switch(type) {
 		case "QR": question = loadQR(rs); break;
 		case "PR": question = loadPR(rs); break;
+		case "MC": question = loadMC(rs); break;
 		// TODO: add other types as well
 		}
 		return question;
+	}
+
+	private Question loadMC(ResultSet rs) throws SQLException {
+		// common
+		int questionId = rs.getInt("id");
+		String problem = rs.getString("problem");
+		int grade = rs.getInt("grade");
+		//
+		Set<String> wrongAnswers = new HashSet<String> ();	// now load this set
+		String answer = rs.getString("answer");
+		wrongAnswers.add(rs.getString("answer_wrong"));
+		while(rs.next() && rs.getInt("id") == questionId) {
+			wrongAnswers.add(rs.getString("answer_wrong"));
+		}
+		Question q = classFactory.getQuestionMC(problem, grade, answer, wrongAnswers);
+		return q;
 	}
 
 	private Question loadPR(ResultSet rs) throws SQLException {
@@ -182,7 +229,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 
 	private String getQuestionsWithAnswersCommand() {
 		return "SELECT * FROM questions INNER JOIN answers ON " + 
-				"questions.id = answers.question_id " + 
+				"questions.id = answers.question_id LEFT JOIN answers_wrong ON answers_wrong.question_id = answers.question_id " + 
 				"WHERE questions.quiz_id = ? ORDER BY questions.id;";
 	}
 

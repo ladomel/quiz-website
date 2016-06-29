@@ -24,7 +24,11 @@ public class User {
 			return true;
 
 		User otherUser = (User) obj;
-		return this.getUserName().equals(otherUser.getUserName());
+		
+		return this.getUserName().equals(otherUser.getUserName()) &&
+				this.getHashedPassword().equals(otherUser.getHashedPassword()) && 
+				this.getSalt().equals(otherUser.getSalt()) &&
+				this.getFriends().equals(otherUser.getFriends());
 	}
 	
 	@Override
