@@ -124,6 +124,7 @@ public class MessageDAOImpl implements MessageDAO{
 			ResultSet rs = preparedStatement.executeQuery();
 			fillAnnouncementAnswer(answer, rs);
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -160,6 +161,7 @@ public class MessageDAOImpl implements MessageDAO{
 			ResultSet rs = preparedStatement.executeQuery();
 			fillRequestAnswer(answer, rs);
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -196,6 +198,7 @@ public class MessageDAOImpl implements MessageDAO{
 			ResultSet rs = preparedStatement.executeQuery();
 			fillChallengeAnswer(answer, rs);
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -232,6 +235,7 @@ public class MessageDAOImpl implements MessageDAO{
 			ResultSet rs = preparedStatement.executeQuery();
 			fillNoteAnswer(answer, rs);
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -275,6 +279,7 @@ public class MessageDAOImpl implements MessageDAO{
 			}
 			
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -301,6 +306,7 @@ public class MessageDAOImpl implements MessageDAO{
 				answer.setId(rs.getInt("id"));
 			}
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -328,6 +334,7 @@ public class MessageDAOImpl implements MessageDAO{
 				answer.setId(rs.getInt("id"));
 			}
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -350,6 +357,7 @@ public class MessageDAOImpl implements MessageDAO{
 
 			if(rs.next()) return true;
 			rs.close();
+			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 		return answer;
 	}
