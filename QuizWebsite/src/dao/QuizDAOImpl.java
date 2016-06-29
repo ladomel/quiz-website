@@ -3,15 +3,13 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.SQLException; 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import classes.Quiz;
-import classes.Result;
+import classes.Quiz; 
 import factory.ClassFactory;
 
 public class QuizDAOImpl implements QuizDAO {
@@ -38,14 +36,12 @@ public class QuizDAOImpl implements QuizDAO {
 					con.prepareStatement(getterCommand());
 			preparedStatement.setInt(1, quizId);
 			ResultSet rs = preparedStatement.executeQuery();
-			// we need only one row (there should not be more)
-			if(rs.next()) quiz = loadIntoQuiz(rs);
+			
+			if(rs.next()) quiz = loadIntoQuiz(rs);	// we need only one row (there should not be more)
+			
 			rs.close();
 			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (SQLException e) {	e.printStackTrace();}
 		return quiz;
 	}
 
@@ -62,7 +58,7 @@ public class QuizDAOImpl implements QuizDAO {
 		quiz.setDateCreated(rs.getLong("creation_time"));
 		quiz.setMaxScore(rs.getInt("max_score"));
 		quiz.setAverageRating(rs.getDouble("avg_rating"));
-		quiz.setAverageScore(rs.getDouble("max_score"));
+		quiz.setAverageScore(rs.getDouble("avg_score"));
 		quiz.setAverageTimeMillis(rs.getLong("avg_time"));
 		quiz.setNumTries(rs.getInt("tries"));
 		quiz.setCategory(rs.getString("category"));	// should have separate table but fuck it
@@ -108,10 +104,7 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setInt(16, quiz.getId());
 			preparedStatement.executeUpdate();
 			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (SQLException e) {e.printStackTrace();	}
 		return oldQuiz;
 	}
 
@@ -156,7 +149,6 @@ public class QuizDAOImpl implements QuizDAO {
 			id = MySQLUtil.getLastInsertId(con);
 			con.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return id;
@@ -184,10 +176,7 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setInt(1, quizId);
 			preparedStatement.executeUpdate();
 			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (SQLException e) {e.printStackTrace();}
 		return oldQuiz;
 	}
 
@@ -201,8 +190,7 @@ public class QuizDAOImpl implements QuizDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
-					con.prepareStatement("SELECT * FROM quizzes "
-							+ "ORDER BY avg_rating DESC LIMIT ?;");
+					con.prepareStatement(popularCommand());
 			preparedStatement.setInt(1, n);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
@@ -212,12 +200,18 @@ public class QuizDAOImpl implements QuizDAO {
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return popularQuizzes;
 	}
 
+	private String popularCommand() {
+		return "SELECT *, username " + 
+				"FROM quizzes INNER " + 
+				"JOIN users ON users.id = quizzes.creator_id " + 
+				"ORDER BY tries DESC LIMIT ?;";
+	}
+	
 	@Override
 	public List<Quiz> getRecentQuizzes(int n) {
 		List<Quiz> recentQuizzes = new ArrayList<Quiz>();
@@ -234,7 +228,6 @@ public class QuizDAOImpl implements QuizDAO {
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return recentQuizzes;
@@ -262,8 +255,7 @@ public class QuizDAOImpl implements QuizDAO {
 			}
 			rs.close();
 			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+		} catch (SQLException e) { 
 			e.printStackTrace();
 		}
 		return userQuizes;
@@ -271,12 +263,11 @@ public class QuizDAOImpl implements QuizDAO {
 
 	private String userCreatedCommand() {
 		return "SELECT " + 
-				"quizzes.id, quizzes.description, username, name, " + 
+				"quizzes.id, avg_rating, avg_score, avg_time, tries, quizzes.description, username, name, " + 
 				"is_random, is_one_page, immediate_correction, " + 
-				"practice_mode, creation_time, time, max_score " + 
+				"practice_mode, creation_time, category, time, max_score " + 
 				"FROM quizzes " + 
 				"INNER JOIN users " + 
-				"ON quizzes.creator_id = users.id WHERE username LIKE ?";
+				"ON quizzes.creator_id = users.id WHERE username LIKE ? ORDER BY creation_time ";
 	}
-
 }

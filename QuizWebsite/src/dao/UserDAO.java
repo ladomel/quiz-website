@@ -44,6 +44,5 @@ public interface UserDAO {
 	 * @param salt - password salt String
 	 * @return user - newly created User object, null if could not create
 	 */
-	public User addUser(String userName, String hexPassword, String salt);
-	
+	public User addUser(String userName, String hexPassword, String salt);	
 }

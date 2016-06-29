@@ -9,7 +9,8 @@ public class User {
 	private String hashedPassword;
 	private String salt;
 	private Set<String> friends;
-
+	private String image;
+	
 	private String description;
 	
 	/*
@@ -38,7 +39,7 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "u: " + userName + ", p: " + hashedPassword + ", salt: " + salt + " , friends: " + friends + ".";	
+		return "u: " + userName + ", p: " + hashedPassword + ", salt: " + salt + " , friends: " + friends + "image: " + image + ".";	
 	}
 	
 	public User(String userName, String hashedPassword, String salt)
@@ -92,5 +93,13 @@ public class User {
 	 */
 	public void setFriends(Set<String> friends) {
 		this.friends = friends;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 }
