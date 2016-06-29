@@ -11,6 +11,13 @@ public class Result {
 	private long timeTaken;
 	private List<Answer> answers;
 	
+	@Override
+	public String toString() {
+		return "quiz: " + quizId + ", user: " + userName + ", quiz grade: " + 
+				finalGrade + ", started: " + timeStarted + ", elapsed: " + 
+				timeTaken + " ms, answers: " + answers;
+	}
+	
 	public Result(String userName, int quizId)
 	{
 		setQuizId(quizId);
