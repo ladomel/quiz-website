@@ -1,6 +1,7 @@
 package Servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,6 +44,9 @@ public class Submit extends HttpServlet {
 	 * Gets called for each question. Creates an Answer.
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html; charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		
 		HttpSession session = request.getSession();
 		List<String> userAnswer = new ArrayList<String>();
 		int numAnswers = (request.getParameterMap().keySet().size()-1);
@@ -70,11 +74,8 @@ public class Submit extends HttpServlet {
 		System.out.println(answer.toString());
 
 		classes.Quiz quiz = (classes.Quiz) (request.getSession().getAttribute("Quiz"));
-		if (!quiz.isImmediatelyCorrected()) {
-			request.setAttribute("grade", grade);
-			request.setAttribute("maxGrade", questions.get(position).getMaxGrade());
-			RequestDispatcher rd = request.getRequestDispatcher("questionResult.jsp?id=" + position);
-			rd.forward(request, response);
-		}
+		if (quiz.isImmediatelyCorrected()) {
+			out.print("questionResult.jsp?id=" + position + "&grade=" + grade + "&maxGrade=" + questions.get(position).getMaxGrade());
+		} else out.print("");
 	}
 }

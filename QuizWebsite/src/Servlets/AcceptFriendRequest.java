@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import classes.Message.Challenge;
 import classes.Message.FriendRequest;
+import dao.MessageDAO;
+import dao.UserDAO;
 
 /**
  * Servlet implementation class AcceptFriendRequest
@@ -40,10 +42,12 @@ public class AcceptFriendRequest extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int requestId = Integer.parseInt(request.getParameter("requestId"));
 		String status = request.getParameter("status");
-		FriendRequest ch = null; // get
-		//ch.setStatus(status);
-		// insrt to database
-		// insert friends into database
+		MessageDAO mD = (MessageDAO) request.getServletContext().getAttribute("messageDAO");
+		FriendRequest fr = mD.getFriendRequest(requestId);
+		fr.setStatus(status);
+		mD.addFriendRequest(fr);
+		UserDAO uD = (UserDAO) request.getServletContext().getAttribute("userDAO");
+		
 	}
 
 }

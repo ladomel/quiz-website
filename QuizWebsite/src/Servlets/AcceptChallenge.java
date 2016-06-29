@@ -37,6 +37,7 @@ public class AcceptChallenge extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getSession().getAttribute("MasterUser") == null) return;
 		int challengeId = Integer.parseInt(request.getParameter("challengeId"));
 		String status = request.getParameter("status");
 		Challenge ch = null; // get

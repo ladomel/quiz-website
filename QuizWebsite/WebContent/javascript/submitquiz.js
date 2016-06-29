@@ -14,6 +14,7 @@ function submitQuiz(){
 		var button = doc.getElementById("submit");
 		button.click();
 	}
+	$(window).unbind();
 	window.location = "FinishQuiz";
 }
 
@@ -21,13 +22,12 @@ function nextQuestion(){
 	var url = document.getElementById("iframe").src;
 	var num = parseInt(url.substring(url.indexOf("?id=") + 4)) + 1;
 	var doc = document.getElementById("iframe").contentDocument;
-	doc.getElementById("submit").click();
 	document.getElementById("nextquestion").disabled = true;
-	//setTimeout(function(){
-		document.getElementById("nextquestion").disabled = false;
-	//}, 3000);
-	
-	document.getElementById("iframe").src = "Question?id=" + num;
+	doc.getElementById("submit").click();
+	setTimeout(function(){
+		document.getElementById("iframe").src = "Question?id=" + num;
+	}, 2000);
+	document.getElementById("nextquestion").disabled = false;
 	
 }
 

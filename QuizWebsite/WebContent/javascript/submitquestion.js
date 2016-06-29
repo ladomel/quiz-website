@@ -8,7 +8,12 @@ function submit(questionID){
 			async: false,
 			url: "Submit",
 			type: "POST",
-			data: $("#form").serialize() + "&questionPosition=" + questionID
+			data: $("#form").serialize() + "&questionPosition=" + questionID,
+			success: function(data){
+				if (data == "") return; else {
+					window.location = data;
+				} 
+			}
 		}		
 	);
 }

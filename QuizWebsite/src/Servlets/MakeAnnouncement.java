@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import classes.User;
 import classes.Message.Announcement;
 import classes.Message.Note;
+import dao.MessageDAO;
 import factory.ClassFactory;
 
 /**
@@ -39,12 +40,14 @@ public class MakeAnnouncement extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getSession().getAttribute("MasterUser") == null) return;
 		String announcement = request.getParameter("announcement");
 		User master = (User) request.getSession().getAttribute("MasterUser");
 		ClassFactory factory = (ClassFactory) request.getServletContext().getAttribute("factory");
 		long date = (new Date()).getTime();
 		Announcement ann = factory.getAnnouncement(master.getUserName(),announcement,date);
-		// database 
+		MessageDAO mD = (MessageDAO) request.getAttribute("messageDAO");
+		mD.addAnnouncement(ann);
 	}
 
 }
