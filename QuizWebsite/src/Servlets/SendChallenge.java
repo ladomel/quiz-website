@@ -2,6 +2,8 @@ package Servlets;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,13 +42,19 @@ public class SendChallenge extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String getterUsername = request.getParameter("getter");
+		Map<String,String[]> map = request.getParameterMap();
 		int quizId = Integer.parseInt(request.getParameter("quizId"));
 		User master = (User) request.getSession().getAttribute("MasterUser");
 		ClassFactory factory = (ClassFactory) request.getServletContext().getAttribute("factory");
 		long date = (new Date()).getTime();
-		Challenge req = factory.getChallenge(master.getUserName(), date, getterUsername, quizId);
-		// database 
+		int i = 0;
+		while(true){
+			if (map.containsKey(Integer.toString(i))){
+				Challenge req = factory.getChallenge(master.getUserName(), date, map.get(Integer.toString(i))[0], quizId);
+				// database 
+				i++;
+			} else break;
+		}
 	}
 
 }
