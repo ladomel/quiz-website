@@ -59,6 +59,12 @@ create table images(
 	image				varchar(255)
 );
 
+create table multiple_choice_metadata(
+	question_id			int(11)			not null,
+	nfields				int(11)			not null,
+	ordered				boolean			not null
+);
+
 insert into questions (quiz_id, problem, type, grade) values(1, 'whatsup', 'QR', 5);
 
 create table answers(
