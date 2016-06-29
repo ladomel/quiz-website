@@ -13,6 +13,7 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import classes.question.QuestionFB;
 import classes.question.QuestionMC;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
@@ -52,6 +53,12 @@ public class QuestionDAOImpl implements QuestionDAO {
 				mc.getGrade(), mc.getType());
 		correctAnswers(lastId, mc.getCorrectAnswers());
 		wrongAnswers(lastId, mc.getWrongAnswers());
+	}
+	
+	@Override
+	public void addFB(int quizId, QuestionFB fb) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void wrongAnswers(int lastId, Collection<String> wrongAnswers) {
