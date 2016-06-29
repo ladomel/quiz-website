@@ -6,6 +6,7 @@ public abstract class Message{
 	private final String getterUserName;
 	private final long dateSent;
 	private boolean seen;
+	private int id;
 	
 	public Message(String senderUserName, long dateSent, String getterUserName, boolean seen)
 	{
@@ -41,5 +42,13 @@ public abstract class Message{
 				"dateSent: " + this.getDateSent() + " | " +
 				"receiverUserName: " + this.getGetterUserName() + " | " + 
 				"seen: " + this.isSeen();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
