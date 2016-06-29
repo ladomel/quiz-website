@@ -35,12 +35,14 @@ public class MessageDAOImplTest {
 	
 	@Test
 	public void testNote() {
-		Note note = classFactory.getNote("a", 11, "haa", "c", false);
+		Note note = classFactory.getNote("a", 11, "haa", "cd", false);
 		messageDAO.addNote(note);
 		
-		System.out.println(messageDAO.getChallenges("haa").size());
-		System.out.println(messageDAO.getChallenges("haa").toString());
-		System.out.println(messageDAO.getNote(2).toString());
+		System.out.println(messageDAO.getNotes("c").size());
+		System.out.println(messageDAO.getNotes("c").toString());
+		System.out.println(messageDAO.getNotes("a").size());
+		System.out.println(messageDAO.getNotes("a").toString());
+		//System.out.println(messageDAO.getNote(2).toString());
 
 	}
 	
@@ -68,5 +70,38 @@ public class MessageDAOImplTest {
 		System.out.println(messageDAO.friendRequestExists("a", "b"));
 		System.out.println(messageDAO.friendRequestExists("b", "a"));
 		System.out.println(messageDAO.friendRequestExists("a", "c"));
+	}
+	
+	@Test
+	public void seenChallengeTest() {
+		System.out.println(messageDAO.getChallenge(5).toString());
+		messageDAO.seenChallenge(5);
+		System.out.println(messageDAO.getChallenge(5).toString());
+	}
+	
+	@Test
+	public void seenFriendRequestTest() {
+		System.out.println(messageDAO.getFriendRequest(4).toString());
+		messageDAO.seenFriendRequest(4);
+		System.out.println(messageDAO.getFriendRequest(4).toString());
+	}
+	
+	@Test
+	public void seenNoteTest() {
+		System.out.println(messageDAO.getNote(4).toString());
+		messageDAO.seenNote(4);
+		System.out.println(messageDAO.getNote(4).toString());
+	}
+	
+	@Test
+	public void unseenTest() {
+		System.out.println(messageDAO.getNumUnseen("haa"));
+		Challenge challenge = classFactory.getChallenge("a", 11, "haa", 1, false);
+		messageDAO.addChallenges(challenge);
+		Note note = classFactory.getNote("sen", 12, "ih", "haa", false);
+		messageDAO.addNote(note);
+		FriendRequest request = classFactory.getFriendRequest("send", 12, "haa", false);
+		messageDAO.addFriendRequest(request);
+		System.out.println(messageDAO.getNumUnseen("haa"));
 	}
 }

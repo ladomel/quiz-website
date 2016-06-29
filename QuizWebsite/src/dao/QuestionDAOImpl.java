@@ -2,7 +2,12 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -162,17 +167,186 @@ public class QuestionDAOImpl implements QuestionDAO {
 	@Override
 	public List<Question> getQuestions(int quizId) {
 		List<Question> questions = null;
-		// TODO: this is hard
+		try {
+			Connection con = dataSource.getConnection();
+			// list with correct size:
+			questions = new ArrayList<Question> ();
+			for(int i = 0; i < numberOfQuestions(con, quizId); i++)  questions.add(null);
+			
+			// TODO: hard
+			retrieveQR(con, quizId, questions);
+			retrievePR(con, quizId, questions);
+			
+			
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return questions;
 	}
 
 	
 	
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 	
+	/*
+	 * this method finds and inserts all QRs into list of questions
+	 */
+	private void retrieveQR(Connection con, int quizId, List<Question> questions) 
+			throws SQLException {
+		
+		PreparedStatement preparedStatement=
+				con.prepareStatement(	// QR only needs sort by q_id
+						"SELECT * FROM questions "
+						+ "LEFT JOIN answers ON answers.question_id = questions.id "
+						+ "WHERE quiz_id = ? AND type LIKE 'QR' ORDER BY id;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		
+		retrieveQRFromRS(rs, questions);
+		
+	}
 	
+	/*
+	 * mocking above method
+	 */
+	private void retrievePR(Connection con, int quizId, List<Question> questions) 
+			throws SQLException {
+		
+		PreparedStatement preparedStatement=
+				con.prepareStatement(	// QR only needs sort by q_id
+						"SELECT * FROM questions "
+						+ "LEFT JOIN answers ON answers.question_id = questions.id "
+						+ "LEFT JOIN images ON images.question_id = id "
+						+ "WHERE quiz_id = ? AND type LIKE 'PR' ORDER BY id;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		
+		retrievePRFromRS(rs, questions);
+		
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+	private void retrieveQRFromRS(ResultSet rs, List<Question> questions) 
+			throws SQLException {
+		
+		while(rs.next()) {
+			String problem = rs.getString("problem");
+			int grade = rs.getInt("grade");
+			int currentQuestionId = rs.getInt("id");
+			rs.previous();
+			Set<String> answers = 
+					collectAnswersUntilQuestionIsSame(rs, currentQuestionId);
+			QuestionQR qr =
+					classFactory.getQuestionQR(problem, grade, answers);
+			// SQL runs +1 idx:
+						questions.set(currentQuestionId - 1, qr);
+		}
+	}
 	
+	/*
+	 * mocking above because why not ?
+	 */
+	private void retrievePRFromRS(ResultSet rs, List<Question> questions) 
+			throws SQLException {
+		
+		while(rs.next()) {
+			String imageURL = rs.getString("image");
+			String problem = rs.getString("problem");
+			int grade = rs.getInt("grade");
+			int currentQuestionId = rs.getInt("id");
+			rs.previous();
+			Set<String> answers = 
+					collectAnswersUntilQuestionIsSame(rs, currentQuestionId);
+			QuestionPR question = 
+					classFactory.getQuestionPR(problem, grade, imageURL, answers);
+			// SQL runs +1 idx:
+			questions.set(currentQuestionId - 1, question);
+		}		
+	}
+
+
+	private Set<String> collectAnswersUntilQuestionIsSame(ResultSet rs, int currentQuestionId) 
+			throws SQLException {
+		
+		Set<String> answers = new HashSet<String> ();
+		while(rs.next() && rs.getInt("id") == currentQuestionId) {
+			answers.add(rs.getString("answer"));
+		}
+		rs.previous();
+		return answers;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	private int numberOfQuestions(Connection con, int quizId) 
+			throws SQLException {
+		int n = 0;
+		PreparedStatement preparedStatement =
+				con.prepareStatement(
+						"SELECT COUNT(1) FROM questions WHERE quiz_id = ?;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		rs.next();
+		n = rs.getInt("COUNT(1)");
+		rs.close();
+		return n;
+	}
+
+
+
+
+
+
+
+
+
 	////////////////// type 1 utils
 	
 	/*
