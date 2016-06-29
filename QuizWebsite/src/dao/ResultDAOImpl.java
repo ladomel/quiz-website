@@ -110,6 +110,12 @@ public class ResultDAOImpl implements ResultDAO {
 			ResultSet rs = getResultSortGradeFirst(con, userName, quizId);
 			while(rs.next()) {
 				Result result = classFactory.getResult(userName, quizId);
+				// set 1-1 values in result:
+				result.setFinalGrade(rs.getInt("final_grade"));
+				result.setQuizId(rs.getInt("quiz_id"));
+				result.setTimeStarted(rs.getLong("start_time"));
+				result.setTimeTaken(rs.getLong("time_taken"));
+				result.setUserName(rs.getString("username"));
 				results.add(result);
 				int resultId = rs.getInt("id");
 				rs.previous();
@@ -164,7 +170,7 @@ public class ResultDAOImpl implements ResultDAO {
 						+ "JOIN users ON users.id = results.user_id "
 						+ "WHERE username LIKE ? "
 						+ "AND results.quiz_id = ? "
-						+ "ORDER BY final_grade DESC, time_taken ASC;");
+						+ "ORDER BY final_grade DESC, time_taken ASC, user_answers.question_id ASC;");
 		preparedStatement.setString(1, userName);
 		preparedStatement.setInt(2, quizId);
 		return preparedStatement.executeQuery();
