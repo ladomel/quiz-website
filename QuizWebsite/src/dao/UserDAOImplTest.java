@@ -84,15 +84,16 @@ public class UserDAOImplTest{
 		Set<String> friends = new HashSet<String>(Arrays.asList("b", "c"));
 		User testUser = new User("a", "a1234", "a123");
 		userDAO.deleteUser("a");
-		assertTrue(userDAO.updateUser(testUser) == null);
 		userDAO.deleteUser("b");
 		userDAO.deleteUser("c");	
 		testUser.setFriends(friends);
+		testUser.setImage("I am an image");
 		
 		userDAO.addUser("a", "a123", "a12");	
-		userDAO.addUser("b", "a123", "a12");	
-		userDAO.addUser("c", "a123", "a12");	
-		
+		userDAO.addUser("b", "b123", "b12");	
+		userDAO.addUser("c", "c123", "c12");	
+
+		System.out.println(userDAO.getUser("a").toString());
 		userDAO.updateUser(testUser);
 		System.out.println(userDAO.getUser("a").toString());
 		
@@ -103,18 +104,4 @@ public class UserDAOImplTest{
 		System.out.println(userDAO.getUser("a").toString());
 		System.out.println(userDAO.getUser("b").toString());
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
