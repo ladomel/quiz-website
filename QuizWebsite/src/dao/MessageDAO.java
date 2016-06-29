@@ -15,5 +15,27 @@ public interface MessageDAO {
 	public List<Challenge> getChallenges(String username);
 	public List<Note> getNotes(String username);
 	
+	/**
+	 * Returns friendRequest by id, null if not found
+	 * 
+	 * @param id - id of request
+	 * @return request - request with id.
+	 */
+	public FriendRequest getFriendRequest(int id);
 	
+	/**
+	 * Returns note by id, null if not found
+	 * 
+	 * @param id - id of note
+	 * @return note - note with id.
+	 */
+	public Note getNote(int id);
+	
+	/**
+	 * Returns Challenge by id, null if not found
+	 * 
+	 * @param id - id of Challenge
+	 * @return Challenge - Challenge with id.
+	 */
+	public Challenge getChallenge(int id);
 }

@@ -251,5 +251,91 @@ public class MessageDAOImpl implements MessageDAO{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}	
+	}
+	
+	public FriendRequest getFriendRequest(int id)
+	{
+		FriendRequest answer = null;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+					con.prepareStatement("SELECT *"
+							+ "FROM friendrequests "
+							+ "WHERE id = ? ;");
+			preparedStatement.setInt(1, id);
+
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			if(rs.next())
+			{
+				answer = classFactory.getFriendRequest
+						(rs.getString("sender_username"), rs.getLong("time"), rs.getString("receiver_username"), rs.getBoolean("seen"));
+				answer.setStatus(rs.getString("status"));
+				answer.setId(rs.getInt("id"));
+			}
+			
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return answer;
+	}
+	
+	public Note getNote(int id)
+	{
+		Note answer = null;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+					con.prepareStatement("SELECT *"
+							+ "FROM notes "
+							+ "WHERE id = ? ;");
+			preparedStatement.setInt(1, id);
+
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			if(rs.next())
+			{
+				answer = classFactory.getNote
+						(rs.getString("sender_username"), rs.getLong("time"), rs.getString("note"), rs.getString("receiver_username"), rs.getBoolean("seen"));
+				answer.setId(rs.getInt("id"));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return answer;
+	}
+	
+
+	public Challenge getChallenge(int id)
+	{
+		Challenge answer = null;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+					con.prepareStatement("SELECT *"
+							+ "FROM challenges "
+							+ "WHERE id = ? ;");
+			preparedStatement.setInt(1, id);
+
+			ResultSet rs = preparedStatement.executeQuery();
+
+			if(rs.next())
+			{
+				answer = classFactory.getChallenge
+						(rs.getString("sender_username"), rs.getLong("time"), rs.getString("receiver_username"), rs.getInt("quiz"), rs.getBoolean("seen"));
+				answer.setStatus(rs.getString("status"));
+				answer.setId(rs.getInt("id"));
+			}
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return answer;
+	}
+	
+	
+	
+	
 }

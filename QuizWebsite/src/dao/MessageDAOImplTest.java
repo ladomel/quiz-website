@@ -30,6 +30,7 @@ public class MessageDAOImplTest {
 
 		System.out.println(messageDAO.getFriendRequests("b").size());
 		System.out.println(messageDAO.getFriendRequests("b").toString());
+		System.out.println(messageDAO.getFriendRequest(2).toString());
 	}
 	
 	@Test
@@ -39,6 +40,7 @@ public class MessageDAOImplTest {
 		
 		System.out.println(messageDAO.getChallenges("haa").size());
 		System.out.println(messageDAO.getChallenges("haa").toString());
+		System.out.println(messageDAO.getNote(2).toString());
 
 	}
 	
@@ -49,6 +51,7 @@ public class MessageDAOImplTest {
 		
 		System.out.println(messageDAO.getChallenges("haa").size());
 		System.out.println(messageDAO.getChallenges("haa").toString());
+		System.out.println(messageDAO.getNote(2).toString());
 	}
 	
 	@Test
@@ -58,4 +61,20 @@ public class MessageDAOImplTest {
 		
 		System.out.println(messageDAO.getAnnouncements().toString());
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
