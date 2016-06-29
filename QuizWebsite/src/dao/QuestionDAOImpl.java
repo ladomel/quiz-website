@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
@@ -162,7 +163,39 @@ public class QuestionDAOImpl implements QuestionDAO {
 	@Override
 	public List<Question> getQuestions(int quizId) {
 		List<Question> questions = null;
-		// TODO: this is hard
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT "
+							+ "q.id AS id, "
+							+ "q.quiz_id AS quiz, "
+							+ "q.problem AS problem, "
+							+ "q.type AS type, "
+							+ "q.grade AS grade, "
+							+ "a.answer AS answer, "
+							+ "a.field_id AS cf_id, "
+							+ "i.image AS image, "
+							+ "mcm.nfields AS nfields, "
+							+ "mcm.ordered AS ordered, "
+							+ "aw.answer_wrong AS answer_wrong, "
+							+ "aw.field_id AS wf_id "
+							+ "FROM "
+							+ "questions as q "
+							+ "LEFT JOIN answers AS a ON a.question_id = q.id "
+							+ "LEFT JOIN images AS i ON i.question_id = q.id "
+							+ "LEFT JOIN multiple_choice_metadata AS mcm ON mcm.question_id = q.id "
+							+ "LEFT JOIN answers_wrong AS aw ON aw.question_id = q.id "
+							+ "WHERE questions.quiz_id = ?;");
+			preparedStatement.setLong(1, quizId);
+			ResultSet rs = preparedStatement.executeQuery();
+			// TODO: extract info
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return questions;
 	}
 
