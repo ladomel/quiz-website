@@ -16,13 +16,16 @@ import classes.question.QuestionMC;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
 import classes.question.Abstract.Question;
+import factory.ClassFactory;
 
 public class QuestionDAOImpl implements QuestionDAO {
 
 	private DataSource dataSource;
+	private ClassFactory classFactory;
 	
 	public QuestionDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
+		classFactory = new ClassFactory();
 	}
 	
 	@Override
@@ -31,6 +34,14 @@ public class QuestionDAOImpl implements QuestionDAO {
 		int lastId = commonFields(quizId, qr.getProblem(),
 				qr.getGrade(), qr.getType());
 		correctAnswers(lastId, qr.getAnswers());
+	}
+	
+	@Override
+	public void addPR(int quizId, QuestionPR pr) {
+		// keep ID of where question was saved to add answers
+		int lastId = commonFields(quizId, pr.getProblem(),
+				pr.getGrade(), pr.getType());
+		correctAnswers(lastId, pr.getAnswers());
 	}
 
 	private void correctAnswers(int lastId, Set<String> answers) {
@@ -71,23 +82,13 @@ public class QuestionDAOImpl implements QuestionDAO {
 			preparedStatement.setString(3, type);
 			preparedStatement.setInt(4, grade);
 			preparedStatement.executeUpdate();
-			lastId = getLastId(con);
+			lastId = MySQLUtil.getLastInsertId(con);
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return lastId;
-	}
-
-	private int getLastId(Connection con) throws SQLException {
-		Statement stmt = con.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID();");
-		rs.next();
-		int lastId = rs.getInt("LAST_INSERT_ID()");
-		rs.close();
-		return lastId;
-		
 	}
 
 	private String commonCommand() {
@@ -139,9 +140,26 @@ public class QuestionDAOImpl implements QuestionDAO {
 		String type = rs.getString("type");
 		switch(type) {
 		case "QR": question = loadQR(rs); break;
+		case "PR": question = loadPR(rs); break;
 		// TODO: add other types as well
 		}
 		return question;
+	}
+
+	private Question loadPR(ResultSet rs) throws SQLException {
+		/*
+		 * COPIED FROM loadQR() TO DO IT FAST
+		 */
+		int questionId = rs.getInt("id");
+		String problem = rs.getString("problem");
+		int grade = rs.getInt("grade");
+		Set<String> answers = new HashSet<String> ();	// now load this set
+		answers.add(rs.getString("answer"));
+		while(rs.next() && rs.getInt("id") == questionId) {
+			answers.add(rs.getString("answer"));
+		}
+		Question q = classFactory.getQuestionQR(problem, grade, answers);
+		return q;
 	}
 
 	// if this is called rs.isAfterLast() is false
@@ -158,7 +176,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		while(rs.next() && rs.getInt("id") == questionId) {
 			answers.add(rs.getString("answer"));
 		}
-		Question q = new QuestionQR(problem, grade, answers);
+		Question q = classFactory.getQuestionQR(problem, grade, answers);
 		return q;
 	}
 
@@ -166,12 +184,6 @@ public class QuestionDAOImpl implements QuestionDAO {
 		return "SELECT * FROM questions INNER JOIN answers ON " + 
 				"questions.id = answers.question_id " + 
 				"WHERE questions.quiz_id = ? ORDER BY questions.id;";
-	}
-
-	@Override
-	public void addPR(int quizId, QuestionPR pr) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
