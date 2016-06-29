@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -107,10 +108,29 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	@Override
 	public void addMCMA(int quizId, QuestionMCMA mcma) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = dataSource.getConnection();
+			loadCommonFields(con, mcma, quizId);
+			int questionId = MySQLUtil.getLastInsertId(con);
+			Set<String> answers = new HashSet<String> (mcma.getCorrectAnswers());
+			loadAnswersOfField(con, answers, questionId, 0);
+			loadWrongAnswersOfField(con, answers, questionId, 0);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -177,15 +197,47 @@ public class QuestionDAOImpl implements QuestionDAO {
 		for(String answer : answers) loadAnswerIntoField(con, answer, 
 				questionId, fieldId);
 	}
+	
+	private void loadWrongAnswersOfField(Connection con, Set<String> answers, 
+			int questionId, int fieldId) 
+					throws SQLException {
+		
+		for(String answer : answers) loadWrongAnswerIntoField(con, answer, 
+				questionId, fieldId);
+	}
+
+
+
+
+
+
+
+
+
+
 
 	// single queries are preferred, but hey, do we have time for that?
 	private void loadAnswerIntoField(Connection con, String answer, 
 			int questionId, int fieldId)
-			throws SQLException {
+					throws SQLException {
 		
 		PreparedStatement preparedStatement =
 				con.prepareStatement("INSERT INTO answers "
 						+ "(question_id, answer, field_id) "
+						+ "VALUES(?, ?, ?);");
+		preparedStatement.setInt(1, questionId);
+		preparedStatement.setString(2, answer);
+		preparedStatement.setInt(3, fieldId);
+		preparedStatement.executeUpdate();
+	}
+	
+	private void loadWrongAnswerIntoField(Connection con, String answer, 
+			int questionId, int fieldId) 
+					throws SQLException {
+		
+		PreparedStatement preparedStatement =
+				con.prepareStatement("INSERT INTO answers_wrong "
+						+ "(question_id, answer_wrong, field_id) "
 						+ "VALUES(?, ?, ?);");
 		preparedStatement.setInt(1, questionId);
 		preparedStatement.setString(2, answer);
