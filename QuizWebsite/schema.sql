@@ -54,6 +54,11 @@ create table questions(
 	primary key(id)
 );
 
+create table images(
+	question_id			int(11)			not null,
+	image				varchar(255)
+);
+
 insert into questions (quiz_id, problem, type, grade) values(1, 'whatsup', 'QR', 5);
 
 create table answers(
