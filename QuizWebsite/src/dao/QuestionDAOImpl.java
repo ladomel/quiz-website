@@ -57,8 +57,43 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	@Override
 	public void addFB(int quizId, QuestionFB fb) {
-		// TODO Auto-generated method stub
-		
+		// keep ID of where question was saved to add answers
+		int lastId = commonFields(quizId, fb.getProblem(),
+				fb.getGrade(), fb.getType());
+		correctAnswersFB(lastId, fb.getAnswers());
+	}
+
+	private void correctAnswersFB(int lastId, List<Set<String>> answers) {
+		int fieldId = 0;
+		for(Set<String> s : answers) 
+		{ 
+			putAnswersSetOnField(s, lastId, fieldId); 
+			fieldId++; 
+		}
+	}
+
+	private void putAnswersSetOnField(Set<String> s, int lastId, int fieldId) {
+		for(String ans : s) {
+			putAnswerInField(ans, lastId, fieldId);
+		}
+	}
+
+	private void putAnswerInField(String ans, int lastId, int fieldId) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement("INSERT INTO answers " + 
+							"(question_id, answer, field_id) " + 
+							"VALUES(?, ?, ?);");
+			preparedStatement.setInt(1, lastId);
+			preparedStatement.setString(2, ans);
+			preparedStatement.setInt(3, fieldId);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 
 	private void wrongAnswers(int lastId, Collection<String> wrongAnswers) {
@@ -89,12 +124,12 @@ public class QuestionDAOImpl implements QuestionDAO {
 	}
 
 	private void correctAnswers(int lastId, Collection<String> answers) {
-		for(String s : answers) putAnswer(s, lastId);
+		for(String s : answers) putAnswerZerothField(s, lastId);
 	}
 
 	// TODO: one can insert all in single query.
 	// but to save time we leave it as is
-	private void putAnswer(String s, int lastId) {
+	private void putAnswerZerothField(String s, int lastId) {
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
@@ -179,9 +214,34 @@ public class QuestionDAOImpl implements QuestionDAO {
 		case "QR": question = loadQR(rs); break;
 		case "PR": question = loadPR(rs); break;
 		case "MC": question = loadMC(rs); break;
+		case "FB": question = loadFB(rs); break;
 		// TODO: add other types as well
 		}
 		return question;
+	}
+
+	private Question loadFB(ResultSet rs) throws SQLException {
+		// common
+		int questionId = rs.getInt("id");
+		String problem = rs.getString("problem");
+		int grade = rs.getInt("grade");
+		//
+		List<Set<String>> answers = new ArrayList<Set<String> > ();
+		int fieldId = 0;	// we know each quetion starts with field # 0
+		Set<String> fieldAnswers = new HashSet<String> ();
+		fieldAnswers.add(rs.getString("answers.answer"));
+		while(rs.next() && rs.getInt("id") == questionId) {
+			if(rs.getInt("answers.field_id") != fieldId) {
+				answers.add(fieldAnswers);
+				fieldAnswers = new HashSet<String> ();
+				fieldAnswers.add(rs.getString("answers.answer"));
+				fieldId = rs.getInt("answers.field_id");
+			} else {
+				fieldAnswers.add(rs.getString("answers.answer"));
+			}
+		}
+		QuestionFB q = classFactory.getQuestionFB(problem, grade, answers);
+		return q;
 	}
 
 	private Question loadMC(ResultSet rs) throws SQLException {
@@ -236,8 +296,9 @@ public class QuestionDAOImpl implements QuestionDAO {
 
 	private String getQuestionsWithAnswersCommand() {
 		return "SELECT * FROM questions INNER JOIN answers ON " + 
-				"questions.id = answers.question_id LEFT JOIN answers_wrong ON answers_wrong.question_id = answers.question_id " + 
-				"WHERE questions.quiz_id = ? ORDER BY questions.id;";
+				"questions.id = answers.question_id "
+				+ "LEFT JOIN answers_wrong ON answers_wrong.question_id = answers.question_id " + 
+				"WHERE questions.quiz_id = ? ORDER BY questions.id, answers.field_id;";
 	}
 
 }
