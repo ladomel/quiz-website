@@ -75,8 +75,21 @@ public class UserDAOImpl implements UserDAO {
 		if(oldUser == null) return null;
 		try {
 			Connection con = dataSource.getConnection();
+			// delete user
 			PreparedStatement preparedStatement = 
 					con.prepareStatement("DELETE FROM users WHERE username LIKE ?;");
+			preparedStatement.setString(1, userName);
+			preparedStatement.executeUpdate();
+			// delete his friends
+			preparedStatement = con.prepareStatement("DELETE FROM "
+					+ "friends WHERE first_user_id = "
+					+ "(SELECT id FROM users WHERE username LIKE ?);");
+			preparedStatement.setString(1, userName);
+			preparedStatement.executeUpdate();
+			// deletefrom friends friendlist
+			preparedStatement = con.prepareStatement("DELETE FROM "
+					+ "friends WHERE second_user_id = "
+					+ "(SELECT id FROM users WHERE username LIKE ?);");
 			preparedStatement.setString(1, userName);
 			preparedStatement.executeUpdate();
 			con.close();
