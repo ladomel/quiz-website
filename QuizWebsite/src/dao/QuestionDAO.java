@@ -3,6 +3,7 @@ package dao;
 import java.util.List;
 
 import classes.question.QuestionFB;
+import classes.question.QuestionMA;
 import classes.question.QuestionMC;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
@@ -17,6 +18,8 @@ public interface QuestionDAO {
 	public void addMC(int quizId, QuestionMC mc);
 	
 	public void addFB(int quizId, QuestionFB fb);
+	
+	public void addMA(int quizId, QuestionMA ma);
 	
 	public List<Question> getQuestions(int quizId);
 

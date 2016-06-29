@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import classes.question.QuestionFB;
+import classes.question.QuestionMA;
 import classes.question.QuestionMC;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
@@ -85,6 +86,12 @@ public class QuestionDAOImpl implements QuestionDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void addMA(int quizId, QuestionMA ma) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public List<Question> getQuestions(int quizId) {
@@ -158,6 +165,16 @@ public class QuestionDAOImpl implements QuestionDAO {
 		preparedStatement.setString(2, pictureURL);
 		preparedStatement.executeUpdate();
 	}
+
+
+
+
+
+
+
+
+
+
 	
 	/////////////////////////////////// type 2 utils
 	
