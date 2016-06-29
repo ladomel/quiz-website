@@ -71,6 +71,10 @@ public class QuestionDAOImpl implements QuestionDAO {
 			Connection con = dataSource.getConnection();
 			loadCommonFields(con, mc, quizId);
 			int questionId = MySQLUtil.getLastInsertId(con);
+			Set<String> answers = new HashSet<String>  ();
+			answers.add(mc.getCorrectAnswer());
+			loadAnswersOfField(con, answers, questionId, 0);
+			loadWrongAnswersOfField(con, answers, questionId, 0);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,6 +110,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		}
 	}
 	
+	//////////////// done
 	@Override
 	public void addMCMA(int quizId, QuestionMCMA mcma) {
 		try {
@@ -113,8 +118,9 @@ public class QuestionDAOImpl implements QuestionDAO {
 			loadCommonFields(con, mcma, quizId);
 			int questionId = MySQLUtil.getLastInsertId(con);
 			Set<String> answers = new HashSet<String> (mcma.getCorrectAnswers());
+			Set<String> answersWrong = new HashSet<String> (mcma.getIncorrectAnswers());
 			loadAnswersOfField(con, answers, questionId, 0);
-			loadWrongAnswersOfField(con, answers, questionId, 0);
+			loadWrongAnswersOfField(con, answersWrong, questionId, 0);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
