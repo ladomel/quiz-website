@@ -61,6 +61,12 @@ public class QuizDAOImpl implements QuizDAO {
 		quiz.setHasPracticeMode(rs.getBoolean("practice_mode"));
 		quiz.setDateCreated(rs.getLong("creation_time"));
 		quiz.setMaxScore(rs.getInt("max_score"));
+		quiz.setAverageRating(rs.getDouble("avg_rating"));
+		quiz.setAverageScore(rs.getDouble("max_score"));
+		quiz.setAverageTimeMillis(rs.getLong("avg_time"));
+		quiz.setNumTries(rs.getInt("tries"));
+		quiz.setCategory(rs.getString("category"));	// should have separate table but fuck it
+		
 		return quiz;
 	}
 
@@ -68,7 +74,8 @@ public class QuizDAOImpl implements QuizDAO {
 		return "SELECT " + 
 				"quizzes.id, quizzes.description, username, name, " + 
 				"is_random, is_one_page, immediate_correction, " + 
-				"practice_mode, creation_time, time, max_score " + 
+				"practice_mode, creation_time, time, max_score, "
+				+ "avg_rating, avg_score, avg_time, tries, category " + 
 				"FROM quizzes " + 
 				"INNER JOIN users " + 
 				"ON quizzes.creator_id = users.id WHERE quizzes.id = ?;";
@@ -93,7 +100,12 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setLong(8, quiz.getDateCreated());
 			preparedStatement.setInt(9, quiz.getQuizTime());
 			preparedStatement.setInt(10, quiz.getMaxScore());
-			preparedStatement.setInt(11, quiz.getId());
+			preparedStatement.setDouble(11, quiz.getAverageRating());
+			preparedStatement.setDouble(12, quiz.getAverageScore());
+			preparedStatement.setLong(13, quiz.getAverageTimeMillis());
+			preparedStatement.setInt(14, quiz.getNumTries());
+			preparedStatement.setString(15, quiz.getCategory());
+			preparedStatement.setInt(16, quiz.getId());
 			preparedStatement.executeUpdate();
 			con.close();
 		} catch (SQLException e) {
@@ -114,7 +126,8 @@ public class QuizDAOImpl implements QuizDAO {
 				"practice_mode = ?, " + 
 				"creation_time = ?, " + 
 				"time = ?, " + 
-				"max_score = ? WHERE id = ?";
+				"max_score = ?, avg_rating = ?, avg_score = ?, "
+				+ "avg_time = ?, tries = ?, category = ? WHERE id = ?";
 	}
 
 	@Override
@@ -134,6 +147,12 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setLong(8, quiz.getDateCreated());
 			preparedStatement.setInt(9, quiz.getQuizTime());
 			preparedStatement.setInt(10, quiz.getMaxScore());
+			preparedStatement.setDouble(11, quiz.getAverageRating());
+			preparedStatement.setDouble(12, quiz.getAverageScore());
+			preparedStatement.setLong(13, quiz.getAverageTimeMillis());
+			preparedStatement.setInt(14, quiz.getNumTries());
+			preparedStatement.setString(15, quiz.getCategory());
+			preparedStatement.setInt(16, quiz.getId());
 			preparedStatement.executeUpdate();
 			id = MySQLUtil.getLastInsertId(con);
 			con.close();
@@ -148,10 +167,10 @@ public class QuizDAOImpl implements QuizDAO {
 		return "INSERT INTO quizzes " + 
 				"(creator_id, name, description, is_random, is_one_page, " + 
 				"immediate_correction, practice_mode, creation_time, " + 
-				"time, max_score) " + 
+				"time, max_score, avg_rating, avg_score, avg_time, tries, category) " + 
 				"VALUES(" + 
 				"(SELECT id FROM users WHERE username like ?), " + 
-				" ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+				" ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	}
 
 	@Override
@@ -179,8 +198,25 @@ public class QuizDAOImpl implements QuizDAO {
 
 	@Override
 	public List<Quiz> getPopularQuizzes(int n) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Quiz> popularQuizzes = new ArrayList<Quiz> (); 
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement("SELECT * FROM quizzes "
+							+ "ORDER BY avg_rating DESC LIMIT ?;");
+			preparedStatement.setInt(1, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) {
+				Quiz quiz = loadIntoQuiz(rs);
+				popularQuizzes.add(quiz);
+			}
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return popularQuizzes;
 	}
 
 	@Override
