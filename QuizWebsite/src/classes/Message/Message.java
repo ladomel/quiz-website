@@ -35,4 +35,11 @@ public abstract class Message{
 		this.seen = seen;
 	}
 
+	@Override
+	public String toString() {
+		return "senderUserName: " + this.getSenderUserName() + " | " + 
+				"dateSent: " + this.getDateSent() + " | " +
+				"receiverUserName: " + this.getGetterUserName() + " | " + 
+				"seen: " + this.isSeen();
+	}
 }

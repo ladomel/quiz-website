@@ -26,4 +26,11 @@ public class Challenge extends Message {
 		this.status = status;
 	}
 
+	@Override
+	public String toString() {
+		return super.toString() + " | " +
+				"status: " + this.getStatus() + 
+				"quizId: " + this.getQuizId();
+	}
+	
 }
