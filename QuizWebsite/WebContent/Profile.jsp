@@ -21,7 +21,7 @@
 </head>
 <body>
 	<div id="centerpanel">
-		<img id="profileimage" src="<%=  %>">
+		<img id="profileimage" src="<%= "asd" %>">
 		<span id="profilename"><%= user.getUserName() %></span>
 		<span id="description"><%= user.getDescription() %></span>
 		<a href="SendFriendRequest?getter=<%= user.getUserName() %>"  >
@@ -39,8 +39,9 @@
 				out.println("<button id='sendnote'>Send Note</button></a>");
 			}
 			
-			if (masterUser.equals(user)){
-				out.println("<button id='editdescr'>Edit Status</button>");
+			if (user.equals(masterUser)){
+				out.println("<a href='EditDescription?username=" + masterUser.getUserName() + "'><button id='editdescr'>Change Status</button></a>");
+				out.println("<a href='EditImage?username=" + masterUser.getUserName() + "'><button id='editpic'>Change Picture</button></a>");
 			}
 		%>
 		<div id="achievements">
@@ -63,11 +64,11 @@
 		<div id="createdquizzes">
 			<div class="divtitle">Created Quizzes:</div>
 			<div class="list">
-			<%
-				List<Quiz> quizzes = (List<Quiz>)request.getAttribute("createdQuizzes");
+			<%/*
+				List<Quiz> quizzes = (List<Quiz>) request.getAttribute("createdQuizzes");
 				for (Quiz quiz : quizzes){ 
 					out.println("<a href=\"Quiz?id=" + quiz.getId() + "\" ><div class=\"listentry\">" + quiz.getQuizName() + "</div></a>");	
-				}
+				}*/
 			%>
 			</div>
 		</div>

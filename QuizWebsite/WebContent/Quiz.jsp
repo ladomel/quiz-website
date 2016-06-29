@@ -11,7 +11,7 @@
 	if (request.getSession().getAttribute("MasterUser") == null) toppanel = "toppanel-loggedout.jsp";
 		else toppanel = "toppanel-loggedin.jsp";
 	
-	Quiz quiz = (Quiz)request.getAttribute("Quiz");
+	Quiz quiz = (Quiz)request.getSession().getAttribute("Quiz");
 %>
 <title><%= quiz.getQuizName() %></title>
 </head>
