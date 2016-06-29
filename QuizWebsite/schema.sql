@@ -105,28 +105,42 @@ create table quiz_problems(
 );
 
 create table friendrequests(
+	id 					int(11) 		not null auto_increment,
 	sender_username 	varchar(256) 		not null,
 	receiver_username 	varchar(256) 		not null,
 	status 				varchar(50), /* Active, Declined, Accepted */
 	time				bigint,
-	seen				boolean
+	seen				boolean,
+    primary key(id)
 );
 
 create table challenges(
-	sender_id 			int(11) 		not null,
-	receiver_id 		int(11) 		not null,
+	id 					int(11) 		not null auto_increment,
+	sender_username 	varchar(256)	not null,
+	receiver_username 	varchar(256)  	not null,
 	quiz 				int(11) 		not null,
 	status 				varchar(50), /* Active, Declined, Accepted */
 	time 				bigint,
-	seen				boolean
+	seen				boolean,
+    primary key(id)
+);
+
+create table announcements(
+	id 					int(11) 		not null auto_increment,
+	announcer_username 	varchar(256)	not null, 
+	announcement		longtext,
+	time 				bigint,
+    primary key(id)
 );
 
 create table notes(
-	sender_id 			int(11) 		not null,
-	receiver_id 		int(11) 		not null,
+	id 					int(11) 		not null auto_increment,
+	sender_username 	varchar(256)	not null,
+	receiver_username 	varchar(256) 	not null,
 	note 				longtext,
 	time 				bigint,
-	seen				boolean
+	seen				boolean,
+    primary key(id)
 );
 
 # result related tables below
