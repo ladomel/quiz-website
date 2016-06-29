@@ -4,8 +4,8 @@ public final class FriendRequest extends Message{
 	
 	private String status = "Pending";
 
-	public FriendRequest(String senderUserName, long dateSent, String receiverUserName) {
-		super(senderUserName, dateSent,receiverUserName);
+	public FriendRequest(String senderUserName, long dateSent, String receiverUserName, boolean seen) {
+		super(senderUserName, dateSent,receiverUserName, seen);
 	}
 	
 	public String generateMessage(String senderUserName){
