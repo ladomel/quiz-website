@@ -3,9 +3,14 @@ package classes;
 import java.util.List;
 
 public class Answer {
-	private Integer grade = null; // Null if not graded.
+	private int grade = -1; // not graded yet
 	private List<String> userAnswer;
 
+	@Override
+	public String toString() {
+		return "grade: " + grade + ", answers: " + userAnswer;
+	}
+	
 	/**
 	 *  Constructor stores problem's id number and user's answer object.
 	 */
@@ -26,7 +31,7 @@ public class Answer {
 	/**
 	 * Sets the grade user in object.
 	 */
-	public void setGrade(Integer newGrade)
+	public void setGrade(int newGrade)
 	{
 		grade = newGrade;
 	}
@@ -35,7 +40,7 @@ public class Answer {
 	 * Returns grade of user or null if answer was not graded yet.
 	 * @return grade or null.
 	 */
-	public Integer getGrade()
+	public int getGrade()
 	{
 		return grade;
 	}

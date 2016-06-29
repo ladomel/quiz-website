@@ -1,10 +1,14 @@
 package classes;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class User {
 	
 	private String userName;
 	private String hashedPassword;
 	private String salt;
+	private Set<String> friends;
 
 	private String description;
 	
@@ -28,11 +32,17 @@ public class User {
         return this.getUserName().hashCode();
     }
 	
+	@Override
+	public String toString() {
+		return "u: " + userName + ", p: " + hashedPassword + ", salt: " + salt + " , friends: " + friends + ".";	
+	}
+	
 	public User(String userName, String hashedPassword, String salt)
 	{
 		setUserName(userName);
 		setHashedPassword(hashedPassword); 
 		setSalt(salt);
+		setFriends(new HashSet<String> ());
 	}
 	
 	public String getUserName() {
@@ -62,7 +72,21 @@ public class User {
 		return description;
 	}
 
-	public void getDescription(String status) {
-		this.description = status;
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
+	 * @return the friends
+	 */
+	public Set<String> getFriends() {
+		return friends;
+	}
+
+	/**
+	 * @param friends the friends to set
+	 */
+	public void setFriends(Set<String> friends) {
+		this.friends = friends;
 	}
 }
