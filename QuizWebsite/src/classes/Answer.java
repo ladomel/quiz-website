@@ -6,6 +6,11 @@ public class Answer {
 	private int grade = -1; // not graded yet
 	private List<String> userAnswer;
 
+	@Override
+	public String toString() {
+		return "grade: " + grade + ", answers: " + userAnswer;
+	}
+	
 	/**
 	 *  Constructor stores problem's id number and user's answer object.
 	 */
