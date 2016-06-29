@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -165,32 +168,9 @@ public class QuestionDAOImpl implements QuestionDAO {
 		List<Question> questions = null;
 		try {
 			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement =
-					con.prepareStatement(
-							"SELECT "
-							+ "q.id AS id, "
-							+ "q.quiz_id AS quiz, "
-							+ "q.problem AS problem, "
-							+ "q.type AS type, "
-							+ "q.grade AS grade, "
-							+ "a.answer AS answer, "
-							+ "a.field_id AS cf_id, "
-							+ "i.image AS image, "
-							+ "mcm.nfields AS nfields, "
-							+ "mcm.ordered AS ordered, "
-							+ "aw.answer_wrong AS answer_wrong, "
-							+ "aw.field_id AS wf_id "
-							+ "FROM "
-							+ "questions as q "
-							+ "LEFT JOIN answers AS a ON a.question_id = q.id "
-							+ "LEFT JOIN images AS i ON i.question_id = q.id "
-							+ "LEFT JOIN multiple_choice_metadata AS mcm ON mcm.question_id = q.id "
-							+ "LEFT JOIN answers_wrong AS aw ON aw.question_id = q.id "
-							+ "WHERE questions.quiz_id = ?;");
-			preparedStatement.setLong(1, quizId);
-			ResultSet rs = preparedStatement.executeQuery();
-			// TODO: extract info
-			rs.close();
+			// list with correct size:
+			questions = new ArrayList<Question> (numberOfQuestions(con, quizId));
+			// TODO: hard
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -206,6 +186,29 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	
 	
+	private int numberOfQuestions(Connection con, int quizId) 
+			throws SQLException {
+		int n = 0;
+		PreparedStatement preparedStatement =
+				con.prepareStatement(
+						"SELECT COUNT(1) FROM questions WHERE quiz_id = ?;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		rs.next();
+		n = rs.getInt("COUNT(1)");
+		rs.close();
+		return n;
+	}
+
+
+
+
+
+
+
+
+
 	////////////////// type 1 utils
 	
 	/*
