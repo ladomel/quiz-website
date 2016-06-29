@@ -21,25 +21,27 @@
 		<div id="notebox">
 		<div class="title">Notes:</div>
 			<div class="noteSeen" onclick="alert('<%= text %>');">
-				<div class="from">FROM: jandaba (10.10.10)</div>
+				<div class="from">FROM: jandaba TO: jandabaajsdasd(10.10.10)</div>
 				<div class="text">NOTE: ra jandaba ginda to?</div>
 			</div>
 			<div class="note" onclick="alert('<%= text %>');">
-				<div class="from">FROM: jandaba (10.10.10)</div>
-				<div class="text">NOTE: ra jandaba ginda to?</div>
 			</div>
 		</div>
 		<div id="friendrequestbox">
 		<div class="title">Friend Requests:</div>
 			<div class="requestSeen">
 				Friend Request FROM: <a href="">USER</a> <br>
-				<button class="accept">Accept</button>
-				<button class="decline">Decline</button>
+				<form action="AcceptFriendRequest" method="post">
+					<input name="requestId" value="5" type="hidden">
+					<input name="status" class="accept" type="submit" value="Accept">
+				</form>
+				<form action="AcceptFriendRequest" method="post">
+					<input name="requestId" value="5" type="hidden">
+					<input name="status" class="accept" type="submit"  value="Decline">
+				</form>
 			</div>
 			<div class="request">
-				Friend Request FROM: <a href="">USER</a> <br>
-				<button class="accept">Accept</button>
-				<button class="decline">Decline</button>
+				
 			</div>
 		</div>
 		<div id="challengebox">
@@ -47,14 +49,17 @@
 			<div class="challengeSeen">
 				FROM: <a href="">USER</a> <br>
 				QUIZ: <a href="">QUIZ</a> <br>
-				<button class="accept">Accept</button>
-				<button class="decline">Decline</button>
+				<form action="AcceptChallenge" method="post">
+					<input name="challengeId" value="5" type="hidden">
+					<input name="status" class="accept" type="submit" value="Accept">
+				</form>
+				<form action="AcceptChallenge" method="post">
+					<input name="challengeId" value="5" type="hidden">
+					<input name="status" class="accept" type="submit"  value="Decline">
+				</form>
 			</div>
 			<div class="challenge">
-				FROM: <a href="">USER</a> <br>
-				QUIZ: <a href="">QUIZ</a> <br>
-				<button class="accept">Accept</button>
-				<button class="decline">Decline</button>
+				
 			</div>
 		</div>
 	</div>
