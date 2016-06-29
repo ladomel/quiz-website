@@ -175,6 +175,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			
 			// TODO: hard
 			retrieveQR(con, quizId, questions);
+			retrievePR(con, quizId, questions);
 			
 			
 			con.close();
@@ -187,7 +188,17 @@ public class QuestionDAOImpl implements QuestionDAO {
 
 	
 	
-	
+
+
+
+
+
+
+
+
+
+
+
 	
 	
 	
@@ -201,15 +212,44 @@ public class QuestionDAOImpl implements QuestionDAO {
 				con.prepareStatement(	// QR only needs sort by q_id
 						"SELECT * FROM questions "
 						+ "LEFT JOIN answers ON answers.question_id = questions.id "
-						+ "WHERE quiz_id = ? AND type LIKE 'QR';"
+						+ "WHERE quiz_id = ? AND type LIKE 'QR' ORDER BY id;"
 						);
 		preparedStatement.setInt(1, quizId);
 		ResultSet rs = preparedStatement.executeQuery();
 		
 		retrieveQRFromRS(rs, questions);
 		
-		rs.close();
 	}
+	
+	/*
+	 * mocking above method
+	 */
+	private void retrievePR(Connection con, int quizId, List<Question> questions) 
+			throws SQLException {
+		
+		PreparedStatement preparedStatement=
+				con.prepareStatement(	// QR only needs sort by q_id
+						"SELECT * FROM questions "
+						+ "LEFT JOIN answers ON answers.question_id = questions.id "
+						+ "LEFT JOIN images ON images.question_id = id "
+						+ "WHERE quiz_id = ? AND type LIKE 'PR' ORDER BY id;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		
+		retrievePRFromRS(rs, questions);
+		
+	}
+
+
+
+
+
+
+
+
+
+
 
 
 	private void retrieveQRFromRS(ResultSet rs, List<Question> questions) 
@@ -222,10 +262,32 @@ public class QuestionDAOImpl implements QuestionDAO {
 			rs.previous();
 			Set<String> answers = 
 					collectAnswersUntilQuestionIsSame(rs, currentQuestionId);
-			QuestionQR qr = classFactory.getQuestionQR(problem, grade, answers);
+			QuestionQR qr =
+					classFactory.getQuestionQR(problem, grade, answers);
 			// SQL runs +1 idx:
-			questions.set(currentQuestionId - 1, qr);
+						questions.set(currentQuestionId - 1, qr);
 		}
+	}
+	
+	/*
+	 * mocking above because why not ?
+	 */
+	private void retrievePRFromRS(ResultSet rs, List<Question> questions) 
+			throws SQLException {
+		
+		while(rs.next()) {
+			String imageURL = rs.getString("image");
+			String problem = rs.getString("problem");
+			int grade = rs.getInt("grade");
+			int currentQuestionId = rs.getInt("id");
+			rs.previous();
+			Set<String> answers = 
+					collectAnswersUntilQuestionIsSame(rs, currentQuestionId);
+			QuestionPR question = 
+					classFactory.getQuestionPR(problem, grade, imageURL, answers);
+			// SQL runs +1 idx:
+			questions.set(currentQuestionId - 1, question);
+		}		
 	}
 
 
