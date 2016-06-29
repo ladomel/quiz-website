@@ -25,7 +25,7 @@
 				out.print("<button id='editdescr'>Edit Description</button>");
 			}
 		%>
-		
+		<button id="sendchallenge">Challenge your Friends</button>
 		<div id="topscores">
 			<div class="divtitle">Top Scores:</div>
 			<div class="inf">

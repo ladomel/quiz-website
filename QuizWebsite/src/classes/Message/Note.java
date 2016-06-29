@@ -1,19 +1,16 @@
 package classes.Message;
 
-public class Note extends Message {
+public final class Note extends Message {
 
-	private String receiverUserName;
+	private final String note;
 	
-	public Note(String senderUserName, long dateSent, String message, String receiverUserName) {
-		super(senderUserName, dateSent, message);
-		setReceiverUserName(receiverUserName);
+	public Note(String senderUserName, long dateSent, String note, String receiverUserName) {
+		super(senderUserName, dateSent, receiverUserName);
+		this.note = note;
 	}
 
-	public String getReceiverUserName() {
-		return receiverUserName;
+	public String getNote() {
+		return note;
 	}
 
-	public void setReceiverUserName(String receiverUserName) {
-		this.receiverUserName = receiverUserName;
-	}
 }
