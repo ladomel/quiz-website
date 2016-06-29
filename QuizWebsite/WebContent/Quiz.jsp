@@ -11,7 +11,7 @@
 	if (request.getSession().getAttribute("MasterUser") == null) toppanel = "toppanel-loggedout.jsp";
 		else toppanel = "toppanel-loggedin.jsp";
 	
-	Quiz quiz = (Quiz)request.getSession().getAttribute("Quiz");
+	Quiz quiz = (Quiz)request.getAttribute("Quiz");
 %>
 <title><%= quiz.getQuizName() %></title>
 </head>
@@ -25,7 +25,7 @@
 				out.print("<button id='editdescr'>Edit Description</button>");
 			}
 		%>
-		<button id="sendchallenge">Challenge your Friends</button>
+		<a href="CreateChallenge?quizId=<%= quiz.getId() %>"><button id="sendchallenge">Challenge your Friends</button></a>
 		<div id="topscores">
 			<div class="divtitle">Top Scores:</div>
 			<div class="inf">
@@ -35,6 +35,7 @@
 			</div>
 			<div class="list">
 			<%
+				// results
 				out.println("<div class=\"listentry\">");
 				out.println("<span class='profile'> <a href=\"Profile?username=" + 1 + "\" >" + "jandaba" + "</a></span>");
 				out.println("<span class='score'>" + 5 + "</span>");
