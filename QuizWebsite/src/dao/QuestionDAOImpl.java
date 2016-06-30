@@ -315,8 +315,8 @@ public class QuestionDAOImpl implements QuestionDAO {
 		PreparedStatement preparedStatement =
 				con.prepareStatement("SELECT * FROM questions "
 						+ "LEFT JOIN answers ON answers.question_id = questions.id "
-						+ "LEFT JOIN answers.wrong AS aw ON aw.question_id = questions.id"
-						+ "WHERE quiz_id = ? AND type LIKE 'MA' "
+						+ "LEFT JOIN answers_wrong AS aw ON aw.question_id = questions.id "
+						+ "WHERE quiz_id = ? AND type LIKE 'MCMA' "
 						+ "ORDER BY id;"
 						);
 		preparedStatement.setInt(1, quizId);
@@ -460,10 +460,45 @@ public class QuestionDAOImpl implements QuestionDAO {
 	}
 	
 	
-	private void retrieveMCMAFromRS(ResultSet rs, List<Question> questions) {
-		// TODO Auto-generated method stub
-		
+	private void retrieveMCMAFromRS(ResultSet rs, List<Question> questions) 
+			throws SQLException {
+
+		while(rs.next()) {
+			String problem = null;
+			Integer grade = null;
+			Integer currentQuestionId = null;
+			problem = rs.getString("questions.problem");
+			grade = rs.getInt("questions.grade");
+			currentQuestionId = rs.getInt("questions.id");
+			
+			rs.previous();
+
+			// set of correct/wrong answers and all the conversion bullshit required to match MCMA ctor
+			Set<String> correctAnswers = new HashSet<String> ();
+			Set<String> wrongAnswers = new HashSet<String> ();
+			collectMCMAAnswersAndWrongAnswers(rs, correctAnswers, wrongAnswers, currentQuestionId);
+			List<String> correctAnswersList = new ArrayList<String> ();
+			List<String> wrongAnswersList = new ArrayList<String> ();
+			correctAnswersList.addAll(correctAnswers);
+			wrongAnswersList.addAll(wrongAnswers);
+			
+			
+			QuestionMCMA mcma = 
+					classFactory.getQuestionMCMA(problem, grade, 
+							correctAnswersList, wrongAnswersList);
+			
+			// SQL runs +1 idx:
+			questions.set(currentQuestionId - 1, mcma);
+		}				
 	}
+
+
+
+
+
+
+
+
 
 
 
@@ -512,6 +547,27 @@ public class QuestionDAOImpl implements QuestionDAO {
 		rs.previous();	// dont forget to back up on next question
 		return answers;
 	}
+	
+	/*
+	 * NOTE: this method works because we know MCMA has only one field.
+	 * generalisation for several fields is little bit tricky and not needed yet.
+	 * 
+	 * code is basically a double of collectAnswersUntilFieldAndQuestionIsSame(...)
+	 */
+	private void collectMCMAAnswersAndWrongAnswers(ResultSet rs, 
+			Set<String> correctAnswers, 
+			Set<String> wrongAnswers, 
+			Integer currentQuestionId) 
+					throws SQLException {
+		
+		while(rs.next() && rs.getInt("id") == currentQuestionId) {
+			correctAnswers.add(rs.getString("answers.answer"));
+			wrongAnswers.add(rs.getString("aw.answer_wrong"));
+		}
+		rs.previous();	// back up from next question
+
+	}		
+
 
 
 
