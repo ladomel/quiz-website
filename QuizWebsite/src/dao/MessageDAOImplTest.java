@@ -113,4 +113,14 @@ public class MessageDAOImplTest {
 		messageDAO.updateFriendRequestStatus(4, "I am new");
 		System.out.println(messageDAO.getFriendRequest(4).toString());
 	}
+	
+	@Test
+	public void updateChallengeTest() {
+		Challenge challenge = classFactory.getChallenge("a", 11, "haa", 1, false);
+		messageDAO.addChallenges(challenge);
+		
+		System.out.println(messageDAO.getChallenge(1).toString());
+		messageDAO.updateChallengeStatus(1, "I am new");
+		System.out.println(messageDAO.getChallenge(1).toString());
+	}
 }

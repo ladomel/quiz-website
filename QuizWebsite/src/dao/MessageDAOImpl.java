@@ -444,4 +444,17 @@ public class MessageDAOImpl implements MessageDAO{
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 	}
+	
+	@Override
+	public void updateChallengeStatus(int id, String newStatus){
+		try {
+			Connection con = dataSource.getConnection();
+			String statement = "UPDATE challenges SET status = ? WHERE id = ?;";
+			PreparedStatement preparedStatement = con.prepareStatement(statement);
+			preparedStatement.setString(1, newStatus);
+			preparedStatement.setInt(2, id);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+	}
 }

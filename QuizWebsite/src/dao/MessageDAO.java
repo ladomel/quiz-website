@@ -81,4 +81,12 @@ public interface MessageDAO {
 	 * @param newStatus - new status
 	 */
 	public void updateFriendRequestStatus(int id, String newStatus);	
+	
+	/**
+	 * Updates challenge status.
+	 * 
+	 * @param id - id of challenge to update
+	 * @param newStatus - new status
+	 */
+	public void updateChallengeStatus(int id, String newStatus);
 }
