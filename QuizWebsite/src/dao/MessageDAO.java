@@ -16,7 +16,7 @@ public interface MessageDAO {
 	public List<Note> getNotes(String username);
 	
 	/**
-	 * Returns friendRequest by id, null if not found
+	 * Returns friendRequest by id, null if not found.
 	 * 
 	 * @param id - id of request
 	 * @return request - request with id.
@@ -24,15 +24,15 @@ public interface MessageDAO {
 	public FriendRequest getFriendRequest(int id);
 	
 	/**
-	 * Returns note by id, null if not found
+	 * Returns note by id, null if not found.
 	 * 
 	 * @param id - id of note
-	 * @return note - note with id.
+	 * @return note - note with id
 	 */
 	public Note getNote(int id);
 	
 	/**
-	 * Returns Challenge by id, null if not found
+	 * Returns Challenge by id, null if not found.
 	 * 
 	 * @param id - id of Challenge
 	 * @return Challenge - Challenge with id.
@@ -40,9 +40,53 @@ public interface MessageDAO {
 	public Challenge getChallenge(int id);
 	
 	/**
-	 * Returns true if friend request was sent
+	 * Returns true if friend request was sent.
 	 * 
 	 * @return true if friend request was sent
 	 */
 	public boolean friendRequestExists(String senderUserName, String receiverUserName);
+	
+	/**
+	 * Updates the challenge to be seen.
+	 * 
+	 * @param id of the challenge
+	 */
+	public void seenChallenge(int id);
+	
+	/**
+	 * Updates the friend request to be seen.
+	 * 
+	 * @param id of the friend request
+	 */
+	public void seenFriendRequest(int id);
+	
+	/**
+	 * Updates the note to be seen.
+	 * 
+	 * @param id of the note
+	 */
+	public void seenNote(int id);
+	
+	/**
+	 * Returns number of unseen messages for user.
+	 * 
+	 * @param userName - username of user
+	 */
+	public int getNumUnseen(String username);
+	
+	/**
+	 * Updates friend request.
+	 * 
+	 * @param id - id of request to update
+	 * @param newStatus - new status
+	 */
+	public void updateFriendRequestStatus(int id, String newStatus);	
+	
+	/**
+	 * Updates challenge status.
+	 * 
+	 * @param id - id of challenge to update
+	 * @param newStatus - new status
+	 */
+	public void updateChallengeStatus(int id, String newStatus);
 }

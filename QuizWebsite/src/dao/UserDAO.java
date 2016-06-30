@@ -45,4 +45,26 @@ public interface UserDAO {
 	 * @return user - newly created User object, null if could not create
 	 */
 	public User addUser(String userName, String hexPassword, String salt);	
+	
+	/**
+	 * Returns true iff specified user is administrator.
+	 * 
+	 * @param username - user name of user we want to check
+	 * @return true iff specified user is administrator
+	 */
+	public boolean isAdmin(String userName);
+	
+	/**
+	 * Take a userName and makes him administrator.
+	 * 
+	 * @param userName - user name of user we want to make administrator
+	 */
+	public void addAdmin(String userName);
+	
+	/**
+	 * Take a userName and removes him from administration.
+	 * 
+	 * @param userName - user name of user we want to remove him from administration
+	 */
+	public void removeAdmin(String userName);
 }

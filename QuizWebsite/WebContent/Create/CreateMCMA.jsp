@@ -45,7 +45,7 @@
 		}
 		function addCorrectAnswer(){
 			var field = document.createElement("input");
-			field.name = "correctanswer" + count; field.type = "text";
+			field.name = "correctanswer" + countCorrect; field.type = "text";
 			document.getElementById('correctanswerfield').appendChild(field);
 			countCorrect++;
 		}

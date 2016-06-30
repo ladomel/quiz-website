@@ -22,7 +22,7 @@ public class MessageDAOImpl implements MessageDAO{
 	
 	public MessageDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
-		classFactory = new ClassFactory();	// TODO: pass as parameter
+		classFactory = new ClassFactory();	 
 	}
 	
 	@Override
@@ -124,6 +124,7 @@ public class MessageDAOImpl implements MessageDAO{
 			ResultSet rs = preparedStatement.executeQuery();
 			fillAnnouncementAnswer(answer, rs);
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -154,12 +155,14 @@ public class MessageDAOImpl implements MessageDAO{
 			PreparedStatement preparedStatement = 
 					con.prepareStatement("SELECT *"
 							+ "FROM friendrequests "
-							+ "WHERE friendrequests.receiver_username = ? ORDER BY time DESC;");
+							+ "WHERE friendrequests.receiver_username = ? AND status = ? ORDER BY time DESC;");
 			preparedStatement.setString(1, username);
+			preparedStatement.setString(2, "Pending");
 
 			ResultSet rs = preparedStatement.executeQuery();
 			fillRequestAnswer(answer, rs);
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -196,6 +199,7 @@ public class MessageDAOImpl implements MessageDAO{
 			ResultSet rs = preparedStatement.executeQuery();
 			fillChallengeAnswer(answer, rs);
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -226,12 +230,14 @@ public class MessageDAOImpl implements MessageDAO{
 			PreparedStatement preparedStatement = 
 					con.prepareStatement("SELECT *"
 							+ "FROM notes "
-							+ "WHERE receiver_username = ?  ORDER BY time DESC;");
+							+ "WHERE receiver_username = ? OR sender_username = ? ORDER BY time DESC;");
 			preparedStatement.setString(1, username);
+			preparedStatement.setString(2, username);
 
 			ResultSet rs = preparedStatement.executeQuery();
 			fillNoteAnswer(answer, rs);
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -275,6 +281,7 @@ public class MessageDAOImpl implements MessageDAO{
 			}
 			
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -301,6 +308,7 @@ public class MessageDAOImpl implements MessageDAO{
 				answer.setId(rs.getInt("id"));
 			}
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -328,6 +336,7 @@ public class MessageDAOImpl implements MessageDAO{
 				answer.setId(rs.getInt("id"));
 			}
 			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -342,7 +351,7 @@ public class MessageDAOImpl implements MessageDAO{
 			PreparedStatement preparedStatement = 
 					con.prepareStatement("SELECT *"
 							+ "FROM friendrequests "
-							+ "WHERE sender_username = ? AND receiver_username = ? ;"); // AND receiver_username = ?;");
+							+ "WHERE sender_username = ? AND receiver_username = ? ;"); 
 			preparedStatement.setString(1, senderUserName);
 			preparedStatement.setString(2, receiverUserName);
 
@@ -350,8 +359,102 @@ public class MessageDAOImpl implements MessageDAO{
 
 			if(rs.next()) return true;
 			rs.close();
+			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 		return answer;
 	}
 
+	@Override
+	public void seenChallenge(int id) {
+		try {
+			Connection con = dataSource.getConnection();
+			String statement = "UPDATE challenges SET seen = ? WHERE id = ?;";
+			PreparedStatement preparedStatement = con.prepareStatement(statement);
+			preparedStatement.setBoolean(1, true);
+			preparedStatement.setInt(2, id);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+	}
+	
+	@Override
+	public void seenFriendRequest(int id) {
+		try {
+			Connection con = dataSource.getConnection();
+			String statement = "UPDATE friendrequests SET seen = ? WHERE id = ?;";
+			PreparedStatement preparedStatement = con.prepareStatement(statement);
+			preparedStatement.setBoolean(1, true);
+			preparedStatement.setInt(2, id);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+		
+	}
+
+	@Override
+	public void seenNote(int id) {
+		try {
+			Connection con = dataSource.getConnection();
+			String statement = "UPDATE notes SET seen = ? WHERE id = ?;";
+			PreparedStatement preparedStatement = con.prepareStatement(statement);
+			preparedStatement.setBoolean(1, true);
+			preparedStatement.setInt(2, id);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+	}
+
+	@Override
+	public int getNumUnseen(String username) {
+		int answer = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			String statement = "SELECT COUNT(seen) AS total FROM challenges WHERE seen=0 AND receiver_username = ?;";
+			PreparedStatement preparedStatement = con.prepareStatement(statement);
+			preparedStatement.setString(1, username);
+			ResultSet rs = preparedStatement.executeQuery();
+			if(rs.next())answer += rs.getInt("total");
+			
+			statement = "SELECT COUNT(seen) AS total FROM notes WHERE seen=0 AND receiver_username = ?;";
+			preparedStatement = con.prepareStatement(statement);
+			preparedStatement.setString(1, username);
+			rs = preparedStatement.executeQuery();
+			if(rs.next())answer += rs.getInt("total");
+			
+			statement = "SELECT COUNT(seen) AS total FROM friendrequests WHERE seen=0 AND receiver_username = ?;";
+			preparedStatement = con.prepareStatement(statement);
+			preparedStatement.setString(1, username);
+			rs = preparedStatement.executeQuery();
+			if(rs.next())answer += rs.getInt("total");
+			rs.close();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+		return answer;
+	}
+
+	@Override
+	public void updateFriendRequestStatus(int id, String newStatus){
+		try {
+			Connection con = dataSource.getConnection();
+			String statement = "UPDATE friendrequests SET status = ? WHERE id = ?;";
+			PreparedStatement preparedStatement = con.prepareStatement(statement);
+			preparedStatement.setString(1, newStatus);
+			preparedStatement.setInt(2, id);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+	}
+	
+	@Override
+	public void updateChallengeStatus(int id, String newStatus){
+		try {
+			Connection con = dataSource.getConnection();
+			String statement = "UPDATE challenges SET status = ? WHERE id = ?;";
+			PreparedStatement preparedStatement = con.prepareStatement(statement);
+			preparedStatement.setString(1, newStatus);
+			preparedStatement.setInt(2, id);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+	}
 }

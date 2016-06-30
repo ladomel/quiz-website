@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import classes.Answer;
 import classes.Result;
+import classes.Quiz;
 
 /**
  * Servlet implementation class FinishQuiz
@@ -35,6 +36,7 @@ public class FinishQuiz extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	HttpSession session = request.getSession();
 
+    	Quiz takenQuiz = (Quiz)session.getAttribute("Quiz");
     	Date date = new Date();
     	Result result = (Result)session.getAttribute("Result");
     	result.setTimeTaken(result.getTimeStarted() - date.getTime());
@@ -44,14 +46,20 @@ public class FinishQuiz extends HttpServlet {
     	for(Answer ans : answers) finalGrade += ans.getGrade();
     	result.setFinalGrade(finalGrade);
     	
+    	int oldNumTries = takenQuiz.getNumTries();
+    	
+    	takenQuiz.setNumTries(oldNumTries + 1);
+    	takenQuiz.setAverageScore( 		 ( takenQuiz.getAverageScore()*oldNumTries+result.getFinalGrade() ) /   (oldNumTries + 1) );
+    	takenQuiz.setAverageTimeMillis(  ( takenQuiz.getAverageTimeMillis()*oldNumTries+result.getTimeTaken() ) /   (oldNumTries + 1) );
+    	
     	request.setAttribute("Result", result);
-		request.setAttribute("Quiz", session.getAttribute("Quiz"));
+		request.setAttribute("Quiz", takenQuiz); 
     	// if not practice mode send to database.
 		
-//		//session.setAttribute("questionPositions", null);
-//		session.setAttribute("Result", null); 
-//		session.setAttribute("Questions", null); 
-//		session.setAttribute("Quiz", null);
+		session.setAttribute("questionPositions", null);
+		session.setAttribute("Result", null); 
+		session.setAttribute("Questions", null); 
+		session.setAttribute("Quiz", null);
 
     	RequestDispatcher requestDispatcher = request.getRequestDispatcher("quizResult.jsp");
     	requestDispatcher.forward(request, response);	
