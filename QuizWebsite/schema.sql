@@ -71,8 +71,6 @@ create table multiple_choice_metadata(
 	ordered				boolean			not null
 );
 
-insert into questions (quiz_id, problem, type, grade) values(1, 'whatsup', 'QR', 5);
-
 create table answers(
 	question_id 		int(11) 		not null,
 	answer 				varchar(255) 	not null,
