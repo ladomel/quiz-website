@@ -16,6 +16,10 @@ import javax.servlet.http.HttpSession;
 
 import classes.Answer;
 import classes.Result;
+import classes.User;
+import dao.QuestionDAO;
+import dao.QuizDAO;
+import classes.question.Abstract.Question;
 
 /**
  * Servlet implementation class TakeQuiz
@@ -53,29 +57,30 @@ public class TakeQuiz extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
-		classes.Quiz takenQuiz = setQuiz(session, request.getParameter("id"));
+		classes.Quiz takenQuiz = setQuiz(session, request);
 		setResult(session, takenQuiz.getId());
 		setNumPositions(session, takenQuiz.isRandom());
-		setQuestions(session); // Not working.
+		setQuestions(session, request, takenQuiz.getId()); // Not working.
 		
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("QuizMultiplePages.jsp");
 		if(takenQuiz.isOnePage()) requestDispatcher = request.getRequestDispatcher("QuizOnePage.jsp");
 		requestDispatcher.forward(request, response);	
 	}
 	
-	private classes.Quiz setQuiz(HttpSession session, String takenQuizId)
+	private classes.Quiz setQuiz(HttpSession session, HttpServletRequest request)
 	{
-		//QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
-		//int id = Integer.parseInt(takenQuizId);
-		//classes.Quiz takenQuiz = (classes.Quiz)quizDAO.getQuiz(id);
-		//session.setAttribute("Quiz", takenQuiz);  ///////////////////////BELOW FOR TESTING
-		return (classes.Quiz)session.getAttribute("Quiz");
+		QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
+		int id = Integer.parseInt(request.getParameter("id"));
+		classes.Quiz takenQuiz = (classes.Quiz)quizDAO.getQuiz(id);
+		session.setAttribute("Quiz", takenQuiz); 
+		return takenQuiz;
 	}
 	
-	private void setQuestions(HttpSession session)
+	private void setQuestions(HttpSession session, HttpServletRequest request, int takenQuizId)
 	{
-		//List<Question> questions = questionDAO.getQuizQuestions(takenQuizId);
-		//session.setAttribute("Questions", questions);
+		QuestionDAO questionDAO = (QuestionDAO)request.getServletContext().getAttribute("questionDAO");
+		List<Question> questions = questionDAO.getQuestions(takenQuizId);
+		session.setAttribute("Questions", questions);
 	}
 	
 	private void setNumPositions(HttpSession session, boolean randomize)
@@ -88,14 +93,14 @@ public class TakeQuiz extends HttpServlet {
 	
 	private void setResult(HttpSession session, int takenQuizId)
 	{
-		//User user = (User)getServletContext().getAttribute("MasterUser"); 	
-		Date date = new Date();
-		long startTime = date.getTime();
-		//Result result = new Result(user.getUserName(), takenQuizId);
-		Result result = new Result("a", takenQuizId); 
-		result.setTimeStarted(startTime);
+		User user = (User)getServletContext().getAttribute("MasterUser"); 	
+		Result result = new Result(user.getUserName(), takenQuizId);
+		
 		List<Answer> answers = new ArrayList<Answer>();
 		result.setAnswers(answers);
+		Date date = new Date();
+		long startTime = date.getTime();
+		result.setTimeStarted(startTime);
 		session.setAttribute("Result", result); 
 	}
 }
