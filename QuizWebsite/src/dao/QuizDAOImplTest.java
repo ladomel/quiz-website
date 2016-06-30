@@ -105,7 +105,7 @@ public class QuizDAOImplTest {
 		quizDAO.updateQuiz(taken1);
 		
 		Quiz q2 = new Quiz("vaja", "Name2", "desc2");
-				q2.setDateCreated(30);
+				q2.setDateCreated(20);
 		q2.setDescription("Desc");
 		q2.setQuizName("Name");
 		q2.setQuizTime(20);
@@ -123,7 +123,7 @@ public class QuizDAOImplTest {
 		
 
 		Quiz q3 = new Quiz("vaja", "Name2", "desc2");
-		q3.setDateCreated(30);
+		q3.setDateCreated(10);
 		q3.setDescription("Desc");
 		q3.setQuizName("Name");
 		q3.setQuizTime(20);
@@ -141,8 +141,9 @@ public class QuizDAOImplTest {
 
 		
 		Quiz taken2 = quizDAO.getQuiz(lastId);		
-		System.out.println("Updat and taken out: " + taken2.toString());
+		//System.out.println("Updat and taken out: " + taken2.toString());
 		
-		System.out.println(quizDAO.getCreatedQuizzes("vaja").toString());
+		//System.out.println(quizDAO.getCreatedQuizzes("vaja").toString());
+		System.out.println(quizDAO.getSeatchedQuizzes(100, "esc").toString());
 	} 
 }

@@ -24,7 +24,7 @@ public class QuizDAOImpl implements QuizDAO {
 	
 	public QuizDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
-		modelFactory = new ClassFactory();	// TODO: should get this via ctor
+		modelFactory = new ClassFactory(); 
 	}
 
 	@Override
@@ -268,6 +268,42 @@ public class QuizDAOImpl implements QuizDAO {
 				"practice_mode, creation_time, category, time, max_score " + 
 				"FROM quizzes " + 
 				"INNER JOIN users " + 
-				"ON quizzes.creator_id = users.id WHERE username LIKE ? ORDER BY creation_time ";
+				"ON quizzes.creator_id = users.id WHERE username LIKE ? ORDER BY creation_time DESC";
+	}
+
+	@Override
+	public List<Quiz> getSeatchedQuizzes(int numResults, String parameter) {
+		List<Quiz> userQuizes = new ArrayList<Quiz>();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(userSearchCommand());
+			preparedStatement.setString(1, "%" + parameter + "%");
+			preparedStatement.setString(2, "%" + parameter + "%");
+			preparedStatement.setString(3, "%" + parameter + "%");
+			preparedStatement.setString(4, "%" + parameter + "%");
+			preparedStatement.setInt(5, numResults);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) {
+				Quiz quiz = loadIntoQuiz(rs);
+				userQuizes.add(quiz);
+			}
+			rs.close();
+			con.close();
+		} catch (SQLException e) { 
+			e.printStackTrace();
+		}
+		return userQuizes;
+	}
+	
+	private String userSearchCommand() {
+		return "SELECT " + 
+				"quizzes.id, avg_rating, avg_score, avg_time, tries, quizzes.description, username, name, " + 
+				"is_random, is_one_page, immediate_correction, " + 
+				"practice_mode, creation_time, category, time, max_score " + 
+				"FROM quizzes " + 
+				"INNER JOIN users " + 
+				"ON quizzes.creator_id = users.id " + 
+				" WHERE name LIKE ? OR category LIKE ? OR quizzes.description LIKE ? OR username LIKE ? ORDER BY creation_time DESC LIMIT ?;";
 	}
 }
