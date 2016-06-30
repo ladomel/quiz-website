@@ -52,12 +52,28 @@ create table user_achievements(
 
 create table questions(
 	id 					int(11) 		not null auto_increment,
+	q_id				int(11),
 	quiz_id 			int(11) 		not null,
 	problem 			longtext 		not null,
 	type 				varchar(50) 	not null,
 	grade 				int(11) 		not null,
 	primary key(id)
 );
+
+# trigger to handle q_id in questions
+DELIMITER $$
+CREATE TRIGGER insert_question_id
+AFTER INSERT ON questions
+FOR EACH ROW
+BEGIN 
+UPDATE questions 
+SET q_id = (
+	SELECT COUNT(1)
+	FROM questions 
+	WHERE quiz_id = NEW.quiz_id
+	) 
+WHERE id = (SELECT LAST_INSERT_ID());
+END $$
 
 create table images(
 	question_id			int(11)			not null,
