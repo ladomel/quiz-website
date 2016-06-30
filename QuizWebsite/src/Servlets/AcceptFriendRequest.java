@@ -1,6 +1,7 @@
 package Servlets;
 
 import java.io.IOException;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -46,8 +47,21 @@ public class AcceptFriendRequest extends HttpServlet {
 		FriendRequest fr = mD.getFriendRequest(requestId);
 		fr.setStatus(status);
 		mD.addFriendRequest(fr);
-		UserDAO uD = (UserDAO) request.getServletContext().getAttribute("userDAO");
 		
+		UserDAO uD = (UserDAO) request.getServletContext().getAttribute("userDAO");
+		classes.User master = (classes.User) request.getSession().getAttribute("MasterUser");
+		master = (classes.User) uD.getUser(master.getUserName());
+		classes.User getter = (classes.User) uD.getUser(fr.getSenderUserName());
+		
+		Set<String> friends = master.getFriends(); friends.add(fr.getSenderUserName());
+		master.setFriends(friends);
+		
+		friends = getter.getFriends(); 
+		friends.add(fr.getGetterUserName());
+		getter.setFriends(friends);
+		
+		uD.updateUser(master);
+		uD.updateUser(getter);
 	}
 
 }

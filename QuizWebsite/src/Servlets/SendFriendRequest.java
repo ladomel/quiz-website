@@ -33,23 +33,20 @@ public class SendFriendRequest extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String getterUsername = request.getParameter("getter");
-		User master = (User) request.getSession().getAttribute("MasterUser");
-		ClassFactory factory = (ClassFactory) request.getServletContext().getAttribute("factory");
-		long date = (new Date()).getTime();
-		FriendRequest req = factory.getFriendRequest(master.getUserName(), date, getterUsername,false);
-		MessageDAO mD = (MessageDAO) request.getServletContext().getAttribute("messageDAO");
-		// if 
-		mD.addFriendRequest(req);
-		RequestDispatcher rd = request.getRequestDispatcher("Profile?username=" + getterUsername);
-		rd.forward(request, response);
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+		String getterUsername = request.getParameter("getter");
+		User master = (User) request.getSession().getAttribute("MasterUser");
+		ClassFactory factory = (ClassFactory) request.getServletContext().getAttribute("factory");
+		long date = (new Date()).getTime();
+		FriendRequest req = factory.getFriendRequest(master.getUserName(), date, getterUsername,false);
+		MessageDAO mD = (MessageDAO) request.getServletContext().getAttribute("messageDAO");
+		if (!mD.friendRequestExists(master.getUserName(), getterUsername)) mD.addFriendRequest(req);
 	}
 
 }

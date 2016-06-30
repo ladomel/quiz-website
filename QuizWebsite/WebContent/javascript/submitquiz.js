@@ -22,13 +22,11 @@ function nextQuestion(){
 	var url = document.getElementById("iframe").src;
 	var num = parseInt(url.substring(url.indexOf("?id=") + 4)) + 1;
 	var doc = document.getElementById("iframe").contentDocument;
-	document.getElementById("nextquestion").disabled = true;
+	
 	doc.getElementById("submit").click();
 	setTimeout(function(){
 		document.getElementById("iframe").src = "Question?id=" + num;
-	}, 2000);
-	document.getElementById("nextquestion").disabled = false;
-	
+	}, 2000);	
 }
 
 $(window).bind('beforeunload', function() {

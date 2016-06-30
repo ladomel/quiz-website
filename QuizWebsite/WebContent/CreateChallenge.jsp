@@ -16,6 +16,7 @@
 		if (request.getSession().getAttribute("MasterUser") == null) toppanel = "toppanel-loggedout.jsp";
 		else toppanel = "toppanel-loggedin.jsp";
 	%>
+	<div id="centerpanel">
 	<form action="SendChallenge" method="post">
 		<input type="hidden" name="quizId" value='<%= request.getParameter("quizId") %>'>	
 		Choose Friends: <br>
@@ -36,7 +37,7 @@
 		</div>
 		<input type="submit" id="send" value="Send">
 	</form>
-	
+	</div>
 	<div id="toppanel">
 		
 	</div>
