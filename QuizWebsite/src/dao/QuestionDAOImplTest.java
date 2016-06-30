@@ -102,9 +102,9 @@ public class QuestionDAOImplTest {
 //		mcWrongs.add("mcWrongs2");
 //		QuestionMC mc = classFactory.getQuestionMC("mcProb", 8, "mcCorrect", mcWrongs);
 //		questionDAO.addMC(1, mc);
-		
-		List<Question> questions = questionDAO.getQuestions(1);
-		System.out.println(questions);
+//		
+//		List<Question> questions = questionDAO.getQuestions(1);
+//		System.out.println(questions);
 	}
 
 	@Test
