@@ -55,10 +55,12 @@ public class AcceptFriendRequest extends HttpServlet {
 		
 		Set<String> friends = master.getFriends(); friends.add(fr.getSenderUserName());
 		master.setFriends(friends);
+		friends.remove(null);
 		
 		friends = getter.getFriends(); 
 		friends.add(fr.getGetterUserName());
 		getter.setFriends(friends);
+		friends.remove(null);
 		
 		uD.updateUser(master);
 		uD.updateUser(getter);
