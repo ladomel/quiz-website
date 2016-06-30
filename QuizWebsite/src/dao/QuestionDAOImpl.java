@@ -179,6 +179,8 @@ public class QuestionDAOImpl implements QuestionDAO {
 			// couples
 			retrieveFB(con, quizId, questions);
 			retrieveMA(con, quizId, questions);
+			// couples
+			retrieveMCMA(con, quizId, questions);
 			
 			
 			con.close();
@@ -205,6 +207,14 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	
 	
+
+
+
+
+
+
+
+
 
 
 
@@ -269,7 +279,6 @@ public class QuestionDAOImpl implements QuestionDAO {
 		PreparedStatement preparedStatement =
 				con.prepareStatement("SELECT * FROM questions "
 						+ "LEFT JOIN answers ON answers.question_id = questions.id "
-						+ "LEFT JOIN images ON images.question_id = id "
 						+ "WHERE quiz_id = ? AND type LIKE 'FB' "
 						+ "ORDER BY id, answers.field_id;"
 						);
@@ -286,7 +295,6 @@ public class QuestionDAOImpl implements QuestionDAO {
 		PreparedStatement preparedStatement =
 				con.prepareStatement("SELECT * FROM questions "
 						+ "LEFT JOIN answers ON answers.question_id = questions.id "
-						+ "LEFT JOIN images ON images.question_id = id "
 						+ "LEFT JOIN multiple_choice_metadata AS mcm "
 						+ "ON mcm.question_id = questions.id  "
 						+ "WHERE quiz_id = ? AND type LIKE 'MA' "
@@ -297,6 +305,26 @@ public class QuestionDAOImpl implements QuestionDAO {
 		
 		retrieveMAFromRS(rs, questions);
 	}
+	
+
+	private void retrieveMCMA(Connection con, int quizId, List<Question> questions) 
+			throws SQLException {
+		
+		PreparedStatement preparedStatement =
+				con.prepareStatement("SELECT * FROM questions "
+						+ "LEFT JOIN answers ON answers.question_id = questions.id "
+						+ "LEFT JOIN answers.wrong AS aw ON aw.question_id = questions.id"
+						+ "LEFT JOIN multiple_choice_metadata AS mcm "
+						+ "ON mcm.question_id = questions.id  "
+						+ "WHERE quiz_id = ? AND type LIKE 'MA' "
+						+ "ORDER BY id;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		
+		retrieveMAFromRS(rs, questions);
+	}
+
 
 
 
