@@ -409,7 +409,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		while(rs.next()) {
 			String problem = rs.getString("problem");
 			int grade = rs.getInt("grade");
-			int currentQuestionId = rs.getInt("id");
+			int currentQuestionId = rs.getInt("q_id");
 			rs.previous();
 			Set<String> answers = 
 					collectAnswersUntilFieldAndQuestionIsSame(rs, currentQuestionId, 0);
@@ -430,7 +430,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			String imageURL = rs.getString("image");
 			String problem = rs.getString("problem");
 			int grade = rs.getInt("grade");
-			int currentQuestionId = rs.getInt("id");
+			int currentQuestionId = rs.getInt("q_id");
 			rs.previous();
 			Set<String> answers = 
 					collectAnswersUntilFieldAndQuestionIsSame(rs, currentQuestionId, 0);
@@ -452,7 +452,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			Integer currentQuestionId = null;
 			problem = rs.getString("questions.problem");
 			grade = rs.getInt("questions.grade");
-			currentQuestionId = rs.getInt("questions.id");
+			currentQuestionId = rs.getInt("questions.q_id");
 			
 			rs.previous();
 			
@@ -477,7 +477,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			Integer currentQuestionId = null;
 			problem = rs.getString("questions.problem");
 			grade = rs.getInt("questions.grade");
-			currentQuestionId = rs.getInt("questions.id");
+			currentQuestionId = rs.getInt("questions.q_id");
 			// MA custom fields
 			Boolean ordered = null;
 			Integer nFields = null;
@@ -506,7 +506,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			Integer currentQuestionId = null;
 			problem = rs.getString("questions.problem");
 			grade = rs.getInt("questions.grade");
-			currentQuestionId = rs.getInt("questions.id");
+			currentQuestionId = rs.getInt("questions.q_id");
 			
 			rs.previous();
 
@@ -539,7 +539,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			Integer currentQuestionId = null;
 			problem = rs.getString("questions.problem");
 			grade = rs.getInt("questions.grade");
-			currentQuestionId = rs.getInt("questions.id");
+			currentQuestionId = rs.getInt("questions.q_id");
 			
 			rs.previous();
 
