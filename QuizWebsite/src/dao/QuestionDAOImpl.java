@@ -4,10 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -181,6 +178,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			retrieveMA(con, quizId, questions);
 			// couples
 			retrieveMCMA(con, quizId, questions);
+			retrieveMC(con, quizId, questions);
 			
 			
 			con.close();
@@ -207,6 +205,13 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	
 	
+
+
+
+
+
+
+
 
 
 
@@ -325,6 +330,38 @@ public class QuestionDAOImpl implements QuestionDAO {
 		retrieveMCMAFromRS(rs, questions);
 		rs.close();
 	}
+	
+	/*
+	 * modified MCMA retriever  
+	 */
+	private void retrieveMC(Connection con, int quizId, List<Question> questions) 
+			throws SQLException {
+		
+		PreparedStatement preparedStatement =
+				con.prepareStatement("SELECT * FROM questions "
+						+ "LEFT JOIN answers ON answers.question_id = questions.id "
+						+ "LEFT JOIN answers_wrong AS aw ON aw.question_id = questions.id "
+						+ "WHERE quiz_id = ? AND type LIKE 'MC' "
+						+ "ORDER BY id;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		
+		retrieveMCFromRS(rs, questions);
+		rs.close();
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -490,6 +527,41 @@ public class QuestionDAOImpl implements QuestionDAO {
 			// SQL runs +1 idx:
 			questions.set(currentQuestionId - 1, mcma);
 		}				
+	}
+	
+	private void retrieveMCFromRS(ResultSet rs, List<Question> questions) 
+			throws SQLException {
+		
+
+		while(rs.next()) {
+			String problem = null;
+			Integer grade = null;
+			Integer currentQuestionId = null;
+			problem = rs.getString("questions.problem");
+			grade = rs.getInt("questions.grade");
+			currentQuestionId = rs.getInt("questions.id");
+			
+			rs.previous();
+
+			// set of correct/wrong answers and all the conversion bullshit required to match MCMA ctor
+			Set<String> correctAnswers = new HashSet<String> ();
+			Set<String> wrongAnswers = new HashSet<String> ();
+			collectMCMAAnswersAndWrongAnswers(rs, correctAnswers, wrongAnswers, currentQuestionId);
+			String correctAnswerString = null;
+			
+			for(String s : correctAnswers) correctAnswerString = s; 
+			
+			QuestionMC mc = classFactory.getQuestionMC(
+					problem, 
+					grade, 
+					correctAnswerString, 
+					wrongAnswers
+					);
+			
+			// SQL runs +1 idx:
+			questions.set(currentQuestionId - 1, mc);
+		}				
+		
 	}
 
 
