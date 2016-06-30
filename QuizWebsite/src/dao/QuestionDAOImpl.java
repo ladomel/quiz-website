@@ -169,13 +169,16 @@ public class QuestionDAOImpl implements QuestionDAO {
 		List<Question> questions = null;
 		try {
 			Connection con = dataSource.getConnection();
-			// list with correct size:
+			// list with populated with correct size:
 			questions = new ArrayList<Question> ();
 			for(int i = 0; i < numberOfQuestions(con, quizId); i++)  questions.add(null);
 			
-			// TODO: hard
+			// couples
 			retrieveQR(con, quizId, questions);
 			retrievePR(con, quizId, questions);
+			// couples
+			retrieveFB(con, quizId, questions);
+			retrieveMA(con, quizId, questions);
 			
 			
 			con.close();
@@ -202,6 +205,24 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/*
 	 * this method finds and inserts all QRs into list of questions
 	 */
@@ -241,6 +262,40 @@ public class QuestionDAOImpl implements QuestionDAO {
 		
 	}
 
+	///////// 
+	private void retrieveFB(Connection con, int quizId, List<Question> questions) 
+			throws SQLException {
+
+		PreparedStatement preparedStatement =
+				con.prepareStatement("SELECT * FROM questions "
+						+ "LEFT JOIN answers ON answers.question_id = questions.id "
+						+ "LEFT JOIN images ON images.question_id = id "
+						+ "WHERE quiz_id = ? AND type LIKE 'FB' "
+						+ "ORDER BY id, answers.field_id;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		
+		retrieveFBFromRS(rs, questions);
+	}
+	
+	// similar to above
+	private void retrieveMA(Connection con, int quizId, List<Question> questions) 
+			throws SQLException {
+
+		PreparedStatement preparedStatement =
+				con.prepareStatement("SELECT * FROM questions "
+						+ "LEFT JOIN answers ON answers.question_id = questions.id "
+						+ "LEFT JOIN images ON images.question_id = id "
+						+ "LEFT JOIN multiple_choice_metadata AS mcm ON mcm.question_id = q.id  "
+						+ "WHERE quiz_id = ? AND type LIKE 'MA' "
+						+ "ORDER BY id, answers.field_id;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		
+		retrieveMAFromRS(rs, questions);
+	}
 
 
 
@@ -250,6 +305,25 @@ public class QuestionDAOImpl implements QuestionDAO {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * retrievals from ResultSet
+ */
 
 
 	private void retrieveQRFromRS(ResultSet rs, List<Question> questions) 
@@ -261,16 +335,16 @@ public class QuestionDAOImpl implements QuestionDAO {
 			int currentQuestionId = rs.getInt("id");
 			rs.previous();
 			Set<String> answers = 
-					collectAnswersUntilQuestionIsSame(rs, currentQuestionId);
+					collectAnswersUntilFieldAndQuestionIsSame(rs, currentQuestionId, 0);
 			QuestionQR qr =
 					classFactory.getQuestionQR(problem, grade, answers);
 			// SQL runs +1 idx:
-						questions.set(currentQuestionId - 1, qr);
+			questions.set(currentQuestionId - 1, qr);
 		}
 	}
 	
 	/*
-	 * mocking above because why not ?
+	 * copy above
 	 */
 	private void retrievePRFromRS(ResultSet rs, List<Question> questions) 
 			throws SQLException {
@@ -282,23 +356,114 @@ public class QuestionDAOImpl implements QuestionDAO {
 			int currentQuestionId = rs.getInt("id");
 			rs.previous();
 			Set<String> answers = 
-					collectAnswersUntilQuestionIsSame(rs, currentQuestionId);
+					collectAnswersUntilFieldAndQuestionIsSame(rs, currentQuestionId, 0);
 			QuestionPR question = 
 					classFactory.getQuestionPR(problem, grade, imageURL, answers);
 			// SQL runs +1 idx:
 			questions.set(currentQuestionId - 1, question);
 		}		
 	}
-
-
-	private Set<String> collectAnswersUntilQuestionIsSame(ResultSet rs, int currentQuestionId) 
+	
+	
+	private void retrieveFBFromRS(ResultSet rs, List<Question> questions) 
 			throws SQLException {
 		
+		while(rs.next()) {
+			// TODO: these are common question fields but could not move to another functions
+			String problem = null;
+			Integer grade = null;
+			Integer currentQuestionId = null;
+			problem = rs.getString("questions.problem");
+			grade = rs.getInt("questions.grade");
+			currentQuestionId = rs.getInt("questions.id");
+			
+			rs.previous();
+			
+			List<Set<String>> answers =  collectFBAnswersUntilNextQuestion(rs, currentQuestionId);
+
+			QuestionFB fb = classFactory.getQuestionFB(problem, grade, answers);
+			// SQL runs +1 idx:
+			questions.set(currentQuestionId - 1, fb);
+		}		
+		
+	}
+	
+	/*
+	 * copy above
+	 */
+	private void retrieveMAFromRS(ResultSet rs, List<Question> questions) 
+			throws SQLException {
+		
+		while(rs.next()) {
+			String problem = null;
+			Integer grade = null;
+			Integer currentQuestionId = null;
+			problem = rs.getString("questions.problem");
+			grade = rs.getInt("questions.grade");
+			currentQuestionId = rs.getInt("questions.id");
+			// MA custom fields
+			Boolean ordered = null;
+			Integer nFields = null;
+			ordered = rs.getBoolean("ordered");
+			nFields = rs.getInt("nfields");
+			
+			rs.previous();
+			
+			List<Set<String>> answers =  collectFBAnswersUntilNextQuestion(rs, currentQuestionId);
+
+			QuestionMA ma = classFactory.getQuestionMA(problem, grade, ordered, answers, nFields);
+			// SQL runs +1 idx:
+			questions.set(currentQuestionId - 1, ma);
+		}		
+		
+		
+	}
+
+
+
+
+	//////////////////////////////// retriever utils1
+	
+	// self-explanatory
+	private int numberOfQuestions(Connection con, int quizId) 
+			throws SQLException {
+		int n = 0;
+		PreparedStatement preparedStatement =
+				con.prepareStatement(
+						"SELECT COUNT(1) FROM questions WHERE quiz_id = ?;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		rs.next();
+		n = rs.getInt("COUNT(1)");
+		rs.close();
+		return n;
+	}
+	
+	// collect set of correct answers
+	private Set<String> collectAnswersUntilFieldAndQuestionIsSame(ResultSet rs, 
+			int currentQuestionId, int currentFieldId) 
+			throws SQLException {
 		Set<String> answers = new HashSet<String> ();
-		while(rs.next() && rs.getInt("id") == currentQuestionId) {
-			answers.add(rs.getString("answer"));
+		while(rs.next() && rs.getInt("id") == currentQuestionId && rs.getInt("field_id") == currentFieldId) {
+			answers.add(rs.getString("answers.answer"));
 		}
-		rs.previous();
+		rs.previous();	// back up from next question
+		return answers;
+	}
+
+	// collect list of sets
+	private List<Set<String>> collectFBAnswersUntilNextQuestion(ResultSet rs, int currentQuestionId) 
+			throws SQLException {
+		
+		List<Set<String>> answers = new ArrayList<Set<String>> ();
+		while(rs.next() && rs.getInt("id") == currentQuestionId) {
+			int currentFieldId = rs.getInt("field_id");
+			Set<String> answersOfField = 
+					collectAnswersUntilFieldAndQuestionIsSame(rs, currentQuestionId, currentFieldId);
+			answers.add(answersOfField);
+		}
+		rs.previous();	// dont forget to back up on next question
 		return answers;
 	}
 
@@ -324,20 +489,26 @@ public class QuestionDAOImpl implements QuestionDAO {
 
 
 
-	private int numberOfQuestions(Connection con, int quizId) 
-			throws SQLException {
-		int n = 0;
-		PreparedStatement preparedStatement =
-				con.prepareStatement(
-						"SELECT COUNT(1) FROM questions WHERE quiz_id = ?;"
-						);
-		preparedStatement.setInt(1, quizId);
-		ResultSet rs = preparedStatement.executeQuery();
-		rs.next();
-		n = rs.getInt("COUNT(1)");
-		rs.close();
-		return n;
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
