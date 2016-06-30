@@ -47,35 +47,33 @@ public class CreateQuiz extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Date date = new Date();
+		long creationMillis = date.getTime();
+		
+		String name = request.getParameter("name");
+		String description = request.getParameter("description");
+		boolean random = (request.getParameter("random") != null);
+		boolean onepage = (request.getParameter("onepage") != null);
+		boolean practice = (request.getParameter("practice") != null);
+		boolean correction = (request.getParameter("correction") != null);
+		int numMinutes = Integer.parseInt(request.getParameter("time"));
+		
 		HttpSession session = request.getSession();
-		QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
-		classes.Quiz newQuiz = createQuiz(request, session);
+		User masterUser = (User)session.getAttribute("MasterUser");
+		
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)session.getAttribute("createdQuestions");
+		
+		ClassFactory factory = (ClassFactory)request.getServletContext().getAttribute("factory");
+		classes.Quiz newQuiz = factory.getQuiz(masterUser.getUserName(), name, description);
+		newQuiz.setDateCreated(creationMillis);
+		newQuiz.setHasPracticeMode(practice);
+		newQuiz.setImmediatelyCorrected(correction);
+		newQuiz.setOnePage(onepage);
+		newQuiz.setRandom(random);
+		newQuiz.setQuizTime(numMinutes);
 		
 		System.out.println(newQuiz.toString());
 		for(int i = 0; i < createdQuestions.size(); i++)
-			System.out.println(createdQuestions.get(i).toString());	
-		//int id = quizDAO.addQuiz(newQuiz);
-		//createdQuestions.clear();
-		//RequestDispatcher requestDispatcher = request.getRequestDispatcher("Quiz?id=" + id);
-		//requestDispatcher.forward(request, response);	
-	}
-	
-	
-	public classes.Quiz createQuiz(HttpServletRequest request, HttpSession session)
-	{
-		Date date = new Date();   
-		User masterUser = (User)session.getAttribute("MasterUser");
-		ClassFactory factory = (ClassFactory)request.getServletContext().getAttribute("factory");
-		//classes.Quiz newQuiz = factory.getQuiz(masterUser.getUserName(), name, description);
-		classes.Quiz newQuiz = factory.getQuiz("Ado", request.getParameter("name"), request.getParameter("description"));
-		newQuiz.setDateCreated(date.getTime());
-		newQuiz.setHasPracticeMode(request.getParameter("practice") != null);
-		newQuiz.setImmediatelyCorrected(request.getParameter("correction") != null);
-		newQuiz.setOnePage(request.getParameter("onepage") != null);
-		newQuiz.setRandom((request.getParameter("random") != null));
-		newQuiz.setQuizTime(Integer.parseInt(request.getParameter("time")));
-		return newQuiz;
 			System.out.println(createdQuestions.get(i).toString());
 			
 		QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
