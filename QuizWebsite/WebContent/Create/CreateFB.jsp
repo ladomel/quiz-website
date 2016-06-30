@@ -31,7 +31,7 @@
 	
 	<script type="text/javascript">
 		var count = 0;
-		var a = [0];
+		var a = [];
 		function addAnswer(i){
 			var field = document.createElement("input");
 			field.name = "answer" + i + "/" + a[i]; a[i]++; 
