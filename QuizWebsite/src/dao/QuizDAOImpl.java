@@ -92,7 +92,7 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setBoolean(4, quiz.isRandom());
 			preparedStatement.setBoolean(5, quiz.isOnePage());
 			preparedStatement.setBoolean(6, quiz.isImmediatelyCorrected());
-			preparedStatement.setBoolean(7, quiz.isHasPracticeMode());
+			preparedStatement.setBoolean(7, quiz.hasPracticeMode());
 			preparedStatement.setLong(8, quiz.getDateCreated());
 			preparedStatement.setInt(9, quiz.getQuizTime());
 			preparedStatement.setInt(10, quiz.getMaxScore());
@@ -136,7 +136,7 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setBoolean(4, quiz.isRandom());
 			preparedStatement.setBoolean(5, quiz.isOnePage());
 			preparedStatement.setBoolean(6, quiz.isImmediatelyCorrected());
-			preparedStatement.setBoolean(7, quiz.isHasPracticeMode());
+			preparedStatement.setBoolean(7, quiz.hasPracticeMode());
 			preparedStatement.setLong(8, quiz.getDateCreated());
 			preparedStatement.setInt(9, quiz.getQuizTime());
 			preparedStatement.setInt(10, quiz.getMaxScore());
