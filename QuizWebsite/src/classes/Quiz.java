@@ -44,7 +44,7 @@ public class Quiz {
 				this.isRandom() == other.isRandom() &&
 				this.isOnePage() == other.isOnePage() &&
 				this.isImmediatelyCorrected() == other.isImmediatelyCorrected() &&
-				this.isHasPracticeMode() == other.isHasPracticeMode();
+				this.hasPracticeMode() == other.hasPracticeMode();
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class Quiz {
 				"IsRandom: " + this.isRandom() + " | " + 
 				"IsOnePage: " + this.isOnePage() + " | " +
 				"IsImmediatelyCorrected: " + this.isImmediatelyCorrected() + " | " +
-				"HasPraticeMode: " + this.isHasPracticeMode() + " | " + 
+				"HasPraticeMode: " + this.hasPracticeMode() + " | " + 
 				"AverageRating: " + this.getAverageRating() + " | " +
 				"AverageScore: " + this.getAverageScore() + " | " +
 				"AverageTimeMillis: " + this.getAverageTimeMillis() + " | " +
@@ -121,7 +121,7 @@ public class Quiz {
 		this.isImmediatelyCorrected = isImmediatelyCorrected;
 	}
 
-	public boolean isHasPracticeMode() {
+	public boolean hasPracticeMode() {
 		return hasPracticeMode;
 	}
 
