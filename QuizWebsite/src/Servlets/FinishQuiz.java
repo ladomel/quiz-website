@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import classes.Answer;
 import classes.Result;
+import classes.Quiz;
 
 /**
  * Servlet implementation class FinishQuiz
@@ -35,17 +36,24 @@ public class FinishQuiz extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	HttpSession session = request.getSession();
 
+    	Quiz takenQuiz = (Quiz)session.getAttribute("Quiz");
     	Date date = new Date();
     	Result result = (Result)session.getAttribute("Result");
-    	result.setTimeTaken( date.getTime()  -result.getTimeStarted() );
+    	result.setTimeTaken(result.getTimeStarted() - date.getTime());
 
     	int finalGrade = 0;
     	List<Answer> answers = result.getAnswers();
     	for(Answer ans : answers) finalGrade += ans.getGrade();
     	result.setFinalGrade(finalGrade);
     	
+    	int oldNumTries = takenQuiz.getNumTries();
+    	
+    	takenQuiz.setNumTries(oldNumTries + 1);
+    	takenQuiz.setAverageScore( 		 ( takenQuiz.getAverageScore()*oldNumTries+result.getFinalGrade() ) /   (oldNumTries + 1) );
+    	takenQuiz.setAverageTimeMillis(  ( takenQuiz.getAverageTimeMillis()*oldNumTries+result.getTimeTaken() ) /   (oldNumTries + 1) );
+    	
     	request.setAttribute("Result", result);
-		request.setAttribute("Quiz", session.getAttribute("Quiz"));
+		request.setAttribute("Quiz", takenQuiz); 
     	// if not practice mode send to database.
 		
 		session.setAttribute("questionPositions", null);
