@@ -287,7 +287,8 @@ public class QuestionDAOImpl implements QuestionDAO {
 				con.prepareStatement("SELECT * FROM questions "
 						+ "LEFT JOIN answers ON answers.question_id = questions.id "
 						+ "LEFT JOIN images ON images.question_id = id "
-						+ "LEFT JOIN multiple_choice_metadata AS mcm ON mcm.question_id = q.id  "
+						+ "LEFT JOIN multiple_choice_metadata AS mcm "
+						+ "ON mcm.question_id = questions.id  "
 						+ "WHERE quiz_id = ? AND type LIKE 'MA' "
 						+ "ORDER BY id, answers.field_id;"
 						);
@@ -409,6 +410,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			
 			rs.previous();
 			
+			// reusing existing collector
 			List<Set<String>> answers =  collectFBAnswersUntilNextQuestion(rs, currentQuestionId);
 
 			QuestionMA ma = classFactory.getQuestionMA(problem, grade, ordered, answers, nFields);
