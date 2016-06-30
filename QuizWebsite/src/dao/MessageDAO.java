@@ -74,4 +74,11 @@ public interface MessageDAO {
 	 */
 	public int getNumUnseen(String username);
 	
+	/**
+	 * Updates friend request.
+	 * 
+	 * @param id - id of request to update
+	 * @param newStatus - new status
+	 */
+	public void updateFriendRequestStatus(int id, String newStatus);	
 }

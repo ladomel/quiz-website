@@ -22,7 +22,7 @@ public class MessageDAOImpl implements MessageDAO{
 	
 	public MessageDAOImpl(DataSource dataSource) {
 		this.dataSource = dataSource;
-		classFactory = new ClassFactory();	// TODO: pass as parameter
+		classFactory = new ClassFactory();	 
 	}
 	
 	@Override
@@ -155,8 +155,9 @@ public class MessageDAOImpl implements MessageDAO{
 			PreparedStatement preparedStatement = 
 					con.prepareStatement("SELECT *"
 							+ "FROM friendrequests "
-							+ "WHERE friendrequests.receiver_username = ? ORDER BY time DESC;");
+							+ "WHERE friendrequests.receiver_username = ? AND status = ? ORDER BY time DESC;");
 			preparedStatement.setString(1, username);
+			preparedStatement.setString(2, "Pending");
 
 			ResultSet rs = preparedStatement.executeQuery();
 			fillRequestAnswer(answer, rs);
@@ -429,5 +430,18 @@ public class MessageDAOImpl implements MessageDAO{
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 		return answer;
+	}
+
+	@Override
+	public void updateFriendRequestStatus(int id, String newStatus){
+		try {
+			Connection con = dataSource.getConnection();
+			String statement = "UPDATE friendrequests SET status = ? WHERE id = ?;";
+			PreparedStatement preparedStatement = con.prepareStatement(statement);
+			preparedStatement.setString(1, newStatus);
+			preparedStatement.setInt(2, id);
+			preparedStatement.executeUpdate();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
 	}
 }
