@@ -410,9 +410,10 @@ public class QuestionDAOImpl implements QuestionDAO {
 			String problem = rs.getString("problem");
 			int grade = rs.getInt("grade");
 			int currentQuestionId = rs.getInt("q_id");
+			int currId = rs.getInt("id");
 			rs.previous();
 			Set<String> answers = 
-					collectAnswersUntilFieldAndQuestionIsSame(rs, currentQuestionId, 0);
+					collectAnswersUntilFieldAndQuestionIsSame(rs, currId, 0);
 			QuestionQR qr =
 					classFactory.getQuestionQR(problem, grade, answers);
 			// SQL runs +1 idx:
@@ -431,9 +432,10 @@ public class QuestionDAOImpl implements QuestionDAO {
 			String problem = rs.getString("problem");
 			int grade = rs.getInt("grade");
 			int currentQuestionId = rs.getInt("q_id");
+			int currId = rs.getInt("id");
 			rs.previous();
 			Set<String> answers = 
-					collectAnswersUntilFieldAndQuestionIsSame(rs, currentQuestionId, 0);
+					collectAnswersUntilFieldAndQuestionIsSame(rs, currId, 0);
 			QuestionPR question = 
 					classFactory.getQuestionPR(problem, grade, imageURL, answers);
 			// SQL runs +1 idx:
@@ -450,13 +452,14 @@ public class QuestionDAOImpl implements QuestionDAO {
 			String problem = null;
 			Integer grade = null;
 			Integer currentQuestionId = null;
+			int currId = rs.getInt("id");
 			problem = rs.getString("questions.problem");
 			grade = rs.getInt("questions.grade");
 			currentQuestionId = rs.getInt("questions.q_id");
 			
 			rs.previous();
 			
-			List<Set<String>> answers =  collectFBAnswersUntilNextQuestion(rs, currentQuestionId);
+			List<Set<String>> answers =  collectFBAnswersUntilNextQuestion(rs, currId);
 
 			QuestionFB fb = classFactory.getQuestionFB(problem, grade, answers);
 			// SQL runs +1 idx:
@@ -475,6 +478,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			String problem = null;
 			Integer grade = null;
 			Integer currentQuestionId = null;
+			int currId = rs.getInt("id");
 			problem = rs.getString("questions.problem");
 			grade = rs.getInt("questions.grade");
 			currentQuestionId = rs.getInt("questions.q_id");
@@ -487,7 +491,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			rs.previous();
 			
 			// reusing existing collector
-			List<Set<String>> answers =  collectFBAnswersUntilNextQuestion(rs, currentQuestionId);
+			List<Set<String>> answers =  collectFBAnswersUntilNextQuestion(rs, currId);
 
 			QuestionMA ma = classFactory.getQuestionMA(problem, grade, ordered, answers, nFields);
 			// SQL runs +1 idx:
@@ -504,6 +508,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			String problem = null;
 			Integer grade = null;
 			Integer currentQuestionId = null;
+			int currId = rs.getInt("id");
 			problem = rs.getString("questions.problem");
 			grade = rs.getInt("questions.grade");
 			currentQuestionId = rs.getInt("questions.q_id");
@@ -513,7 +518,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			// set of correct/wrong answers and all the conversion bullshit required to match MCMA ctor
 			Set<String> correctAnswers = new HashSet<String> ();
 			Set<String> wrongAnswers = new HashSet<String> ();
-			collectMCMAAnswersAndWrongAnswers(rs, correctAnswers, wrongAnswers, currentQuestionId);
+			collectMCMAAnswersAndWrongAnswers(rs, correctAnswers, wrongAnswers, currId);
 			List<String> correctAnswersList = new ArrayList<String> ();
 			List<String> wrongAnswersList = new ArrayList<String> ();
 			correctAnswersList.addAll(correctAnswers);
@@ -537,6 +542,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			String problem = null;
 			Integer grade = null;
 			Integer currentQuestionId = null;
+			int currId = rs.getInt("id");
 			problem = rs.getString("questions.problem");
 			grade = rs.getInt("questions.grade");
 			currentQuestionId = rs.getInt("questions.q_id");
@@ -546,7 +552,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 			// set of correct/wrong answers and all the conversion bullshit required to match MCMA ctor
 			Set<String> correctAnswers = new HashSet<String> ();
 			Set<String> wrongAnswers = new HashSet<String> ();
-			collectMCMAAnswersAndWrongAnswers(rs, correctAnswers, wrongAnswers, currentQuestionId);
+			collectMCMAAnswersAndWrongAnswers(rs, correctAnswers, wrongAnswers, currId);
 			String correctAnswerString = null;
 			
 			for(String s : correctAnswers) correctAnswerString = s; 
@@ -710,8 +716,43 @@ public class QuestionDAOImpl implements QuestionDAO {
 		preparedStatement.setString(3, q.getType());	// sorry no enum
 		preparedStatement.setLong(4, q.getGrade());
 		preparedStatement.executeUpdate();
+		preparedStatement.close();
+		
+		int qId = getLastQuestionId(con, quizId);
+		setQuestionIdOnLastInsert(con, qId);
 	}
 	
+	private void setQuestionIdOnLastInsert(Connection con, int qId) 
+			throws SQLException {
+		PreparedStatement preparedStatement = 
+				con.prepareStatement(
+						"UPDATE questions "
+						+ "SET q_id = ? "
+						+ "WHERE id = (SELECT LAST_INSERT_ID());"
+						);
+		preparedStatement.setInt(1, qId);
+		preparedStatement.executeUpdate();
+		preparedStatement.close();		
+	}
+
+	// self-explanatory
+	private int getLastQuestionId(Connection con, int quizId) 
+			throws SQLException {
+		int id = 0;
+		PreparedStatement preparedStatement =
+				con.prepareStatement(
+						"SELECT COUNT(1) "
+						+ "FROM questions "
+						+ "WHERE quiz_id = ?;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		rs.next();
+		id = rs.getInt("count(1)");
+		rs.close();
+		return id;
+	}
+
 	/*
 	 * this will load answers set as fields possible correct answers
 	 */
