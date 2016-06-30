@@ -249,7 +249,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		ResultSet rs = preparedStatement.executeQuery();
 		
 		retrieveQRFromRS(rs, questions);
-		
+		rs.close();
 	}
 	
 	/*
@@ -269,7 +269,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		ResultSet rs = preparedStatement.executeQuery();
 		
 		retrievePRFromRS(rs, questions);
-		
+		rs.close();
 	}
 
 	///////// 
@@ -286,6 +286,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		ResultSet rs = preparedStatement.executeQuery();
 		
 		retrieveFBFromRS(rs, questions);
+		rs.close();
 	}
 	
 	// similar to above
@@ -304,6 +305,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		ResultSet rs = preparedStatement.executeQuery();
 		
 		retrieveMAFromRS(rs, questions);
+		rs.close();
 	}
 	
 
@@ -314,16 +316,25 @@ public class QuestionDAOImpl implements QuestionDAO {
 				con.prepareStatement("SELECT * FROM questions "
 						+ "LEFT JOIN answers ON answers.question_id = questions.id "
 						+ "LEFT JOIN answers.wrong AS aw ON aw.question_id = questions.id"
-						+ "LEFT JOIN multiple_choice_metadata AS mcm "
-						+ "ON mcm.question_id = questions.id  "
 						+ "WHERE quiz_id = ? AND type LIKE 'MA' "
 						+ "ORDER BY id;"
 						);
 		preparedStatement.setInt(1, quizId);
 		ResultSet rs = preparedStatement.executeQuery();
 		
-		retrieveMAFromRS(rs, questions);
+		retrieveMCMAFromRS(rs, questions);
+		rs.close();
 	}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -446,6 +457,11 @@ public class QuestionDAOImpl implements QuestionDAO {
 			questions.set(currentQuestionId - 1, ma);
 		}		
 		
+	}
+	
+	
+	private void retrieveMCMAFromRS(ResultSet rs, List<Question> questions) {
+		// TODO Auto-generated method stub
 		
 	}
 
