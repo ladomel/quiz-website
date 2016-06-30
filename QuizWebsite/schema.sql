@@ -17,6 +17,11 @@ create table users(
 	primary key(id)
 );
 
+create table admins(
+	username 			varchar(255) 	not null,
+primary key(username)
+);
+
 insert into users(username, hash_password, salt) values('vaja', '1234', 'salt');
 
 create table friends(
