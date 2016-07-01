@@ -156,18 +156,27 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public boolean isAdmin(String userName) {
-		boolean answer = false;
+		boolean isAdmin = false;
 		try {
 			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement = 
-					con.prepareStatement("SELECT * FROM admins WHERE username = ? ;");
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT * "
+							+ "FROM admins "
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?)"
+							+ ";"
+							);
 			preparedStatement.setString(1, userName);
 			ResultSet rs = preparedStatement.executeQuery();
-			if(rs.next()) answer = true;
+			// if result set contains something => user is admin
+			isAdmin = rs.next();
+			
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
-		return answer;
+		
+		return isAdmin;
 	}
 
 	@Override
