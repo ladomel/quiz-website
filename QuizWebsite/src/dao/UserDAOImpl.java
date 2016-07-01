@@ -116,8 +116,8 @@ public class UserDAOImpl implements UserDAO {
 							+ "SET "
 							+ "hash_password = ?, "
 							+ "salt = ?,"
-							+ "description = ?,"
-							+ "image = ?"
+							+ "description = ?, "
+							+ "image = ? "
 							+ "WHERE username LIKE ?;"
 							);
 			preparedStatement.setString(1, user.getHashedPassword());
@@ -185,11 +185,12 @@ public class UserDAOImpl implements UserDAO {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement = 
 					con.prepareStatement(
-							"INSERT INTO admins "
-							+ "VALUES(SELECT id FROM users WHERE username = ?)"
+							"INSERT INTO admins (user_id) "
+							+ "VALUES((SELECT id FROM users WHERE username = ?))"
 							+ ";"
 							);
 			preparedStatement.setString(1, userName);
+			System.out.println(userName);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			con.close();
@@ -202,7 +203,7 @@ public class UserDAOImpl implements UserDAO {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement = 
 					con.prepareStatement(
-							"DELETE FROM adminds "
+							"DELETE FROM admins "
 							+ "WHERE user_id = (SELECT id FROM users WHERE username = ?)"
 							+ ";"
 							);
@@ -222,13 +223,14 @@ public class UserDAOImpl implements UserDAO {
 							"INSERT INTO friends "
 							+ "(first_user_id, second_user_id) "
 							+ "VALUES("
-							+ "SELECT id FROM user WHERE username LIKE ?"
+							+ "(SELECT id FROM users WHERE username LIKE ?)"
 							+ ", "
-							+ "SELECT id FROM user WHERE username LIKE ?"
+							+ "(SELECT id FROM users WHERE username LIKE ?)"
 							+ "), ("
-							+ "SELECT id FROM user WHERE username LIKE ?"
+							+ "(SELECT id FROM users WHERE username LIKE ?)"
 							+ ", "
-							+ "SELECT id FROM user WHERE username LIKE ?);"
+							+ "(SELECT id FROM users WHERE username LIKE ?)"
+							+ ");"
 							);
 			preparedStatement.setString(1, userName1);
 			preparedStatement.setString(2, userName2);
@@ -275,5 +277,11 @@ public class UserDAOImpl implements UserDAO {
 		Set<String> friends = new HashSet<String> ();
 		while(rs.next()) friends.add(rs.getString("users.username"));
 		return friends;
+	}
+
+	@Override
+	public void removeFriendship(String userName1, String userName2) {
+		// TODO Auto-generated method stub
+		
 	}
 }

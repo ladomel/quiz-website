@@ -85,4 +85,13 @@ public interface UserDAO {
 	 * @return set of given users friends
 	 */
 	public Set<String> getFriends(String userName);
+	
+	/**
+	 * Removes friendship between given two users.
+	 * 
+	 * @param user name 1
+	 * @param user name 2
+	 */
+	public void removeFriendship(String userName1, String userName2);
+	
 }
