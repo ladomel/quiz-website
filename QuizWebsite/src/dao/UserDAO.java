@@ -80,7 +80,6 @@ public interface UserDAO {
 	
 	/**
 	 * Returns set of friends for given user name.
-	 * Returns null of user does not exists.
 	 * 
 	 * @param userName - String user name
 	 * @return set of given users friends
