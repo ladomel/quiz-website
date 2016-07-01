@@ -28,19 +28,14 @@ public class UserDAOImpl implements UserDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement = 
-					con.prepareStatement("SELECT "
-							+ "users.username, users.hash_password, "
-							+ "users.salt, users.description, users.image, "
-							+ "users2.username AS username2 "
+					con.prepareStatement(
+							"SELECT * "
 							+ "FROM users "
-							+ "LEFT JOIN friends "
-							+ "ON users.id = friends.first_user_id "
-							+ "LEFT JOIN users AS users2 "
-							+ "ON users2.id = friends.second_user_id "
-							+ "WHERE users.username like ?;");
+							+ "WHERE username LIKE ?;");
 			preparedStatement.setString(1, userName);
 			ResultSet rs = preparedStatement.executeQuery();
 			user = loadIntoUser(rs);
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
@@ -53,16 +48,14 @@ public class UserDAOImpl implements UserDAO {
 		if(!rs.next())
 			return null; 
 		else {
-			user = classFactory.getUser(rs.getString("username"), 
+			user = classFactory.getUser(
+					rs.getString("username"), 
 					rs.getString("hash_password"), 
-					rs.getString("salt"));
+					rs.getString("salt")
+					);
 			user.setDescription(rs.getString("description"));
-			user.setImage(rs.getString("image"));//Added this.
-			rs.previous();
+			user.setImage(rs.getString("image"));
 			}
-		Set<String> friends = new HashSet<String> ();
-		while(rs.next()) friends.add(rs.getString("username2"));
-//		user.setFriends(friends);
 		return user;
 	}
 
