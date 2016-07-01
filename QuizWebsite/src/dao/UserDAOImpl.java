@@ -215,8 +215,32 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public void addFriend(String userName1, String userName2) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"INSERT INTO friends "
+							+ "(first_user_id, second_user_id) "
+							+ "VALUES("
+							+ "SELECT id FROM user WHERE username LIKE ?"
+							+ ", "
+							+ "SELECT id FROM user WHERE username LIKE ?"
+							+ "), ("
+							+ "SELECT id FROM user WHERE username LIKE ?"
+							+ ", "
+							+ "SELECT id FROM user WHERE username LIKE ?);"
+							);
+			preparedStatement.setString(1, userName1);
+			preparedStatement.setString(2, userName2);
+			preparedStatement.setString(3, userName2);
+			preparedStatement.setString(4, userName1);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
