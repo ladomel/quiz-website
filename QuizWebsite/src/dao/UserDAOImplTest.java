@@ -86,7 +86,7 @@ public class UserDAOImplTest{
 		userDAO.deleteUser("a");
 		userDAO.deleteUser("b");
 		userDAO.deleteUser("c");	
-		testUser.setFriends(friends);
+//		testUser.setFriends(friends);
 		testUser.setImage("I am an image");
 		
 		userDAO.addUser("a", "a123", "a12");	
@@ -98,7 +98,7 @@ public class UserDAOImplTest{
 		System.out.println(userDAO.getUser("a").toString());
 		
 		User user2 = userDAO.getUser("a");
-		user2.getFriends().remove("b");
+//		user2.getFriends().remove("b");
 		userDAO.updateUser(user2);
 		
 		System.out.println(userDAO.getUser("a").toString());
