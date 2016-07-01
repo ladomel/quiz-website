@@ -81,39 +81,27 @@ public class UserDAOImplTest{
 	
 	@Test
 	public void basicTest3() {
-		Set<String> friends = new HashSet<String>(Arrays.asList("b", "c"));
-		User testUser = new User("a", "a1234", "a123");
 		userDAO.deleteUser("a");
 		userDAO.deleteUser("b");
 		userDAO.deleteUser("c");	
-//		testUser.setFriends(friends);
-		testUser.setImage("I am an image");
 		
 		userDAO.addUser("a", "a123", "a12");	
 		userDAO.addUser("b", "b123", "b12");	
 		userDAO.addUser("c", "c123", "c12");	
 
-		System.out.println(userDAO.getUser("a").toString());
-		userDAO.updateUser(testUser);
-		System.out.println(userDAO.getUser("a").toString());
+		userDAO.addFriend("a", "b");
+		userDAO.addFriend("a", "c");
+		assertTrue(userDAO.getFriends("c").contains("a"));
+		assertFalse(userDAO.getFriends("c").contains("b"));
+		userDAO.removeFriendship("a", "b");
+		assertFalse(userDAO.getFriends("b").contains("a"));
 		
-		User user2 = userDAO.getUser("a");
-//		user2.getFriends().remove("b");
-		userDAO.updateUser(user2);
-		
-		System.out.println(userDAO.getUser("a").toString());
-	
 	}
 	
 
+	// admin test
 	@Test
 	public void basicTest4() {
-		userDAO.removeAdmin("Lado");
-		System.out.println(userDAO.isAdmin("Lado"));
-		userDAO.addAdmin("Lado");
-		System.out.println(userDAO.isAdmin("Lado"));
-		userDAO.removeAdmin("Lado");
-		System.out.println(userDAO.isAdmin("Lado"));
 		
 	}
 }
