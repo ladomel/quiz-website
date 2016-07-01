@@ -281,7 +281,27 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public void removeFriendship(String userName1, String userName2) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"DELETE FROM friends "
+							+ "WHERE ( "
+							+ "first_user_id = (SELECT id FROM users WHERE username LIKE ?) AND second_user_id = (SELECT id FROM users WHERE username LIKE ?)"
+							+ " ) OR ( "
+							+ "first_user_id = (SELECT id FROM users WHERE username LIKE ?) AND second_user_id = (SELECT id FROM users WHERE username LIKE ?)"
+							+ ");"
+							);
+			preparedStatement.setString(1, userName1);
+			preparedStatement.setString(2, userName2);
+			preparedStatement.setString(3, userName2);
+			preparedStatement.setString(4, userName1);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
