@@ -110,50 +110,26 @@ public class UserDAOImpl implements UserDAO {
 		
 		try {
 			Connection con = dataSource.getConnection();
-			// delete old user and remove his friends
-			deleteUser(con, user.getUserName());
-			deleteUsersAsFriend(con, user.getUserName());
-			// add user
-			addUser(user.getUserName(),
-					user.getHashedPassword(),
-					user.getSalt());
-			// update user
-			updateUser(con, user);
-			// add users friends
-//			addFriends(con, user.getUserName(), user.getFriends());
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"UPDATE users "
+							+ "SET "
+							+ "hash_password = ?, "
+							+ "salt = ?,"
+							+ "description = ?,"
+							+ "image = ?"
+							+ "WHERE username LIKE ?;"
+							);
+			preparedStatement.setString(1, user.getHashedPassword());
+			preparedStatement.setString(2, user.getSalt());
+			preparedStatement.setString(3, user.getDescription());
+			preparedStatement.setString(4, user.getImage());
+			preparedStatement.setString(5, user.getUserName());
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 		return oldUser;
-	}
-
-	private void addFriends(Connection con, String userName, Set<String> friends) 
-			throws SQLException {
-		PreparedStatement preparedStatement =
-				con.prepareStatement("INSERT INTO friends "
-						+ "(first_user_id, second_user_id) VALUES(("
-						+ "SELECT id FROM users WHERE username LIKE ?), ("
-						+ "SELECT id FROM users WHERE username LIKE ?));");
-		for(String friend : friends) {
-			preparedStatement.setString(1, userName);
-			preparedStatement.setString(2, friend);
-			preparedStatement.executeUpdate();
-		}
-	}
-
-	private void updateUser(Connection con, User user) throws SQLException {
-		PreparedStatement preparedStatement = 
-				con.prepareStatement(updateCommand());
-		preparedStatement.setString(5, user.getUserName());
-		preparedStatement.setString(1, user.getHashedPassword());
-		preparedStatement.setString(2, user.getSalt());
-		preparedStatement.setString(3, user.getDescription());
-		preparedStatement.setString(4, user.getImage());
-		preparedStatement.executeUpdate();		
-	}
-
-	private String updateCommand() {
-		return "UPDATE users SET hash_password = ?, salt = ?, description = ?, image = ? "
-				+ "WHERE username LIKE ?;";
 	}
 
 	@Override
