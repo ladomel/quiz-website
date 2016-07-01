@@ -60,4 +60,13 @@ public interface QuizDAO {
 	 * @return list with recent Quizzes created by user
 	 */
 	public List<Quiz> getCreatedQuizzes(String userName);	
+	
+	/**
+	 * Returns a list with Quizzes returned by a search.
+	 * 
+	 * @param parameter - parameter user entered to search for it
+	 * @param numResults - size of the list
+	 * @return list with  with Quizzes returned by a search
+	 */
+	public List<Quiz> getSeatchedQuizzes(int numResults, String parameter);
 }

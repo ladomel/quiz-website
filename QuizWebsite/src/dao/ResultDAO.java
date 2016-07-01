@@ -2,7 +2,6 @@ package dao;
 
 import java.util.List;
 
-import classes.Answer;
 import classes.Result;
 
 /**
@@ -36,12 +35,24 @@ public interface ResultDAO {
 	 */
 	public List<Result> getRecentResults(String userName, int n);
 	
-	// TODO: provide javadoc
-	
+	/**
+	 * @param quizId - id of quiz
+	 * @param n - int limit number
+	 * @return list of recent results by given quiz
+	 */
 	public List<Result> getRecentResults(int quizId, int n);
 	
+	/**
+	 * @param userName - String user name
+	 * @param n - int limit number
+	 * @return best of recent results by given user
+	 */
 	public List<Result> getBestResults(String userName, int n);
 	
+	/**
+	 * @param quizId - id of quiz
+	 * @param n - int limit number
+	 * @return list of best results by given quiz
+	 */
 	public List<Result> getBestResults(int quizId, int n);
-	
 }
