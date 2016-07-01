@@ -70,32 +70,27 @@ public class UserDAOImpl implements UserDAO {
 			deleteUser(con, userName);
 			
 			// delete his friends
-			deleteUsersFriends(con, userName);
-			
-			// deletefrom friends friendlist
-			deleteFromFriendLists(con, userName);
+			deleteUsersAsFriend(con, userName);
 			
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 		return oldUser;
 	}
 
-	private void deleteFromFriendLists(Connection con, String userName) 
+	// deletes users friends and deletes him from other users friendlists
+	private void deleteUsersAsFriend(Connection con, String userName) 
 			throws SQLException {
-		PreparedStatement preparedStatement = con.prepareStatement("DELETE FROM "
-				+ "friends WHERE second_user_id = "
-				+ "(SELECT id FROM users WHERE username LIKE ?);");
+		PreparedStatement preparedStatement = con.prepareStatement(
+				"DELETE FROM friends "
+				+ "WHERE first_user_id = "
+				+ "(SELECT id FROM users WHERE username LIKE ?)"
+				+ "OR second_user_id = "
+				+ "(SELECT id FROM users WHERE username LIKE ?)"
+				+ ";");
 		preparedStatement.setString(1, userName);
-		preparedStatement.executeUpdate();
-	}
-
-	private void deleteUsersFriends(Connection con, String userName) 
-			throws SQLException {
-		PreparedStatement preparedStatement = con.prepareStatement("DELETE FROM "
-				+ "friends WHERE first_user_id = "
-				+ "(SELECT id FROM users WHERE username LIKE ?);");
-		preparedStatement.setString(1, userName);
-		preparedStatement.executeUpdate();		
+		preparedStatement.setString(2, userName);
+		preparedStatement.executeUpdate();	
+		preparedStatement.close();
 	}
 
 	private void deleteUser(Connection con, String userName) 
@@ -103,7 +98,8 @@ public class UserDAOImpl implements UserDAO {
 		PreparedStatement preparedStatement = 
 				con.prepareStatement("DELETE FROM users WHERE username LIKE ?;");
 		preparedStatement.setString(1, userName);
-		preparedStatement.executeUpdate();		
+		preparedStatement.executeUpdate();
+		preparedStatement.close();
 	}
 
 	@Override
@@ -116,7 +112,7 @@ public class UserDAOImpl implements UserDAO {
 			Connection con = dataSource.getConnection();
 			// delete old user and remove his friends
 			deleteUser(con, user.getUserName());
-			deleteUsersFriends(con, user.getUserName());
+			deleteUsersAsFriend(con, user.getUserName());
 			// add user
 			addUser(user.getUserName(),
 					user.getHashedPassword(),
