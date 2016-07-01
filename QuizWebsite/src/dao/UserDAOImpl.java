@@ -245,7 +245,35 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public Set<String> getFriends(String userName) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> friends = null;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT users.username "
+							+ "FROM friends "
+							+ "LEFT JOIN users "
+							+ "ON users.id = friends.second_user_id "
+							+ "WHERE friends.first_user_id = (SELECT id FROM users WHERE username = ?);"
+							);
+			preparedStatement.setString(1, userName);
+			ResultSet rs = preparedStatement.executeQuery();
+			friends = collectFriends(rs);
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return friends;
+	}
+
+	private Set<String> collectFriends(ResultSet rs) 
+			throws SQLException {
+		
+		Set<String> friends = new HashSet<String> ();
+		while(rs.next()) friends.add(rs.getString("users.username"));
+		return friends;
 	}
 }
