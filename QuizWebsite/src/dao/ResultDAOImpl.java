@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -189,13 +190,25 @@ public class ResultDAOImpl implements ResultDAO {
 	}
 
 	@Override
-	public List<Result> getBestResults(String userName, int n) {
+	public List<Result> getRecentResults(Set<String> userName, int n) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Result> getBestResults(int quizId, int n) {
+	public List<Result> getBestResults(String userName, int n, long interval) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Result> getBestResults(int quizId, int n, long interval) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Integer> getPopularQuizzes(int n, long interval) {
 		// TODO Auto-generated method stub
 		return null;
 	}

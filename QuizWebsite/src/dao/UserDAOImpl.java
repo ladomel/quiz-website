@@ -28,19 +28,14 @@ public class UserDAOImpl implements UserDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement = 
-					con.prepareStatement("SELECT "
-							+ "users.username, users.hash_password, "
-							+ "users.salt, users.description, users.image, "
-							+ "users2.username AS username2 "
+					con.prepareStatement(
+							"SELECT * "
 							+ "FROM users "
-							+ "LEFT JOIN friends "
-							+ "ON users.id = friends.first_user_id "
-							+ "LEFT JOIN users AS users2 "
-							+ "ON users2.id = friends.second_user_id "
-							+ "WHERE users.username like ?;");
+							+ "WHERE username LIKE ?;");
 			preparedStatement.setString(1, userName);
 			ResultSet rs = preparedStatement.executeQuery();
 			user = loadIntoUser(rs);
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
@@ -53,16 +48,14 @@ public class UserDAOImpl implements UserDAO {
 		if(!rs.next())
 			return null; 
 		else {
-			user = classFactory.getUser(rs.getString("username"), 
+			user = classFactory.getUser(
+					rs.getString("username"), 
 					rs.getString("hash_password"), 
-					rs.getString("salt"));
+					rs.getString("salt")
+					);
 			user.setDescription(rs.getString("description"));
-			user.setImage(rs.getString("image"));//Added this.
-			rs.previous();
+			user.setImage(rs.getString("image"));
 			}
-		Set<String> friends = new HashSet<String> ();
-		while(rs.next()) friends.add(rs.getString("username2"));
-		user.setFriends(friends);
 		return user;
 	}
 
@@ -77,32 +70,27 @@ public class UserDAOImpl implements UserDAO {
 			deleteUser(con, userName);
 			
 			// delete his friends
-			deleteUsersFriends(con, userName);
-			
-			// deletefrom friends friendlist
-			deleteFromFriendLists(con, userName);
+			deleteUsersAsFriend(con, userName);
 			
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 		return oldUser;
 	}
 
-	private void deleteFromFriendLists(Connection con, String userName) 
+	// deletes users friends and deletes him from other users friendlists
+	private void deleteUsersAsFriend(Connection con, String userName) 
 			throws SQLException {
-		PreparedStatement preparedStatement = con.prepareStatement("DELETE FROM "
-				+ "friends WHERE second_user_id = "
-				+ "(SELECT id FROM users WHERE username LIKE ?);");
+		PreparedStatement preparedStatement = con.prepareStatement(
+				"DELETE FROM friends "
+				+ "WHERE first_user_id = "
+				+ "(SELECT id FROM users WHERE username LIKE ?)"
+				+ "OR second_user_id = "
+				+ "(SELECT id FROM users WHERE username LIKE ?)"
+				+ ";");
 		preparedStatement.setString(1, userName);
-		preparedStatement.executeUpdate();
-	}
-
-	private void deleteUsersFriends(Connection con, String userName) 
-			throws SQLException {
-		PreparedStatement preparedStatement = con.prepareStatement("DELETE FROM "
-				+ "friends WHERE first_user_id = "
-				+ "(SELECT id FROM users WHERE username LIKE ?);");
-		preparedStatement.setString(1, userName);
-		preparedStatement.executeUpdate();		
+		preparedStatement.setString(2, userName);
+		preparedStatement.executeUpdate();	
+		preparedStatement.close();
 	}
 
 	private void deleteUser(Connection con, String userName) 
@@ -110,7 +98,8 @@ public class UserDAOImpl implements UserDAO {
 		PreparedStatement preparedStatement = 
 				con.prepareStatement("DELETE FROM users WHERE username LIKE ?;");
 		preparedStatement.setString(1, userName);
-		preparedStatement.executeUpdate();		
+		preparedStatement.executeUpdate();
+		preparedStatement.close();
 	}
 
 	@Override
@@ -121,50 +110,26 @@ public class UserDAOImpl implements UserDAO {
 		
 		try {
 			Connection con = dataSource.getConnection();
-			// delete old user and remove his friends
-			deleteUser(con, user.getUserName());
-			deleteUsersFriends(con, user.getUserName());
-			// add user
-			addUser(user.getUserName(),
-					user.getHashedPassword(),
-					user.getSalt());
-			// update user
-			updateUser(con, user);
-			// add users friends
-			addFriends(con, user.getUserName(), user.getFriends());
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"UPDATE users "
+							+ "SET "
+							+ "hash_password = ?, "
+							+ "salt = ?,"
+							+ "description = ?, "
+							+ "image = ? "
+							+ "WHERE username LIKE ?;"
+							);
+			preparedStatement.setString(1, user.getHashedPassword());
+			preparedStatement.setString(2, user.getSalt());
+			preparedStatement.setString(3, user.getDescription());
+			preparedStatement.setString(4, user.getImage());
+			preparedStatement.setString(5, user.getUserName());
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 		return oldUser;
-	}
-
-	private void addFriends(Connection con, String userName, Set<String> friends) 
-			throws SQLException {
-		PreparedStatement preparedStatement =
-				con.prepareStatement("INSERT INTO friends "
-						+ "(first_user_id, second_user_id) VALUES(("
-						+ "SELECT id FROM users WHERE username LIKE ?), ("
-						+ "SELECT id FROM users WHERE username LIKE ?));");
-		for(String friend : friends) {
-			preparedStatement.setString(1, userName);
-			preparedStatement.setString(2, friend);
-			preparedStatement.executeUpdate();
-		}
-	}
-
-	private void updateUser(Connection con, User user) throws SQLException {
-		PreparedStatement preparedStatement = 
-				con.prepareStatement(updateCommand());
-		preparedStatement.setString(5, user.getUserName());
-		preparedStatement.setString(1, user.getHashedPassword());
-		preparedStatement.setString(2, user.getSalt());
-		preparedStatement.setString(3, user.getDescription());
-		preparedStatement.setString(4, user.getImage());
-		preparedStatement.executeUpdate();		
-	}
-
-	private String updateCommand() {
-		return "UPDATE users SET hash_password = ?, salt = ?, description = ?, image = ? "
-				+ "WHERE username LIKE ?;";
 	}
 
 	@Override
@@ -191,28 +156,43 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public boolean isAdmin(String userName) {
-		boolean answer = false;
+		boolean isAdmin = false;
 		try {
 			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement = 
-					con.prepareStatement("SELECT * FROM admins WHERE username = ? ;");
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT * "
+							+ "FROM admins "
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?)"
+							+ ";"
+							);
 			preparedStatement.setString(1, userName);
 			ResultSet rs = preparedStatement.executeQuery();
-			if(rs.next()) answer = true;
+			// if result set contains something => user is admin
+			isAdmin = rs.next();
+			
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
-		return answer;
+		
+		return isAdmin;
 	}
 
 	@Override
 	public void addAdmin(String userName) {
 		try {
 			Connection con = dataSource.getConnection();
-			String statement = "INSERT INTO admins(username) VALUES(?)";
-			PreparedStatement preparedStatement = 	con.prepareStatement(statement);
+			PreparedStatement preparedStatement = 
+					con.prepareStatement(
+							"INSERT INTO admins (user_id) "
+							+ "VALUES((SELECT id FROM users WHERE username = ?))"
+							+ ";"
+							);
 			preparedStatement.setString(1, userName);
+			System.out.println(userName);
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 	}
@@ -221,11 +201,107 @@ public class UserDAOImpl implements UserDAO {
 	public void removeAdmin(String userName) {
 		try {
 			Connection con = dataSource.getConnection();
-			String statement = "DELETE FROM admins WHERE username = ?";
-			PreparedStatement preparedStatement = 	con.prepareStatement(statement);
+			PreparedStatement preparedStatement = 
+					con.prepareStatement(
+							"DELETE FROM admins "
+							+ "WHERE user_id = (SELECT id FROM users WHERE username = ?)"
+							+ ";"
+							);
 			preparedStatement.setString(1, userName);
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
+	}
+
+	@Override
+	public void addFriend(String userName1, String userName2) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"INSERT INTO friends "
+							+ "(first_user_id, second_user_id) "
+							+ "VALUES("
+							+ "(SELECT id FROM users WHERE username LIKE ?)"
+							+ ", "
+							+ "(SELECT id FROM users WHERE username LIKE ?)"
+							+ "), ("
+							+ "(SELECT id FROM users WHERE username LIKE ?)"
+							+ ", "
+							+ "(SELECT id FROM users WHERE username LIKE ?)"
+							+ ");"
+							);
+			preparedStatement.setString(1, userName1);
+			preparedStatement.setString(2, userName2);
+			preparedStatement.setString(3, userName2);
+			preparedStatement.setString(4, userName1);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public Set<String> getFriends(String userName) {
+		Set<String> friends = null;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT users.username "
+							+ "FROM friends "
+							+ "LEFT JOIN users "
+							+ "ON users.id = friends.second_user_id "
+							+ "WHERE friends.first_user_id = (SELECT id FROM users WHERE username = ?);"
+							);
+			preparedStatement.setString(1, userName);
+			ResultSet rs = preparedStatement.executeQuery();
+			friends = collectFriends(rs);
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return friends;
+	}
+
+	private Set<String> collectFriends(ResultSet rs) 
+			throws SQLException {
+		
+		Set<String> friends = new HashSet<String> ();
+		while(rs.next()) friends.add(rs.getString("users.username"));
+		return friends;
+	}
+
+	@Override
+	public void removeFriendship(String userName1, String userName2) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"DELETE FROM friends "
+							+ "WHERE ( "
+							+ "first_user_id = (SELECT id FROM users WHERE username LIKE ?) AND second_user_id = (SELECT id FROM users WHERE username LIKE ?)"
+							+ " ) OR ( "
+							+ "first_user_id = (SELECT id FROM users WHERE username LIKE ?) AND second_user_id = (SELECT id FROM users WHERE username LIKE ?)"
+							+ ");"
+							);
+			preparedStatement.setString(1, userName1);
+			preparedStatement.setString(2, userName2);
+			preparedStatement.setString(3, userName2);
+			preparedStatement.setString(4, userName1);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

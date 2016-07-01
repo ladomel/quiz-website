@@ -55,7 +55,7 @@ public class ResultDAOImplTest {
 	public void test2() {
 		Set<String> friends = new HashSet<String>(Arrays.asList("b", "c"));
 		User testUser = new User("username", "a1234", "a123");
-		testUser.setFriends(friends);
+//		testUser.setFriends(friends);
 		userDAO.deleteUser("username");
 		userDAO.addUser("username", "a123", "a12");	
 		userDAO.updateUser(testUser);  // Aq test user maq ukve setiani.
