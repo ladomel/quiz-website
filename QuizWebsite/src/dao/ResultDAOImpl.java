@@ -29,8 +29,8 @@ public class ResultDAOImpl implements ResultDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			insertResultWithoutAnswers(result, con);
-			int resultId = MySQLUtil.getLastInsertId(con);
-			insertAnswers(resultId, result.getAnswers(), con);
+//			int resultId = MySQLUtil.getLastInsertId(con);
+//			insertAnswers(resultId, result.getAnswers(), con);
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -40,6 +40,7 @@ public class ResultDAOImpl implements ResultDAO {
 	}
 
 	/*
+	 * NOTE: obsolete. answer saving no longer supported.
 	 * Here are used many inserts instead of single insert with several values.
 	 * Performance difference should be negligible because of low
 	 * numbers involved with quizzes in general.
@@ -87,20 +88,18 @@ public class ResultDAOImpl implements ResultDAO {
 	private void insertResultWithoutAnswers(Result result, Connection con)
 			throws SQLException {
 		PreparedStatement preparedStatement = 
-				con.prepareStatement(inserResultCommand());
+				con.prepareStatement(
+						"INSERT INTO results " + 
+						"(user_id, quiz_id, final_grade, start_time, time_taken) " + 
+						"VALUES" + 
+						"((SELECT id FROM users WHERE username LIKE ?), ?, ?, ?, ?);");
 		preparedStatement.setString(1, result.getUserName());
 		preparedStatement.setInt(2, result.getQuizId());
 		preparedStatement.setInt(3, result.getFinalGrade());
 		preparedStatement.setLong(4, result.getTimeStarted());
 		preparedStatement.setLong(5, result.getTimeTaken());
 		preparedStatement.executeUpdate();
-	}
-
-	private String inserResultCommand() {
-		return "INSERT INTO results " + 
-				"(user_id, quiz_id, final_grade, start_time, time_taken) " + 
-				"VALUES" + 
-				"((SELECT id FROM users WHERE username LIKE ?), ?, ?, ?, ?);";
+		preparedStatement.close();
 	}
 
 	@Override
@@ -118,9 +117,9 @@ public class ResultDAOImpl implements ResultDAO {
 				result.setTimeTaken(rs.getLong("time_taken"));
 				result.setUserName(rs.getString("username"));
 				results.add(result);
-				int resultId = rs.getInt("id");
-				rs.previous();
-				loadAnswersIntoResult(result, rs, resultId);
+//				int resultId = rs.getInt("id");
+//				rs.previous();
+//				loadAnswersIntoResult(result, rs, resultId);
 			}
 			rs.close();
 			con.close();
@@ -131,6 +130,7 @@ public class ResultDAOImpl implements ResultDAO {
 		return results;
 	}
 	
+	// obsolete since we no longer hold answers
 	private void loadAnswersIntoResult(Result result, ResultSet rs, 
 			int resultId) throws SQLException {
 		List<Answer> answers = new ArrayList<Answer> ();
@@ -161,32 +161,88 @@ public class ResultDAOImpl implements ResultDAO {
 	private ResultSet getResultSortGradeFirst(Connection con, String userName, 
 			int quizId)	throws SQLException {
 		PreparedStatement preparedStatement =
-				con.prepareStatement("SELECT results.id, "
-						+ "quiz_id, username, final_grade, start_time, time_taken, "
-						+ "grade, answers_of_question.question_id, "
-						+ "field_id, user_answer "
+				con.prepareStatement(
+						"SELECT * "
 						+ "FROM results "
-						+ "JOIN answers_of_question ON results.id = result_id "
-						+ "LEFT JOIN user_answers ON answers_of_question.question_id = user_answers.question_id "
-						+ "JOIN users ON users.id = results.user_id "
-						+ "WHERE username LIKE ? "
-						+ "AND results.quiz_id = ? "
-						+ "ORDER BY final_grade DESC, time_taken ASC, user_answers.question_id ASC;");
-		preparedStatement.setString(1, userName);
-		preparedStatement.setInt(2, quizId);
-		return preparedStatement.executeQuery();
+						+ "WHERE results.quiz_id = ?"
+						+ " AND "
+						+ "results.user_id = (SELECT id FROM users WHERE username LIKE ?)" 
+						);
+		preparedStatement.setString(2, userName);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		preparedStatement.close();
+		return rs;
 	}
 
 	@Override
 	public List<Result> getRecentResults(String userName, int n) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Result> results = new ArrayList<Result> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT *"
+							+ "FROM results "
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?) "
+							+ "ORDER BY start_time DESC "
+							+ "LIMIT ?;"
+							);
+			preparedStatement.setString(1, userName);
+			preparedStatement.setInt(2, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) {
+				Result result = 
+						classFactory.getResult(userName, rs.getInt("quiz_id"));
+				result.setTimeStarted(rs.getLong("start_time"));
+				result.setTimeTaken(rs.getLong("time_taken"));
+				result.setFinalGrade(rs.getInt("final_grade"));
+				results.add(result);
+			}
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
 	}
 
 	@Override
 	public List<Result> getRecentResults(int quizId, int n) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Result> results = new ArrayList<Result> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT username, start_time, time_taken, final_grade "
+							+ "FROM results "
+							+ "JOIN users "
+							+ "ON users.id = results.user_id "
+							+ "WHERE quiz_id = ? "
+							+ "ORDER BY start_time DESC "
+							+ "LIMIT ?;"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setInt(2, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) {
+				Result result = 
+						classFactory.getResult(rs.getString("username"), quizId);
+				result.setTimeStarted(rs.getLong("start_time"));
+				result.setTimeTaken(rs.getLong("time_taken"));
+				result.setFinalGrade(rs.getInt("final_grade"));
+				results.add(result);
+			}
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
 	}
 
 	@Override
