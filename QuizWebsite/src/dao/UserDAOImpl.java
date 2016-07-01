@@ -183,10 +183,15 @@ public class UserDAOImpl implements UserDAO {
 	public void addAdmin(String userName) {
 		try {
 			Connection con = dataSource.getConnection();
-			String statement = "INSERT INTO admins(username) VALUES(?)";
-			PreparedStatement preparedStatement = 	con.prepareStatement(statement);
+			PreparedStatement preparedStatement = 
+					con.prepareStatement(
+							"INSERT INTO admins "
+							+ "VALUES(SELECT id FROM users WHERE username = ?)"
+							+ ";"
+							);
 			preparedStatement.setString(1, userName);
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 	}
