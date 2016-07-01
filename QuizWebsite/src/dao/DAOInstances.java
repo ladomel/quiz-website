@@ -1,8 +1,8 @@
 package dao;
 
-//import org.apache.commons.dbcp2.BasicDataSource;  // Usual.
+import org.apache.commons.dbcp2.BasicDataSource;  // Usual.
 
-import org.apache.tomcat.dbcp.dbcp2.BasicDataSource; // Online.
+//import org.apache.tomcat.dbcp.dbcp2.BasicDataSource; // Online.
 
 /**
  * This class is probably not quite factory, hence the name.
@@ -27,7 +27,7 @@ public class DAOInstances {
 		
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		dataSource.setUsername("root");
-		dataSource.setPassword("558751");
+		dataSource.setPassword("nuca");
 		dataSource.setUrl("jdbc:mysql://localhost:3306/oop");
 		// we can control how connection pool behaves
 		dataSource.setMaxIdle(20);
@@ -35,6 +35,10 @@ public class DAOInstances {
 	
 	public UserDAO getUserDAO() {
 		return new UserDAOImpl(dataSource);
+	}
+	
+	public MessageDAO getMessageDAO() {
+		return new MessageDAOImpl(dataSource);
 	}
 	
 	public QuizDAO getQuizDAO() {

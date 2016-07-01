@@ -102,6 +102,18 @@ public class UserDAOImplTest{
 		userDAO.updateUser(user2);
 		
 		System.out.println(userDAO.getUser("a").toString());
-		System.out.println(userDAO.getUser("b").toString());
+	
+	}
+	
+
+	@Test
+	public void basicTest4() {
+		userDAO.removeAdmin("Lado");
+		System.out.println(userDAO.isAdmin("Lado"));
+		userDAO.addAdmin("Lado");
+		System.out.println(userDAO.isAdmin("Lado"));
+		userDAO.removeAdmin("Lado");
+		System.out.println(userDAO.isAdmin("Lado"));
+		
 	}
 }
