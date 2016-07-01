@@ -15,7 +15,7 @@ public class Result {
 	public String toString() {
 		return "quiz: " + quizId + ", user: " + userName + ", quiz grade: " + 
 				finalGrade + ", started: " + timeStarted + ", elapsed: " + 
-				timeTaken + " ms, answers: " + answers.toString();
+				timeTaken + " ms.";
 	}
 	
 	public Result(String userName, int quizId)
