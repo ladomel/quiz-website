@@ -2,6 +2,7 @@ package Servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,8 +11,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import classes.Result;
 import classes.Message.Challenge;
 import dao.MessageDAO;
+import dao.ResultDAO;
 
 /**
  * Servlet implementation class AcceptChallenge
@@ -50,7 +53,18 @@ public class AcceptChallenge extends HttpServlet {
 		ch.setStatus(status); 
 		mD.addChallenges(ch);
 		
-		if (status.equals("Accept")) out.print("Quiz?id=" + ch.getQuizId()); else out.print("Decline");
+		if (status.equals("Accept")) {
+			request.getSession().setAttribute("Challenger", ch.getSenderUserName());
+			ResultDAO rD = (ResultDAO) request.getServletContext().getAttribute("resultDAO");
+			List<Result> res = rD.getResult(ch.getGetterUserName(), ch.getQuizId());
+			int maxx = 0;
+			for (int i=0;i<res.size();i++){
+				if (res.get(i).getFinalGrade() > maxx) maxx = res.get(i).getFinalGrade();
+			}
+			request.getSession().setAttribute("ChallengerScore", maxx);
+			out.print("Quiz?id=" + ch.getQuizId()); 
+		}
+			else out.print("Decline");
 	}
 
 }

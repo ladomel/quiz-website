@@ -60,7 +60,11 @@
 		<%
 			if (request.getSession().getAttribute("MasterUser") != null){
 				out.println("<a href=\"CreateQuiz.jsp\"><button id=\"createaquiz\">Create a Quiz!</button></a>");		
+				if ((boolean)request.getSession().getAttribute("isAdmin")) {
+					out.print("<form action='MakeAnnouncement' method='post'> <input type='submit' value='Create Announcement' id='makeAnn'> </form>");
+				}
 			}
+			
 		%>
 		
 	</div>

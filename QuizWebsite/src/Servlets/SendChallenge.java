@@ -49,7 +49,7 @@ public class SendChallenge extends HttpServlet {
 		User master = (User) request.getSession().getAttribute("MasterUser");
 		ClassFactory factory = (ClassFactory) request.getServletContext().getAttribute("factory");
 		long date = (new Date()).getTime();
-		MessageDAO mD = (MessageDAO) request.getAttribute("messageDAO");
+		MessageDAO mD = (MessageDAO) request.getServletContext().getAttribute("messageDAO");
 		int i = 0;
 		while(true){
 			if (map.containsKey(Integer.toString(i))){

@@ -18,7 +18,6 @@
 		if (request.getSession().getAttribute("MasterUser") == null) toppanel = "toppanel-loggedout.jsp";
 		else toppanel = "toppanel-loggedin.jsp";
 		User user = (User) session.getAttribute("MasterUser");
-		String text = "ra jandaba ginda to?";
 	%>
 	<div id="centerpanel">
 		<div id="notebox">

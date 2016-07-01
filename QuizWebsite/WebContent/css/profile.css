@@ -12,6 +12,16 @@
 	background: #e6e6e6;
 }
 
+#secondbox {
+	min-width: 1200px;
+	height: 400px;
+	margin: 0px;
+	width: 1200px;
+	left: calc(50% - 600px);
+	position: absolute;
+	top: 500px;
+}
+
 #profileimage {
 	height: 200px;
 	width: 200px;
@@ -154,4 +164,10 @@
 }
 
 
-
+#friendsactivity , #recentlytakenquizzes , #recentlycreatedquizzes {
+	position: absolute;
+	width: 400px;
+	height: 400px;
+	top : 800px;
+	left: 40px;
+}

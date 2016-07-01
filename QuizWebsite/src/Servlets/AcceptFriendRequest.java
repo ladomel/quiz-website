@@ -54,7 +54,7 @@ public class AcceptFriendRequest extends HttpServlet {
 		classes.User getter = (classes.User) uD.getUser(fr.getSenderUserName());
 		
 		Set<String> friends = master.getFriends(); friends.add(fr.getSenderUserName());
-		master.setFriends(friends);
+		master.setFriends(friends); System.out.println(fr.toString());
 		friends.remove(null);
 		
 		friends = getter.getFriends(); 
@@ -62,8 +62,8 @@ public class AcceptFriendRequest extends HttpServlet {
 		getter.setFriends(friends);
 		friends.remove(null);
 		
-		uD.updateUser(master);
-		uD.updateUser(getter);
+		uD.updateUser(master); System.out.println(master.toString());
+		uD.updateUser(getter); System.out.println(getter.toString());
 	}
 
 }
