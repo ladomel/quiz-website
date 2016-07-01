@@ -62,7 +62,7 @@ public class UserDAOImpl implements UserDAO {
 			}
 		Set<String> friends = new HashSet<String> ();
 		while(rs.next()) friends.add(rs.getString("username2"));
-		user.setFriends(friends);
+//		user.setFriends(friends);
 		return user;
 	}
 
@@ -131,7 +131,7 @@ public class UserDAOImpl implements UserDAO {
 			// update user
 			updateUser(con, user);
 			// add users friends
-			addFriends(con, user.getUserName(), user.getFriends());
+//			addFriends(con, user.getUserName(), user.getFriends());
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 		return oldUser;
@@ -227,5 +227,17 @@ public class UserDAOImpl implements UserDAO {
 			preparedStatement.executeUpdate();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
+	}
+
+	@Override
+	public void addFriend(String userName1, String userName2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Set<String> getFriends(String userName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
