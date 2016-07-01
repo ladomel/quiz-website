@@ -19,7 +19,7 @@ create table users(
 
 create table admins(
 	user_id 			varchar(255) 	not null,
-	unique(username)
+	unique(user_id)
 );
 
 insert into users(username, hash_password, salt) values('vaja', '1234', 'salt');
