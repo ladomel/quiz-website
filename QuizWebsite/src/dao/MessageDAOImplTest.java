@@ -1,6 +1,5 @@
 package dao;
 
-import org.apache.catalina.ant.ResourcesTask;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -122,5 +121,71 @@ public class MessageDAOImplTest {
 		System.out.println(messageDAO.getChallenge(1).toString());
 		messageDAO.updateChallengeStatus(1, "I am new");
 		System.out.println(messageDAO.getChallenge(1).toString());
+	}
+	
+	@Test 
+	public void testNumPendingFriendRequests()
+	{
+		FriendRequest request1 = classFactory.getFriendRequest("test1", 20, "test2", false);
+		FriendRequest request2 = classFactory.getFriendRequest("test3", 20, "test2", false);
+		FriendRequest request3 = classFactory.getFriendRequest("test4", 20, "test2", true);
+		FriendRequest request4 = classFactory.getFriendRequest("test2", 20, "test1", true);
+		
+		messageDAO.addFriendRequest(request1);
+		messageDAO.addFriendRequest(request2);
+		messageDAO.addFriendRequest(request3);
+		messageDAO.addFriendRequest(request4);
+		
+		System.out.println("Number of pending by test 2: " + messageDAO.numPendingFriendRequests("test2"));
+	}
+	
+	@Test
+	public void testNumPendingChallenges()
+	{
+		Challenge chal1 = classFactory.getChallenge("test1", 10, "test2", 2, false);
+		Challenge chal2 = classFactory.getChallenge("test3", 20, "test2", 3, true);
+		Challenge chal3 = classFactory.getChallenge("test4", 30, "test2", 2, false);
+		Challenge chal4 = classFactory.getChallenge("test2", 10, "test1", 2, false);
+		
+		messageDAO.addChallenges(chal1);
+		messageDAO.addChallenges(chal2);
+		messageDAO.addChallenges(chal3);
+		messageDAO.addChallenges(chal4);
+		
+		messageDAO.updateChallengeStatus(6, "Not pending");
+		
+		System.out.println("Number of pending by test 2: " + messageDAO.numPendingChallenges("test2"));
+	}
+	
+	@Test 
+	public void testNumUnseenNotes()
+	{
+		Note note1 = classFactory.getNote("test1", 20, "hi", "test2", false);
+		Note note2 = classFactory.getNote("test1", 20, "ho", "test2", true);
+		Note note3 = classFactory.getNote("test1", 20, "hu", "test2", false);
+		Note note4 = classFactory.getNote("test2", 20, "ha", "test3", false);
+		
+		messageDAO.addNote(note1);
+		messageDAO.addNote(note2);
+		messageDAO.addNote(note3);
+		messageDAO.addNote(note4);
+			
+		System.out.println("Number of unseen by test 2: " + messageDAO.numUnseenNotes("test2"));	
+	}
+	
+
+	@Test
+	public void testFriendRequestExists()
+	{
+		FriendRequest request1 = classFactory.getFriendRequest("test13", 20, "test23", false);
+		messageDAO.addFriendRequest(request1);
+		System.out.println("Exists? has to be true: " + messageDAO.friendRequestExists("test13", "test23"));
+
+		messageDAO.updateFriendRequestStatus(33, "Seen");
+		System.out.println("Exists? has to be false: " + messageDAO.friendRequestExists("test13", "test23"));
+		
+		FriendRequest request2 = classFactory.getFriendRequest("test13", 20, "test23", false);
+		messageDAO.addFriendRequest(request2);
+		System.out.println("Exists? has to be true: " + messageDAO.friendRequestExists("test13", "test23"));
 	}
 }
