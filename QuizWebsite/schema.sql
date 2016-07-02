@@ -88,7 +88,7 @@ insert into answers (question_id, answer) values(1, 'good'), (1, 'bad');
 create table quizzes(
 	id 					int(11) 		not null auto_increment,
 	creator_id 			int(11) 		not null,
-	name 				varchar(250) 	not null,
+	name 				varchar(250),
 	description 		longtext,
 	is_random 			boolean 		not null default 0,
 	is_one_page 		boolean 		not null default 1,
