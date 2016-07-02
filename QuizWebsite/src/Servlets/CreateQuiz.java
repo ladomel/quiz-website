@@ -20,6 +20,7 @@ import classes.question.QuestionMCMA;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
 import classes.question.Abstract.Question;
+import dao.AchievementDAO;
 import dao.QuestionDAO;
 import dao.QuizDAO;
 import factory.ClassFactory;
@@ -47,38 +48,17 @@ public class CreateQuiz extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Date date = new Date();
-		long creationMillis = date.getTime();
 		
-		String name = request.getParameter("name");
-		String description = request.getParameter("description");
-		boolean random = (request.getParameter("random") != null);
-		boolean onepage = (request.getParameter("onepage") != null);
-		boolean practice = (request.getParameter("practice") != null);
-		boolean correction = (request.getParameter("correction") != null);
-		int numMinutes = Integer.parseInt(request.getParameter("time"));
-		
-		HttpSession session = request.getSession();
-		User masterUser = (User)session.getAttribute("MasterUser");
-		
+		classes.Quiz newQuiz = createQuiz(request);
+		HttpSession session = request.getSession();				
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)session.getAttribute("createdQuestions");
-		
-		ClassFactory factory = (ClassFactory)request.getServletContext().getAttribute("factory");
-		classes.Quiz newQuiz = factory.getQuiz(masterUser.getUserName(), name, description);
-		newQuiz.setDateCreated(creationMillis);
-		newQuiz.setHasPracticeMode(practice);
-		newQuiz.setImmediatelyCorrected(correction);
-		newQuiz.setOnePage(onepage);
-		newQuiz.setRandom(random);
-		newQuiz.setQuizTime(numMinutes);
 		
 		System.out.println(newQuiz.toString());
 		for(int i = 0; i < createdQuestions.size(); i++)
 			System.out.println(createdQuestions.get(i).toString());
 			
 		QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
-		QuestionDAO questionDAO = (QuestionDAO) request.getServletContext().getAttribute("questionDAO");
-	
+		QuestionDAO questionDAO = (QuestionDAO) request.getServletContext().getAttribute("questionDAO");	
 		int id = quizDAO.addQuiz(newQuiz);
 		
 		for (int i=0;i<createdQuestions.size();i++){
@@ -89,7 +69,6 @@ public class CreateQuiz extends HttpServlet {
 				case "MC": questionDAO.addMC(id,(QuestionMC) createdQuestions.get(i)); break;
 				case "MA": questionDAO.addMA(id, (QuestionMA)createdQuestions.get(i)); break;
 				case "MCMA": questionDAO.addMCMA(id, (QuestionMCMA)createdQuestions.get(i)); break;
-				
 			}
 		}
 
@@ -97,4 +76,34 @@ public class CreateQuiz extends HttpServlet {
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("Quiz?id=" + id);
 		requestDispatcher.forward(request, response);	
 	}
+	
+	/**
+	 * This function creates quiz according to user's input
+	 */
+	private classes.Quiz createQuiz(HttpServletRequest request)
+	{
+		Date date = new Date();
+		HttpSession session = request.getSession();
+		User masterUser = (User)session.getAttribute("MasterUser");
+		ClassFactory factory = (ClassFactory)request.getServletContext().getAttribute("factory");
+		classes.Quiz newQuiz = factory.getQuiz(masterUser.getUserName(),  request.getParameter("name"), request.getParameter("description"));
+		newQuiz.setDateCreated(date.getTime());
+		newQuiz.setHasPracticeMode(request.getParameter("practice") != null);
+		newQuiz.setImmediatelyCorrected(request.getParameter("correction") != null);
+		newQuiz.setOnePage(request.getParameter("onepage") != null);
+		newQuiz.setRandom(request.getParameter("random") != null);
+		newQuiz.setQuizTime(Integer.parseInt(request.getParameter("time")));
+		
+
+		AchievementDAO achievementDAO = (AchievementDAO)request.getServletContext().getAttribute("achievementDAO");
+		achievementDAO.achievementEarned(masterUser.getUserName(), 0, date.getTime());
+		masterUser.getUserName();
+		
+		return newQuiz;
+	}
+	
+	
+	
+	
+	
 }
