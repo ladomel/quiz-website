@@ -33,12 +33,21 @@ public class QuizDAOImpl implements QuizDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
-					con.prepareStatement(getterCommand());
+					con.prepareStatement(
+							"SELECT "
+							+ "username, name, description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
+							+ "FROM quizzes "
+							+ "LEFT JOIN users "
+							+ "ON users.id = quizzes.creator_id "
+							+ "WHERE id = ?;"
+							);
 			preparedStatement.setInt(1, quizId);
 			ResultSet rs = preparedStatement.executeQuery();
 			
-			if(rs.next()) quiz = loadIntoQuiz(rs);	// we need only one row (there should not be more)
+			// we need only one row (there should not be more)
+			if(rs.next()) quiz = loadIntoQuiz(rs);
 			
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
@@ -46,32 +55,21 @@ public class QuizDAOImpl implements QuizDAO {
 	}
 
 	private Quiz loadIntoQuiz(ResultSet rs) throws SQLException {
-		Quiz quiz = modelFactory.getQuiz(rs.getString("username"),
-				rs.getString("name"),
-				rs.getString("description"));
+		Quiz quiz = modelFactory.getQuiz(
+				rs.getString("username"), 
+				rs.getString("name"), 
+				rs.getString("description")
+				);
 		quiz.setRandom(rs.getBoolean("is_random"));
-		quiz.setQuizTime(rs.getInt("time"));
 		quiz.setOnePage(rs.getBoolean("is_one_page"));
 		quiz.setImmediatelyCorrected(rs.getBoolean("immediate_correction"));
-		quiz.setId(rs.getInt("id"));
 		quiz.setHasPracticeMode(rs.getBoolean("practice_mode"));
 		quiz.setDateCreated(rs.getLong("creation_time"));
+		quiz.setQuizTime(rs.getInt("time"));
 		quiz.setMaxScore(rs.getInt("max_score"));
-		quiz.setCategory(rs.getString("category"));	// should have separate table but fuck it
-		
+		quiz.setCategory(rs.getString("category"));
 		return quiz;
 	}
-
-	private String getterCommand() {
-		return "SELECT " + 
-				"quizzes.id, quizzes.description, username, name, " + 
-				"is_random, is_one_page, immediate_correction, " + 
-				"practice_mode, creation_time, time, max_score, "
-				+ "avg_rating, avg_score, avg_time, tries, category " + 
-				"FROM quizzes " + 
-				"INNER JOIN users " + 
-				"ON quizzes.creator_id = users.id WHERE quizzes.id = ?;";
-		}
 
 	@Override
 	public Quiz updateQuiz(Quiz quiz) {
@@ -81,7 +79,21 @@ public class QuizDAOImpl implements QuizDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
-					con.prepareStatement(updatingCommand());
+					con.prepareStatement(
+							"UPDATE quizzes "
+							+ "SET "
+							+ "creator_id = (SELECT id FROM users WHERE username LIKE ?), "
+							+ "name = ?, "
+							+ "description = ?, "
+							+ "is_random = ?, "
+							+ "is_one_page = ?, "
+							+ "immediate_correction = ?, "
+							+ "practice_mode = ?, "
+							+ "creation_time = ?, "
+							+ "time = ?, "
+							+ "max_score = ?, "
+							+ "category = ? "
+							+ "WHERE id = ?");
 			preparedStatement.setString(1, quiz.getUserName());
 			preparedStatement.setString(2, quiz.getQuizName());
 			preparedStatement.setString(3, quiz.getDescription());
@@ -95,24 +107,10 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setString(15, quiz.getCategory());
 			preparedStatement.setInt(16, quiz.getId());
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {e.printStackTrace();	}
 		return oldQuiz;
-	}
-
-	private String updatingCommand() {
-		return "UPDATE quizzes SET " + 
-				"creator_id = (SELECT id FROM users WHERE username LIKE ?), " + 
-				"name = ?, " + 
-				"description = ?, " + 
-				"is_random = ?, " + 
-				"is_one_page = ?, " + 
-				"immediate_correction = ?, " + 
-				"practice_mode = ?, " + 
-				"creation_time = ?, " + 
-				"time = ?, " + 
-				"max_score = ?, avg_rating = ?, avg_score = ?, "
-				+ "avg_time = ?, tries = ?, category = ? WHERE id = ?";
 	}
 
 	@Override
@@ -121,7 +119,22 @@ public class QuizDAOImpl implements QuizDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
-					con.prepareStatement(addingCommand());
+					con.prepareStatement(
+							"INSERT INTO quizzes "
+							+ "("
+							+ "(SELECT id FROM users WHERE username LIKE ?), "
+							+ "name, "
+							+ "description, "
+							+ "is_random, "
+							+ "is_one_page, "
+							+ "immediate_correction, "
+							+ "practice_mode, "
+							+ "creation_time, "
+							+ "time, "
+							+ "max_score,"
+							+ "category "
+							+ ") VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+							);
 			preparedStatement.setString(1, quiz.getUserName());
 			preparedStatement.setString(2, quiz.getQuizName());
 			preparedStatement.setString(3, quiz.getDescription());
@@ -134,22 +147,13 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setInt(10, quiz.getMaxScore());
 			preparedStatement.setString(15, quiz.getCategory());
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			id = MySQLUtil.getLastInsertId(con);
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return id;
-	}
-
-	private String addingCommand() {
-		return "INSERT INTO quizzes " + 
-				"(creator_id, name, description, is_random, is_one_page, " + 
-				"immediate_correction, practice_mode, creation_time, " + 
-				"time, max_score, avg_rating, avg_score, avg_time, tries, category) " + 
-				"VALUES(" + 
-				"(SELECT id FROM users WHERE username like ?), " + 
-				" ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 	}
 
 	@Override
@@ -160,38 +164,38 @@ public class QuizDAOImpl implements QuizDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
-					con.prepareStatement(deletingCommand());
+					con.prepareStatement(
+							"DELETE FROM quizzes WHERE id = ?;"
+							);
 			preparedStatement.setInt(1, quizId);
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {e.printStackTrace();}
 		return oldQuiz;
 	}
 
-	private String deletingCommand() {
-		return "DELETE FROM quizzes WHERE id = ?;";
-	}
-
-	private String popularCommand() {
-		return "SELECT *, username " + 
-				"FROM quizzes INNER " + 
-				"JOIN users ON users.id = quizzes.creator_id " + 
-				"ORDER BY tries DESC LIMIT ?;";
-	}
-	
 	@Override
 	public List<Quiz> getRecentQuizzes(int n) {
 		List<Quiz> recentQuizzes = new ArrayList<Quiz>();
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
-					con.prepareStatement(recentCommand());
+					con.prepareStatement(
+							"SELECT "
+									+ "username, name, description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
+									+ "LEFT JOIN users "
+									+ "ON users.id = quizzes.creator_id "
+									+ "ORDER BY creation_time DESC "
+									+ "LIMIT ?;"
+									);
 			preparedStatement.setInt(1, n);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
 				Quiz quiz = loadIntoQuiz(rs);
 				recentQuizzes.add(quiz);
 			}
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
@@ -200,26 +204,28 @@ public class QuizDAOImpl implements QuizDAO {
 		return recentQuizzes;
 	}
 
-	private String recentCommand() {
-		return "SELECT *, username " + 
-				"FROM quizzes INNER " + 
-				"JOIN users ON users.id = quizzes.creator_id " + 
-				"ORDER BY creation_time DESC LIMIT ?;";
-	}
-
 	@Override
 	public List<Quiz> getCreatedQuizzes(String userName) {
 		List<Quiz> userQuizes = new ArrayList<Quiz>();
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
-					con.prepareStatement(userCreatedCommand());
+					con.prepareStatement(
+							"SELECT "
+							+ "username, name, description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
+							+ "FROM quizzes "
+							+ "LEFT JOIN users "
+							+ "ON quizzes.creator_id = users.id "
+							+ "WHERE username LIKE ? "
+							+ "ORDER BY creation_time DESC;"
+							);
 			preparedStatement.setString(1, userName);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
 				Quiz quiz = loadIntoQuiz(rs);
 				userQuizes.add(quiz);
 			}
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) { 
@@ -228,23 +234,25 @@ public class QuizDAOImpl implements QuizDAO {
 		return userQuizes;
 	}
 
-	private String userCreatedCommand() {
-		return "SELECT " + 
-				"quizzes.id, avg_rating, avg_score, avg_time, tries, quizzes.description, username, name, " + 
-				"is_random, is_one_page, immediate_correction, " + 
-				"practice_mode, creation_time, category, time, max_score " + 
-				"FROM quizzes " + 
-				"INNER JOIN users " + 
-				"ON quizzes.creator_id = users.id WHERE username LIKE ? ORDER BY creation_time DESC";
-	}
-
 	@Override
 	public List<Quiz> getSeatchedQuizzes(int numResults, String parameter) {
 		List<Quiz> userQuizes = new ArrayList<Quiz>();
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
-					con.prepareStatement(userSearchCommand());
+					con.prepareStatement(
+							"SELECT "
+							+ "username, name, description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
+							+ "FROM quizzes "
+							+ "LEFT JOIN users "
+							+ "ON users.id = quizzes.creator_id "
+							+ "WHERE name LIKE ? "
+							+ "OR category LIKE ? "
+							+ "OR quizzes.description LIKE ? "
+							+ "OR username LIKE ? "
+							+ "ORDER BY creation_time DESC "
+							+ "LIMIT ?;"
+							);
 			preparedStatement.setString(1, "%" + parameter + "%");
 			preparedStatement.setString(2, "%" + parameter + "%");
 			preparedStatement.setString(3, "%" + parameter + "%");
@@ -255,6 +263,7 @@ public class QuizDAOImpl implements QuizDAO {
 				Quiz quiz = loadIntoQuiz(rs);
 				userQuizes.add(quiz);
 			}
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) { 
@@ -263,14 +272,4 @@ public class QuizDAOImpl implements QuizDAO {
 		return userQuizes;
 	}
 	
-	private String userSearchCommand() {
-		return "SELECT " + 
-				"quizzes.id, avg_rating, avg_score, avg_time, tries, quizzes.description, username, name, " + 
-				"is_random, is_one_page, immediate_correction, " + 
-				"practice_mode, creation_time, category, time, max_score " + 
-				"FROM quizzes " + 
-				"INNER JOIN users " + 
-				"ON quizzes.creator_id = users.id " + 
-				" WHERE name LIKE ? OR category LIKE ? OR quizzes.description LIKE ? OR username LIKE ? ORDER BY creation_time DESC LIMIT ?;";
-	}
 }
