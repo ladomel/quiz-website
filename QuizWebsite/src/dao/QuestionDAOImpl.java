@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -757,20 +758,29 @@ public class QuestionDAOImpl implements QuestionDAO {
 	/*
 	 * this will load answers set as fields possible correct answers
 	 */
-	private void loadAnswersOfField(Connection con, Set<String> answers,
+	private void loadAnswersOfField(Connection con, Collection<String> answers,
 			int questionId, int fieldId)
 			throws SQLException {
 		
-		for(String answer : answers) loadAnswerIntoField(con, answer, 
-				questionId, fieldId);
+		int idxInField = 0;
+		for(String answer : answers) 
+		{
+			loadAnswerIntoField(con, answer, 
+					questionId, fieldId, idxInField);
+			idxInField ++;
+		}
 	}
 	
-	private void loadWrongAnswersOfField(Connection con, Set<String> answers, 
+	private void loadWrongAnswersOfField(Connection con, Collection<String> answers, 
 			int questionId, int fieldId) 
 					throws SQLException {
 		
-		for(String answer : answers) loadWrongAnswerIntoField(con, answer, 
-				questionId, fieldId);
+		int idxInField = 0;
+		for(String answer : answers) { 
+			loadWrongAnswerIntoField(con, answer, 
+					questionId, fieldId, idxInField);
+			idxInField ++;
+		}
 	}
 
 
@@ -785,31 +795,35 @@ public class QuestionDAOImpl implements QuestionDAO {
 
 	// single queries are preferred, but hey, do we have time for that?
 	private void loadAnswerIntoField(Connection con, String answer, 
-			int questionId, int fieldId)
+			int questionId, int fieldId, int idxInField)
 					throws SQLException {
 		
 		PreparedStatement preparedStatement =
 				con.prepareStatement("INSERT INTO answers "
-						+ "(question_id, answer, field_id) "
-						+ "VALUES(?, ?, ?);");
+						+ "(question_id, answer, field_id, idx_in_field) "
+						+ "VALUES(?, ?, ?, ?);");
 		preparedStatement.setInt(1, questionId);
 		preparedStatement.setString(2, answer);
 		preparedStatement.setInt(3, fieldId);
+		preparedStatement.setInt(4, idxInField);
 		preparedStatement.executeUpdate();
+		preparedStatement.close();
 	}
 	
 	private void loadWrongAnswerIntoField(Connection con, String answer, 
-			int questionId, int fieldId) 
+			int questionId, int fieldId, int idxInField) 
 					throws SQLException {
 		
 		PreparedStatement preparedStatement =
 				con.prepareStatement("INSERT INTO answers_wrong "
-						+ "(question_id, answer_wrong, field_id) "
-						+ "VALUES(?, ?, ?);");
+						+ "(question_id, answer_wrong, field_id, idx_in_field) "
+						+ "VALUES(?, ?, ?, ?);");
 		preparedStatement.setInt(1, questionId);
 		preparedStatement.setString(2, answer);
 		preparedStatement.setInt(3, fieldId);
+		preparedStatement.setInt(4, idxInField);
 		preparedStatement.executeUpdate();
+		preparedStatement.close();
 	}
 	
 	/*
