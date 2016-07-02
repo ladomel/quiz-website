@@ -58,13 +58,15 @@ create table multiple_choice_metadata(
 create table answers(
 	question_id 		int(11) 		not null,
 	answer 				varchar(255) 	not null,
-	field_id 			int(11) 		default 0
+	field_id 			int(11) 		default 0,
+	idx_in_field		int(11)			default 0
 );
 
 create table answers_wrong(
 	question_id 		int(11) 		not null,
 	answer_wrong		varchar(255) 	not null,
-	field_id 			int(11) 		default 0
+	field_id 			int(11) 		default 0,
+	idx_in_field		int(11)			default 0
 );
 
 create table quizzes(
