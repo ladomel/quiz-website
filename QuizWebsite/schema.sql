@@ -44,6 +44,12 @@ create table questions(
 	primary key(id)
 );
 
+create table question_lines(
+	text				varchar(255)	not null,
+	idx					int(11)			not null default 0,
+	question_id			int(11)			not null
+);
+
 create table images(
 	question_id			int(11)			not null,
 	image				varchar(255)
