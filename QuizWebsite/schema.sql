@@ -167,6 +167,6 @@ create table  user_answers(
 create table earned_achievements
 (
 	username 			varchar(256)	not null,
-	avhievement_id 		int(11)			not null 
-	time 				bigint
+	achievement_id 		int(11)			not null, 
+	unlock_time 				bigint
 );
