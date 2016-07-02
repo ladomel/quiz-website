@@ -19,6 +19,7 @@ import classes.question.QuestionMCH;
 import classes.question.QuestionMCMA;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
+import classes.question.QuestionTF;
 import classes.question.Abstract.Question;
 import factory.ClassFactory;
 
@@ -129,6 +130,17 @@ public class QuestionDAOImplTest {
 		mchLines.add("mchLn3");
 		QuestionMCH mch = new QuestionMCH("matching1", 11, mchLines, mchCorr, mchWr);
 		questionDAO.addMCH(quizId, mch);
+		
+		List<String> tfCorr = new ArrayList<String> ();
+		tfCorr.add("mchCor1");
+		tfCorr.add("mchCor2");
+		tfCorr.add("mchCor3");
+		List<String> tfLines = new ArrayList<String> ();
+		tfLines.add("mchLn1");
+		tfLines.add("mchLn2");
+		tfLines.add("mchLn3");
+		QuestionTF tf = classFactory.getQuestionTF("true/false", 10, tfLines, tfCorr);
+		questionDAO.addTF(quizId, tf);
 		
 		List<Question> questions = questionDAO.getQuestions(1);
 		System.out.println(questions);

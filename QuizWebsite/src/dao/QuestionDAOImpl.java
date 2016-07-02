@@ -20,6 +20,7 @@ import classes.question.QuestionMCH;
 import classes.question.QuestionMCMA;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
+import classes.question.QuestionTF;
 import classes.question.Abstract.Question;
 import factory.ClassFactory;
 
@@ -153,6 +154,24 @@ public class QuestionDAOImpl implements QuestionDAO {
 		
 	}
 	
+	@Override
+	public void addTF(int quizId, QuestionTF tf) {
+		Connection con;
+		try {
+			con = dataSource.getConnection();
+			loadCommonFields(con, tf, quizId);
+			int questionId = MySQLUtil.getLastInsertId(con);
+			List<String> rightAnswers = tf.getCorrectAnswers();
+			List<String> questions = tf.getPropositions();
+			loadAnswersOfField(con, rightAnswers, questionId, 0);
+			loadQuestionLines(con, questionId, questions);
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+	
 
 
 
@@ -213,9 +232,9 @@ public class QuestionDAOImpl implements QuestionDAO {
 			// couples
 			retrieveMCMA(con, quizId, questions);
 			retrieveMC(con, quizId, questions);
-			// ?
+			// couples
 			retrieveMCH(con, quizId, questions);
-			
+			retrieveTF(con, quizId, questions);
 			
 			con.close();
 		} catch (SQLException e) {
@@ -241,6 +260,16 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	
 	
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -415,8 +444,39 @@ public class QuestionDAOImpl implements QuestionDAO {
 		
 		retrieveMCHFromRS(rs, questions);
 		
+		preparedStatement.close();
 		rs.close();
 	}
+	
+	private void retrieveTF(Connection con, int quizId, List<Question> questions) 
+			throws SQLException {
+		
+		PreparedStatement preparedStatement =
+				con.prepareStatement(
+						"SELECT * FROM questions "
+						+ "LEFT JOIN answers ON answers.question_id = questions.id "
+						+ "LEFT JOIN question_lines AS q_l ON q_l.question_id = questions.id "
+						+ "WHERE quiz_id = ? AND type LIKE 'TF' "
+						+ "ORDER BY id"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+
+		retrieveTFFromRS(rs, questions);
+		
+		preparedStatement.close();
+		rs.close();
+	}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -673,6 +733,40 @@ public class QuestionDAOImpl implements QuestionDAO {
 			questions.set(currentQuestionId - 1, mch);
 		}			
 	}
+	
+	private void retrieveTFFromRS(ResultSet rs, List<Question> questions) 
+			throws SQLException {
+
+		while(rs.next()) {
+			String problem = null;
+			Integer grade = null;
+			Integer currentQuestionId = null;
+			int currId = rs.getInt("questions.id");
+			problem = rs.getString("questions.problem");
+			grade = rs.getInt("questions.grade");
+			currentQuestionId = rs.getInt("questions.q_id");
+			
+			rs.previous();
+
+			Vector<String> rightAnswers = new Vector<String> ();
+			Vector<String> questionLines = new Vector<String> ();
+			collectTFAnswersWithQuestionLines(rs, rightAnswers, questionLines, currId);
+			QuestionTF tf = classFactory.getQuestionTF(problem, grade, questionLines, rightAnswers);
+			
+			// SQL runs +1 idx:
+			questions.set(currentQuestionId - 1, tf);
+		}		
+	}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -776,6 +870,23 @@ public class QuestionDAOImpl implements QuestionDAO {
 					rightAnswerIdx, wrongAnswerIdx, questionLineIdx);
 			rightAnswers.set(rightAnswerIdx, rs.getString("answers.answer"));
 			wrongAnswers.set(wrongAnswerIdx, rs.getString("aw.answer_wrong"));
+			questionLines.set(questionLineIdx, rs.getString("q_l.text"));
+		}
+		rs.previous();
+		
+	}
+	
+	private void collectTFAnswersWithQuestionLines(ResultSet rs, 
+			Vector<String> rightAnswers,
+			Vector<String> questionLines, 
+			int currId) throws SQLException {
+		
+		while(rs.next() && rs.getInt("id") == currId) {
+			int rightAnswerIdx = rs.getInt("answers.idx_in_field");
+			int questionLineIdx = rs.getInt("q_l.idx"); 
+			resizeToContain(rightAnswers, new Vector<String>(), questionLines, 
+					rightAnswerIdx, 0, questionLineIdx);
+			rightAnswers.set(rightAnswerIdx, rs.getString("answers.answer"));
 			questionLines.set(questionLineIdx, rs.getString("q_l.text"));
 		}
 		rs.previous();
@@ -1056,6 +1167,16 @@ public class QuestionDAOImpl implements QuestionDAO {
 		while(wrongAnswers.size() < int2 + 1) wrongAnswers.add(null);
 		while(questionLines.size() < int3 + 1) questionLines.add(null);
 	}
+
+
+
+
+
+
+
+
+
+
 
 
 
