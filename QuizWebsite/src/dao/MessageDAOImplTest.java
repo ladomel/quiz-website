@@ -173,7 +173,24 @@ public class MessageDAOImplTest {
 		System.out.println("Number of unseen by test 2: " + messageDAO.numUnseenNotes("test2"));	
 	}
 	
-
+	@Test
+	public void testGetChallenge() {
+		Challenge challenge = classFactory.getChallenge("a", 11, "haa", 1, false);
+		messageDAO.addChallenges(challenge);
+		
+		Challenge challenge2 = classFactory.getChallenge("a", 11, "haa", 1, false);
+		messageDAO.addChallenges(challenge2);
+		
+		System.out.println(messageDAO.getChallenges("haa").size());
+		System.out.println(messageDAO.getChallenges("haa").toString());
+		
+		messageDAO.updateChallengeStatus(2, "Seen");
+		
+		System.out.println(messageDAO.getChallenges("haa").size());
+		System.out.println(messageDAO.getChallenges("haa").toString());
+	}
+	
+	
 	@Test
 	public void testFriendRequestExists()
 	{
