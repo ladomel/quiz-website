@@ -39,14 +39,6 @@ public interface QuizDAO {
 	public Quiz deleteQuiz(int quizId);
 	
 	/**
-	 * Returns a list with Quizzes in it sorted by popularity.
-	 * 
-	 * @param n - number of quizzes
-	 * @return list of Quizzes sorted by popularity
-	 */
-	public List<Quiz> getPopularQuizzes(int n);
-	
-	/**
 	 * Returns a list with Quizzes in it sorted by creation date.
 	 * 
 	 * @param n - number of quizzes
