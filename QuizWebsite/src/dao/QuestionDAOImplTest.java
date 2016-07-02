@@ -1,9 +1,6 @@
 package dao;
 
-import static org.junit.Assert.*;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +8,8 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.mysql.fabric.xmlrpc.base.Array;
 
 import classes.Quiz;
 import classes.question.QuestionFB;
@@ -118,7 +117,7 @@ public class QuestionDAOImplTest {
 		int quizId = getNewQuizId();
 		questionDAO.addQR(quizId, question);
 		questionDAO.addQR(quizId, question2);
-	//	System.out.println(questionDAO.getQuestions(quizId).toString());
+		//System.out.println(questionDAO.getQuestions(quizId).toString());
 	}	
 	
 	@Test
@@ -149,7 +148,80 @@ public class QuestionDAOImplTest {
 		System.out.println(questionDAO.getQuestions(quizId).toString());
 	}	
 	
+	@Test
+	public void testMA() 
+	{
+		QuestionMA question = classFactory.getQuestionMA("problem1", 1, true, getSetList1(), 2);
+		QuestionMA question2 = classFactory.getQuestionMA("problem2", 2, false, getSetList2(), 3);
+		System.out.println(question.toString());
+		
+		int quizId = getNewQuizId();
+		questionDAO.addMA(quizId, question);
+		questionDAO.addMA(quizId, question2);
+		System.out.println(questionDAO.getQuestions(quizId).toString());
+	}
 	
+	@Test 
+	public void testFB()
+	{
+		QuestionFB question = classFactory.getQuestionFB("problem1", 1, getSetList1());
+		QuestionFB question2 = classFactory.getQuestionFB("problem2", 2, getSetList2());
+		System.out.println(question.toString());
+		
+		int quizId = getNewQuizId();
+		questionDAO.addFB(quizId, question);
+		questionDAO.addFB(quizId, question2);
+		System.out.println(questionDAO.getQuestions(quizId).toString());
+	}
+	
+	private ArrayList<Set<String>> getSetList1()
+	{
+		Set<String> answers = new HashSet<String>(Arrays.asList("z", "a", "d"));
+		Set<String> answers2 = new HashSet<String>(Arrays.asList("c", "a", "f"));
+		return new ArrayList<Set<String>>(Arrays.asList(answers, answers2));
+		
+	}
+	
+	private ArrayList<Set<String>> getSetList2()
+	{
+		Set<String> answers = new HashSet<String>(Arrays.asList("l", "a", "g"));
+		Set<String> answers2 = new HashSet<String>(Arrays.asList("c", "d", "h"));
+		return new ArrayList<Set<String>>(Arrays.asList(answers, answers2));
+		
+	}
+	
+	@Test
+	public void testMCMA() 
+	{
+		QuestionMCMA question = classFactory.getQuestionMCMA("problem1", 1, getList1(), getList2());
+		QuestionMCMA question2 = classFactory.getQuestionMCMA("problem2", 2, getList3(), getList4());
+		System.out.println(question.toString());
+		
+		int quizId = getNewQuizId();
+		questionDAO.addMCMA(quizId, question);
+		questionDAO.addMCMA(quizId, question2);
+		System.out.println(questionDAO.getQuestions(quizId).toString());
+	}
+	
+	private List<String> getList1()
+	{
+		return new ArrayList<String>(Arrays.asList("c", "d", "h"));
+	}
+	
+	private List<String> getList2()
+	{
+		return new ArrayList<String>(Arrays.asList("a", "b", "c"));
+	}	
+	
+	private List<String> getList3()
+	{
+		return new ArrayList<String>(Arrays.asList("y", "x", "z"));
+	}
+	
+	private List<String> getList4()
+	{
+		return new ArrayList<String>(Arrays.asList("l", "a", "m"));
+	}
 	private int getNewQuizId()
 	{
 		Quiz quiz = new Quiz("vaja", "Future Vulture", "quiz about 2034");
