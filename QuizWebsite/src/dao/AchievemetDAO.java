@@ -19,4 +19,14 @@ public interface AchievemetDAO {
 	 * @param date - date of achievement unlocking
 	 */
 	public void achievementEarned(int userId, int achievementId, long date);
+	
+	
+	/**
+	 * This function returns true if user has earned given achievement
+	 * 
+	 * @param userId - id of user
+	 * @param achievementId - if of achievement
+	 * @return true iff user has earned this achievement.
+	 */
+	public boolean hasAchievement(int userId, int achievementId);
 }
