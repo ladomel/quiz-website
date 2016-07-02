@@ -36,20 +36,6 @@ create table status(
 	primary key(user_id,status)
 );
 
-create table achievements(
-	id 					int(11) 		not null,
-	name 				varchar(256) 	not null,
-	icon 				varchar(256) 	not null,
-	description 		longtext,
-	primary key(id)
-);
-
-create table user_achievements(
-	user_id 			int(11) 		not null,
-	achievement_id 		int(11) 		not null,
-	primary key(user_id,achievement_id)
-);
-
 create table questions(
 	id 					int(11) 		not null auto_increment,
 	q_id				int(11),
@@ -176,4 +162,11 @@ create table  user_answers(
 	question_id 		int(11) 		not null,
 	field_id 			int(11) 		not null,
 	user_answer 		longtext
+);
+
+create table earned_achievements
+(
+	username 			varchar(256)	not null,
+	achievement_id 		int(11)			not null, 
+	unlock_time 				bigint
 );

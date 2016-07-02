@@ -23,22 +23,22 @@ public class AchievementDAOImplTest {
 	
 	@Test
 	public void hasAchievementTest() {
-		System.out.println("Before adding: " + achievementDAO.hasAchievement(1, 2));
-		achievementDAO.achievementEarned(1, 2, 10);
+		System.out.println("Before adding: " + achievementDAO.hasAchievement("test", 2));
+		achievementDAO.achievementEarned("test", 2, 10);
 
-		achievementDAO.achievementEarned(1, 5, 5000);
-		System.out.println("After adding: " + achievementDAO.hasAchievement(1, 2));
+		achievementDAO.achievementEarned("test", 5, 5000);
+		System.out.println("After adding: " + achievementDAO.hasAchievement("test", 2));
 	}
 
 
 	@Test
 	public void gerEarnedAchievementsTest() {
 
-		achievementDAO.achievementEarned(1, 3, 30);
-		achievementDAO.achievementEarned(1, 5, 5000);
-		achievementDAO.achievementEarned(1, 4, 40);
-		achievementDAO.achievementEarned(1, 2, 1000);
-		System.out.println("All achievements: " + achievementDAO.getEarnedAchievements(1));
+		achievementDAO.achievementEarned("test", 3, 30);
+		achievementDAO.achievementEarned("test", 5, 5000);
+		achievementDAO.achievementEarned("test", 4, 40);
+		achievementDAO.achievementEarned("test", 2, 1000);
+		System.out.println("All achievements: " + achievementDAO.getEarnedAchievements("test"));
 	}
 
 	
