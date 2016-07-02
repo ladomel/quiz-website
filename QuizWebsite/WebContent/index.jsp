@@ -17,7 +17,8 @@
 <body>
 	<%
 		String toppanel; 
-		if (request.getSession().getAttribute("MasterUser") == null) toppanel = "toppanel-loggedout.jsp";
+		User master = (User)request.getSession().getAttribute("MasterUser"); 
+		if (master == null) toppanel = "toppanel-loggedout.jsp";
 		else toppanel = "toppanel-loggedin.jsp";
 	%>
 	
@@ -48,7 +49,14 @@
 			</span>
 			<span class="quizzes" id="popularquizzes">
 				<div class="divtitle">Popular Quizzes</div>
-				<div class="list">
+				<div class="sortby">
+					Show Results of:
+					<span><a href="index">All time</a></span>
+					<span><a href="index?popular=week">Last Week</a></span>
+					<span><a href="index?popular=day">Last Day</a></span>
+				</div>
+				
+				<div class="list" id="poplist">
 				<%
 					quizzes = (List<Quiz> )request.getAttribute("PopularQuizzes");
 					for (int i=0;i<quizzes.size();i++){
@@ -58,11 +66,14 @@
 				</div>
 			</span>
 		<%
-			if (request.getSession().getAttribute("MasterUser") != null){
+			if (master != null){
 				out.println("<a href=\"CreateQuiz.jsp\"><button id=\"createaquiz\">Create a Quiz!</button></a>");		
+				out.println("<a href=\"Profile?username=" + master.getUserName() +"\"><button id=\"homepage\">Homepage!</button></a>");
 				if ((boolean)request.getSession().getAttribute("isAdmin")) {
 					out.print("<form action='MakeAnnouncement' method='post'> <input type='submit' value='Create Announcement' id='makeAnn'> </form>");
 				}
+			} else {
+				out.println("<div id='logintosee'>Log In to Create and Take a Quiz!</div>");
 			}
 			
 		%>
