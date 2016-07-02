@@ -15,7 +15,10 @@
 	User masterUser = (User)session.getAttribute("MasterUser");
 	String userName = masterUser.getUserName();
 	MessageDAO resultDao = (MessageDAO)request.getServletContext().getAttribute("messageDAO");
-	int unseen = resultDao.getNumUnseen(userName);
+	int unseenN = resultDao.numUnseenNotes(userName);
+	int unseenC = resultDao.numPendingChallenges(userName);
+	int unseenF = resultDao.numPendingFriendRequests(userName);
+	
 %>
 	<div id="toppanel">
 		<a href="index">
@@ -29,8 +32,10 @@
 		 
 		 <span id="loggedinbox">
 		 	<p id="welcome"><% out.print("Welcome Home, " + userName); %></p>
-		 	<form id="messagebox" action="Messages" method="post">
-		 		<button class="loggedinbuttons" id="messages" style=""><% if (unseen>0) out.print("You've got " + unseen + " unseen messages"); else out.print("No new Messages"); %></button>
+		 	<form id="messagebox" action="Messages" method="get">
+		 		<button class="loggedinbuttons" id="notes" style='background:<% if (unseenN>0) out.print("red"); %>'>Notes<% if (unseenN>0) out.print(" (" +  unseenN + ")");%></button>
+				<button class="loggedinbuttons" id="challenges" style='background:<% if (unseenC>0) out.print("red"); %>'>Challenges<% if (unseenC>0) out.print(" (" +  unseenC + ")");%></button>
+			<button class="loggedinbuttons" id="friendrequests" style='background:<% if (unseenF>0) out.print("red"); %>'>Friend Requests<% if (unseenF>0) out.print(" (" +  unseenF + ")");%></button>
 			</form>
 		 	<form action="Logout" method="post">
 		 		<button class="loggedinbuttons" id="logout">Logout</button>
