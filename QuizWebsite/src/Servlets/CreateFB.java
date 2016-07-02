@@ -41,6 +41,7 @@ public class CreateFB extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String problem = request.getParameter("statement");
+		int grade = Integer.parseInt(request.getParameter("grade"));
 		List<Set<String>> answers = new ArrayList<Set<String>>();
 
 		String delimeter = "/";
@@ -58,7 +59,7 @@ public class CreateFB extends HttpServlet {
 			answers.add(possibleAnswersSet);
 		}
 		
-		QuestionFB questionFB = new QuestionFB(problem, 1, answers);
+		QuestionFB questionFB = new QuestionFB(problem, grade, answers);
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
 		createdQuestions.add(questionFB);
 	}
