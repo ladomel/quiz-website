@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import classes.question.QuestionFB;
 import classes.question.QuestionMA;
 import classes.question.QuestionMC;
+import classes.question.QuestionMCH;
 import classes.question.QuestionMCMA;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
@@ -128,6 +129,12 @@ public class QuestionDAOImpl implements QuestionDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void addMCH(int quizId, QuestionMCH mch) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 
@@ -872,6 +879,16 @@ public class QuestionDAOImpl implements QuestionDAO {
 		preparedStatement.setBoolean(3, ordered);
 		preparedStatement.executeUpdate();
 	}
+
+
+
+
+
+
+
+
+
+
 
 
 
