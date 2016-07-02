@@ -39,6 +39,7 @@ public class CreateMCMA extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String problem = request.getParameter("statement");
+		int grade = Integer.parseInt(request.getParameter("grade"));
 		String nextAnswer;
 
 		List<String> correctAnswers = new ArrayList<String>();
@@ -57,7 +58,7 @@ public class CreateMCMA extends HttpServlet {
 			incorrectAnswers.add(nextAnswer);
 		}
 
-		QuestionMCMA questionMCMA = new QuestionMCMA(problem, 1, correctAnswers, incorrectAnswers);
+		QuestionMCMA questionMCMA = new QuestionMCMA(problem, grade, correctAnswers, incorrectAnswers);
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
 		createdQuestions.add(questionMCMA);
 	}
