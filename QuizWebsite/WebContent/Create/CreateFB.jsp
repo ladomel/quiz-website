@@ -17,6 +17,7 @@
 </head>
 <body>
 	<form id="form" onkeypress="return event.keyCode != 13;">
+		Question Grade: <input type="text" name="grade" id="grade"> <br> <br>
 		Text:
 		<textarea type="text" cols="60" rows="6" name="statement" id="stmnt"></textarea> <br>
 		Correct Answers:<br>
