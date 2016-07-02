@@ -35,11 +35,11 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-							+ "username, name, description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
+							+ "username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON users.id = quizzes.creator_id "
-							+ "WHERE id = ?;"
+							+ "WHERE quizzes.id = ?;"
 							);
 			preparedStatement.setInt(1, quizId);
 			ResultSet rs = preparedStatement.executeQuery();
@@ -104,8 +104,8 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setLong(8, quiz.getDateCreated());
 			preparedStatement.setInt(9, quiz.getQuizTime());
 			preparedStatement.setInt(10, quiz.getMaxScore());
-			preparedStatement.setString(15, quiz.getCategory());
-			preparedStatement.setInt(16, quiz.getId());
+			preparedStatement.setString(11, quiz.getCategory());
+			preparedStatement.setInt(12, quiz.getId());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			con.close();
@@ -122,7 +122,7 @@ public class QuizDAOImpl implements QuizDAO {
 					con.prepareStatement(
 							"INSERT INTO quizzes "
 							+ "("
-							+ "(SELECT id FROM users WHERE username LIKE ?), "
+							+ "creator_id, "
 							+ "name, "
 							+ "description, "
 							+ "is_random, "
@@ -133,7 +133,8 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "time, "
 							+ "max_score,"
 							+ "category "
-							+ ") VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+							+ ") VALUES ( (SELECT id FROM users WHERE username LIKE ?), "
+							+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
 							);
 			preparedStatement.setString(1, quiz.getUserName());
 			preparedStatement.setString(2, quiz.getQuizName());
@@ -145,7 +146,7 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setLong(8, quiz.getDateCreated());
 			preparedStatement.setInt(9, quiz.getQuizTime());
 			preparedStatement.setInt(10, quiz.getMaxScore());
-			preparedStatement.setString(15, quiz.getCategory());
+			preparedStatement.setString(11, quiz.getCategory());
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			id = MySQLUtil.getLastInsertId(con);
@@ -183,7 +184,7 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-									+ "username, name, description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
+									+ "username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
 									+ "LEFT JOIN users "
 									+ "ON users.id = quizzes.creator_id "
 									+ "ORDER BY creation_time DESC "
@@ -212,7 +213,7 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-							+ "username, name, description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
+							+ "username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON quizzes.creator_id = users.id "
@@ -242,7 +243,7 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-							+ "username, name, description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
+							+ "username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON users.id = quizzes.creator_id "
