@@ -184,12 +184,13 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-									+ "username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
-									+ "LEFT JOIN users "
-									+ "ON users.id = quizzes.creator_id "
-									+ "ORDER BY creation_time DESC "
-									+ "LIMIT ?;"
-									);
+							+ "username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
+							+ "FROM quizzes "
+							+ "LEFT JOIN users "
+							+ "ON users.id = quizzes.creator_id "
+							+ "ORDER BY creation_time DESC "
+							+ "LIMIT ?;"
+							);
 			preparedStatement.setInt(1, n);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
