@@ -57,10 +57,6 @@ public class QuizDAOImpl implements QuizDAO {
 		quiz.setHasPracticeMode(rs.getBoolean("practice_mode"));
 		quiz.setDateCreated(rs.getLong("creation_time"));
 		quiz.setMaxScore(rs.getInt("max_score"));
-		quiz.setAverageRating(rs.getDouble("avg_rating"));
-		quiz.setAverageScore(rs.getDouble("avg_score"));
-		quiz.setAverageTimeMillis(rs.getLong("avg_time"));
-		quiz.setNumTries(rs.getInt("tries"));
 		quiz.setCategory(rs.getString("category"));	// should have separate table but fuck it
 		
 		return quiz;
@@ -96,10 +92,6 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setLong(8, quiz.getDateCreated());
 			preparedStatement.setInt(9, quiz.getQuizTime());
 			preparedStatement.setInt(10, quiz.getMaxScore());
-			preparedStatement.setDouble(11, quiz.getAverageRating());
-			preparedStatement.setDouble(12, quiz.getAverageScore());
-			preparedStatement.setLong(13, quiz.getAverageTimeMillis());
-			preparedStatement.setInt(14, quiz.getNumTries());
 			preparedStatement.setString(15, quiz.getCategory());
 			preparedStatement.setInt(16, quiz.getId());
 			preparedStatement.executeUpdate();
@@ -140,10 +132,6 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setLong(8, quiz.getDateCreated());
 			preparedStatement.setInt(9, quiz.getQuizTime());
 			preparedStatement.setInt(10, quiz.getMaxScore());
-			preparedStatement.setDouble(11, quiz.getAverageRating());
-			preparedStatement.setDouble(12, quiz.getAverageScore());
-			preparedStatement.setLong(13, quiz.getAverageTimeMillis());
-			preparedStatement.setInt(14, quiz.getNumTries());
 			preparedStatement.setString(15, quiz.getCategory());
 			preparedStatement.executeUpdate();
 			id = MySQLUtil.getLastInsertId(con);

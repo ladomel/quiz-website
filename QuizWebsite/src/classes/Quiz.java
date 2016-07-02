@@ -15,13 +15,6 @@ public class Quiz {
 	private boolean isImmediatelyCorrected;
 	private boolean hasPracticeMode;
 	
-	
-	// Not necessary, might delete.
-	private double averageRating; // Average rating made by users.
-	private double averageScore; // Users' average score in the quiz.
-	private long averageTimeMillis; // Users' average time in milliseconds.
-	private int numTries; // Number of times users started this quiz.
-	
 	// extension
 	private String category; // TODO enum
 	private Set<String> tags;
@@ -60,10 +53,6 @@ public class Quiz {
 				"IsOnePage: " + this.isOnePage() + " | " +
 				"IsImmediatelyCorrected: " + this.isImmediatelyCorrected() + " | " +
 				"HasPraticeMode: " + this.hasPracticeMode() + " | " + 
-				"AverageRating: " + this.getAverageRating() + " | " +
-				"AverageScore: " + this.getAverageScore() + " | " +
-				"AverageTimeMillis: " + this.getAverageTimeMillis() + " | " +
-				"NumTries: " + this.getNumTries() + " | " +
 				"Category: " + this.getCategory() + " | ";
 	}
 	
@@ -159,38 +148,6 @@ public class Quiz {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public double getAverageRating() {
-		return averageRating;
-	}
-
-	public void setAverageRating(double averageRating) {
-		this.averageRating = averageRating;
-	}
-
-	public int getNumTries() {
-		return numTries;
-	}
-
-	public void setNumTries(int numTries) {
-		this.numTries = numTries;
-	}
-
-	public double getAverageScore() {
-		return averageScore;
-	}
-
-	public void setAverageScore(double averageScore) {
-		this.averageScore = averageScore;
-	}
-
-	public long getAverageTimeMillis() {
-		return averageTimeMillis;
-	}
-
-	public void setAverageTimeMillis(long averageTimeMillis) {
-		this.averageTimeMillis = averageTimeMillis;
 	}
 
 	public String getCategory() {
