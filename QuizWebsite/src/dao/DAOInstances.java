@@ -37,6 +37,11 @@ public class DAOInstances {
 		return new UserDAOImpl(dataSource);
 	}
 	
+
+	public AchievementDAO getAchievementDAO() {
+		return new AchievementDAOImpl(dataSource);
+	}
+	
 	public MessageDAO getMessageDAO() {
 		return new MessageDAOImpl(dataSource);
 	}

@@ -2,6 +2,7 @@ package factory;
 import java.util.List;
 import java.util.Set;
 
+import classes.Achievement;
 import classes.Answer;
 import classes.Quiz;
 import classes.User;
@@ -89,5 +90,10 @@ public class ClassFactory {
 	
 	public FriendRequest getFriendRequest(String sender,  long date, String getter, boolean seen){
 		return new FriendRequest(sender,date,getter, seen); 
+	}
+	
+	public Achievement getAchievement(String name, String pictureURL, String description)
+	{
+		return new Achievement(name, pictureURL, description);
 	}
 }

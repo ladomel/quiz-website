@@ -4,14 +4,12 @@ public class Achievement {
 	private String name;
 	private String pictureURL;
 	private String description; 
-	private String unlockedDescription;
 	
-	private Achievement(String name, String pictureURL, String description, String unlockedDescription)
+	public Achievement(String name, String pictureURL, String description)
 	{
 		setName(name);
 		setPictureURL(pictureURL);
 		setDescription(description);
-		setUnlockedDescription(unlockedDescription);
 	}
 
 	public String getName() {
@@ -36,13 +34,5 @@ public class Achievement {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getUnlockedDescription() {
-		return unlockedDescription;
-	}
-
-	public void setUnlockedDescription(String unlockedDescription) {
-		this.unlockedDescription = unlockedDescription;
 	}
 }

@@ -3,8 +3,11 @@ package Listeners;
 import javax.servlet.*;
 import javax.servlet.annotation.WebListener;
 
+import Main.Achievements;
 import Main.PasswordHasher;
 import dao.DAOInstances;
+import dao.MessageDAO;
+import dao.QuestionDAO;
 import dao.QuizDAO;
 import dao.UserDAO;
 import factory.ClassFactory;
@@ -19,8 +22,11 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
 	private DAOInstances daoFactory;
 	private UserDAO userDAO;
 	private QuizDAO quizDAO;
+	private MessageDAO messageDAO;
+	private QuestionDAO questionDAO;
 	private PasswordHasher hasher;
 	private ClassFactory factory;
+	private Achievements achievements;
 	
     /**
      * Default constructor. 
@@ -38,6 +44,8 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
     	daoFactory = null;	
     	userDAO = null;	
     	quizDAO = null;
+    	messageDAO = null;	
+    	questionDAO = null;
     }
 
 	/**
@@ -52,14 +60,20 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
     	daoFactory.init();
     	
     	userDAO = daoFactory.getUserDAO();	// TODO: add to context
+    	messageDAO = daoFactory.getMessageDAO();	// TODO: add to context
     	quizDAO = daoFactory.getQuizDAO();	// TODO: add to context
+    	questionDAO = daoFactory.getQuestionDAO();	// TODO: add to context
+    	achievements = new Achievements();
     	
     	factory = new ClassFactory();
     	hasher = new PasswordHasher();
     	
     	context.setAttribute("userDAO", userDAO);  
     	context.setAttribute("quizDAO", quizDAO);  
+    	context.setAttribute("messageDAO", messageDAO);  
+    	context.setAttribute("questionDAO", questionDAO);  
     	context.setAttribute("factory", factory);  
     	context.setAttribute("hasher", hasher);  
+    	context.setAttribute("achievements", achievements);  
     }
 }
