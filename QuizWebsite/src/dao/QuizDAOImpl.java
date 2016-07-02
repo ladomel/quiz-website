@@ -35,7 +35,7 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-							+ "username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
+							+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON users.id = quizzes.creator_id "
@@ -60,6 +60,7 @@ public class QuizDAOImpl implements QuizDAO {
 				rs.getString("name"), 
 				rs.getString("description")
 				);
+		quiz.setId(rs.getInt("id"));
 		quiz.setRandom(rs.getBoolean("is_random"));
 		quiz.setOnePage(rs.getBoolean("is_one_page"));
 		quiz.setImmediatelyCorrected(rs.getBoolean("immediate_correction"));
@@ -184,12 +185,13 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-									+ "username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
-									+ "LEFT JOIN users "
-									+ "ON users.id = quizzes.creator_id "
-									+ "ORDER BY creation_time DESC "
-									+ "LIMIT ?;"
-									);
+							+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category "
+							+ "FROM quizzes "
+							+ "LEFT JOIN users "
+							+ "ON users.id = quizzes.creator_id "
+							+ "ORDER BY creation_time DESC "
+							+ "LIMIT ?;"
+							);
 			preparedStatement.setInt(1, n);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
@@ -213,7 +215,7 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-							+ "username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
+							+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON quizzes.creator_id = users.id "
@@ -243,7 +245,7 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-							+ "username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
+							+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON users.id = quizzes.creator_id "
