@@ -2,6 +2,7 @@ package factory;
 import java.util.List;
 import java.util.Set;
 
+import classes.Achievement;
 import classes.Answer;
 import classes.Quiz;
 import classes.User;
@@ -45,9 +46,9 @@ public class ClassFactory {
 		return new QuestionFB(newProblem, grade, newAnswers);
 	}
 	
-	public QuestionMA getQuestionMA(String newProblem, int grade, boolean graded, List<Set<String>> newAnswers, int numAnswers)
+	public QuestionMA getQuestionMA(String newProblem, int grade, boolean ordered, List<Set<String>> newAnswers, int numAnswers)
 	{
-		return new QuestionMA(newProblem, grade, graded, newAnswers, numAnswers);
+		return new QuestionMA(newProblem, grade, ordered, newAnswers, numAnswers);
 	}
 	
 	public QuestionMC getQuestionMC(String newProblem, int grade, String correctAnswer, Set<String> wrongAnswers)
@@ -89,5 +90,10 @@ public class ClassFactory {
 	
 	public FriendRequest getFriendRequest(String sender,  long date, String getter, boolean seen){
 		return new FriendRequest(sender,date,getter, seen); 
+	}
+	
+	public Achievement getAchievement(String name, String pictureURL, String description)
+	{
+		return new Achievement(name, pictureURL, description);
 	}
 }

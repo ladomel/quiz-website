@@ -41,6 +41,7 @@ public class CreateMA extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String problem = request.getParameter("statement");
+		int grade = Integer.parseInt(request.getParameter("grade"));
 		int numAnswers = Integer.parseInt(request.getParameter("answernum"));
 		boolean ordered = (null != request.getParameter("order"));
 		List<Set<String>> answers = new ArrayList<Set<String>>();
@@ -61,7 +62,7 @@ public class CreateMA extends HttpServlet {
 			answers.add(possibleAnswersSet);
 		}
 		
-		QuestionMA questionMA = new QuestionMA(problem, 1, ordered, answers, numAnswers); //////////ORDERD
+		QuestionMA questionMA = new QuestionMA(problem, grade, ordered, answers, numAnswers); 
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
 		createdQuestions.add(questionMA);
 	}

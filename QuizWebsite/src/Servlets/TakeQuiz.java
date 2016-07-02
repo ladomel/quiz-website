@@ -95,7 +95,6 @@ public class TakeQuiz extends HttpServlet {
 	{
 
 		User user = (User)session.getAttribute("MasterUser"); 	
-
 		Result result = new Result(user.getUserName(), takenQuizId);
 		
 		List<Answer> answers = new ArrayList<Answer>();

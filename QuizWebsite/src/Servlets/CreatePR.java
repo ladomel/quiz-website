@@ -40,6 +40,7 @@ public class CreatePR extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String problem = request.getParameter("statement");
 		String pictureURL = request.getParameter("externalURL");
+		int grade = Integer.parseInt(request.getParameter("grade"));
 		HashSet<String> answers = new HashSet<String>();
 		
 		String nextAnswer = "";
@@ -51,7 +52,7 @@ public class CreatePR extends HttpServlet {
 			answers.add(nextAnswer);
 		}
 		
-		QuestionPR questionPR = new QuestionPR(problem, 1 ,pictureURL, answers);
+		QuestionPR questionPR = new QuestionPR(problem, grade ,pictureURL, answers);
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
 		createdQuestions.add(questionPR);
 	}
