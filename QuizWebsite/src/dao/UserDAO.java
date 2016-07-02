@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.Set;
+
 import classes.User;
 
 /**
@@ -67,4 +69,29 @@ public interface UserDAO {
 	 * @param userName - user name of user we want to remove him from administration
 	 */
 	public void removeAdmin(String userName);
+	
+	/**
+	 * Adds first user as a friend of second user and vice-versa.
+	 * 
+	 * @param userName1 - first user name
+	 * @param userName2 - second user name
+	 */
+	public void addFriend(String userName1, String userName2);
+	
+	/**
+	 * Returns set of friends for given user name.
+	 * 
+	 * @param userName - String user name
+	 * @return set of given users friends
+	 */
+	public Set<String> getFriends(String userName);
+	
+	/**
+	 * Removes friendship between given two users.
+	 * 
+	 * @param user name 1
+	 * @param user name 2
+	 */
+	public void removeFriendship(String userName1, String userName2);
+	
 }

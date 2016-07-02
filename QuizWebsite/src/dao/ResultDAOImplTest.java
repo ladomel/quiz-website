@@ -2,6 +2,7 @@ package dao;
 
 import static org.junit.Assert.*;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -34,28 +35,63 @@ public class ResultDAOImplTest {
 		classFactory = new ClassFactory();
 	}
 
+	// this is scratching surface barely
+	// needs better check
 	@Test
 	public void test() {
-		Result result = classFactory.getResult("vaja", 1);
-		result.setFinalGrade(98);
-		result.setTimeStarted(2005);
-		result.setTimeTaken(5);
-		List<Answer> answers = new ArrayList<Answer> ();
-		Answer answer1 = classFactory.getAnswer(Arrays.asList("drogba", "gadavida", "chinetshi"));
 		
-		Answer answer2 = classFactory.getAnswer(Arrays.asList("messi", "aris", "sauketeso"));
-		answers.add(answer1);
-		answers.add(answer2);
-		result.setAnswers(answers);
-		resultDAO.insertResult(result);
+		userDAO.addUser("vaja", "vajaspass", "vajassalt");
+		userDAO.addUser("vajab", "vajaspass", "vajassalt");
+		userDAO.addUser("vajabe", "vajaspass", "vajassalt");
+		userDAO.addUser("vajaber", "vajaspass", "vajassalt");
+		userDAO.addUser("vajabere", "vajaspass", "vajassalt");
+		userDAO.addUser("vajaberej", "vajaspass", "vajassalt");
+		userDAO.addUser("vajabereja", "vajaspass", "vajassalt");
+		
+		Result result1 = buildResult("vaja", 1, 90, 2005, 1);
+		Result result2 = buildResult("vajab", 2, 91, 2006, 2);
+		Result result21 = buildResult("vajabe", 2, 71, 2034, 9);
+		Result result3 = buildResult("vajabe", 3, 92, 2007, 3);
+		Result result4 = buildResult("vajaber", 4, 93, 2008, 4);
+		Result result41 = buildResult("vajaber", 2, 46, 201, 9);
+		Result result5 = buildResult("vajabere", 5, 94, 2008, 5);
+		Result result6 = buildResult("vajaberej", 2, 95, 2009, 6);
+		Result result7 = buildResult("vajabereja", 1, 96, 2010, 7);
+		
+		resultDAO.insertResult(result1);
+		resultDAO.insertResult(result2);
+		resultDAO.insertResult(result21);
+		resultDAO.insertResult(result3);
+		resultDAO.insertResult(result4);
+		resultDAO.insertResult(result41);
+		resultDAO.insertResult(result5);
+		resultDAO.insertResult(result6);
+		resultDAO.insertResult(result7);
+		
+		System.out.println("best by quiz id: " + resultDAO.getBestResults(2, 3, 2000));
+		System.out.println("best by user	:" + resultDAO.getBestResults("vajaber", 5, 202));
+
+		System.out.println("recent q_id n	:" + resultDAO.getRecentResults(2, 2));
+		System.out.println("recent u_nm n	:" + resultDAO.getRecentResults("vajaber", 3));
+		
+		System.out.println("pop quizes	202	:" + resultDAO.getPopularQuizzes(5, 202));
 	}
 
-	
+	// result construction wrapper
+	private Result buildResult(String u, int q_id, int grade, int start, int duration) {
+		Result result = classFactory.getResult(u, q_id);
+		result.setFinalGrade(grade);
+		result.setTimeStarted(start);
+		result.setTimeTaken(duration);
+		return result;
+	}
+
+	/*
 	@Test
 	public void test2() {
 		Set<String> friends = new HashSet<String>(Arrays.asList("b", "c"));
 		User testUser = new User("username", "a1234", "a123");
-		testUser.setFriends(friends);
+//		testUser.setFriends(friends);
 		userDAO.deleteUser("username");
 		userDAO.addUser("username", "a123", "a12");	
 		userDAO.updateUser(testUser);  // Aq test user maq ukve setiani.
@@ -112,7 +148,7 @@ public class ResultDAOImplTest {
 		System.out.println(results.toString());
 		System.out.println("Number of results: " + results.size());
 	}
-	
+	*/
 	
 	private int getNewQuizId()
 	{

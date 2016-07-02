@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
@@ -28,8 +29,8 @@ public class ResultDAOImpl implements ResultDAO {
 		try {
 			Connection con = dataSource.getConnection();
 			insertResultWithoutAnswers(result, con);
-			int resultId = MySQLUtil.getLastInsertId(con);
-			insertAnswers(resultId, result.getAnswers(), con);
+//			int resultId = MySQLUtil.getLastInsertId(con);
+//			insertAnswers(resultId, result.getAnswers(), con);
 			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -39,6 +40,7 @@ public class ResultDAOImpl implements ResultDAO {
 	}
 
 	/*
+	 * NOTE: obsolete. answer saving no longer supported.
 	 * Here are used many inserts instead of single insert with several values.
 	 * Performance difference should be negligible because of low
 	 * numbers involved with quizzes in general.
@@ -86,41 +88,46 @@ public class ResultDAOImpl implements ResultDAO {
 	private void insertResultWithoutAnswers(Result result, Connection con)
 			throws SQLException {
 		PreparedStatement preparedStatement = 
-				con.prepareStatement(inserResultCommand());
+				con.prepareStatement(
+						"INSERT INTO results " + 
+						"(user_id, quiz_id, final_grade, start_time, time_taken) " + 
+						"VALUES" + 
+						"((SELECT id FROM users WHERE username LIKE ?), ?, ?, ?, ?);");
 		preparedStatement.setString(1, result.getUserName());
 		preparedStatement.setInt(2, result.getQuizId());
 		preparedStatement.setInt(3, result.getFinalGrade());
 		preparedStatement.setLong(4, result.getTimeStarted());
 		preparedStatement.setLong(5, result.getTimeTaken());
 		preparedStatement.executeUpdate();
+		preparedStatement.close();
 	}
 
-	private String inserResultCommand() {
-		return "INSERT INTO results " + 
-				"(user_id, quiz_id, final_grade, start_time, time_taken) " + 
-				"VALUES" + 
-				"((SELECT id FROM users WHERE username LIKE ?), ?, ?, ?, ?);";
-	}
-
+	////////////////////// getters from here
+	
 	@Override
 	public List<Result> getResult(String userName, int quizId) {
 		List<Result> results = new ArrayList<Result> ();
 		try {
 			Connection con = dataSource.getConnection();
-			ResultSet rs = getResultSortGradeFirst(con, userName, quizId);
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT username, quiz_id, start_time, time_taken, final_grade "
+							+ "FROM results "
+							+ "JOIN users "
+							+ "ON users.id = results.user_id "
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?) "
+							+ "AND quiz_id = ? "
+							+ "ORDER BY start_time DESC, final_grade DESC"
+							+ " ;"
+							);
+			preparedStatement.setString(1, userName);
+			preparedStatement.setInt(2, quizId);
+			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
-				Result result = classFactory.getResult(userName, quizId);
-				// set 1-1 values in result:
-				result.setFinalGrade(rs.getInt("final_grade"));
-				result.setQuizId(rs.getInt("quiz_id"));
-				result.setTimeStarted(rs.getLong("start_time"));
-				result.setTimeTaken(rs.getLong("time_taken"));
-				result.setUserName(rs.getString("username"));
+				Result result = buildResultFromResultSet(rs);
 				results.add(result);
-				int resultId = rs.getInt("id");
-				rs.previous();
-				loadAnswersIntoResult(result, rs, resultId);
 			}
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
@@ -130,74 +137,184 @@ public class ResultDAOImpl implements ResultDAO {
 		return results;
 	}
 	
-	private void loadAnswersIntoResult(Result result, ResultSet rs, 
-			int resultId) throws SQLException {
-		List<Answer> answers = new ArrayList<Answer> ();
-		while(rs.next() && rs.getInt("id") == resultId) {
-			int questionId = rs.getInt("question_id");
-			rs.previous();
-			answers.add(getAnswer(rs, questionId));
-		}
-		rs.previous();
-		result.setAnswers(answers);
-	}
-
-	private Answer getAnswer(ResultSet rs, int questionId) 
-			throws SQLException {
-		List<String> userAnswers = new ArrayList<String> ();
-		while(rs.next() && rs.getInt("question_id") == questionId) {
-			String userAnswer = rs.getString("user_answer");
-			userAnswers.add(userAnswer);
-		}
-		// TODO: it gets funky if no empty user answers are allowed,
-		// but this is more than enough soice it is not.
-		rs.previous();
-		Answer answer = classFactory.getAnswer(userAnswers);
-		answer.setGrade(rs.getInt("grade"));
-		return answer ;
-	}
-
-	private ResultSet getResultSortGradeFirst(Connection con, String userName, 
-			int quizId)	throws SQLException {
-		PreparedStatement preparedStatement =
-				con.prepareStatement("SELECT results.id, "
-						+ "quiz_id, username, final_grade, start_time, time_taken, "
-						+ "grade, answers_of_question.question_id, "
-						+ "field_id, user_answer "
-						+ "FROM results "
-						+ "JOIN answers_of_question ON results.id = result_id "
-						+ "LEFT JOIN user_answers ON answers_of_question.question_id = user_answers.question_id "
-						+ "JOIN users ON users.id = results.user_id "
-						+ "WHERE username LIKE ? "
-						+ "AND results.quiz_id = ? "
-						+ "ORDER BY final_grade DESC, time_taken ASC, user_answers.question_id ASC;");
-		preparedStatement.setString(1, userName);
-		preparedStatement.setInt(2, quizId);
-		return preparedStatement.executeQuery();
-	}
-
 	@Override
 	public List<Result> getRecentResults(String userName, int n) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Result> results = new ArrayList<Result> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT username, quiz_id, start_time, time_taken, final_grade "
+							+ "FROM results "
+							+ "JOIN users "
+							+ "ON users.id = results.user_id "
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?) "
+							+ "ORDER BY start_time DESC, final_grade DESC "
+							+ "LIMIT ?;"
+							);
+			preparedStatement.setString(1, userName);
+			preparedStatement.setInt(2, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) {
+				Result result = buildResultFromResultSet(rs);
+				results.add(result);
+			}
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
 	}
 
+	// basically copy of above ^^^^^^
 	@Override
 	public List<Result> getRecentResults(int quizId, int n) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Result> results = new ArrayList<Result> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT username, quiz_id, start_time, time_taken, final_grade "
+							+ "FROM results "
+							+ "JOIN users "
+							+ "ON users.id = results.user_id "
+							+ "WHERE quiz_id = ? "
+							+ "ORDER BY start_time DESC, final_grade DESC "
+							+ "LIMIT ?;"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setInt(2, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) {
+				Result result = buildResultFromResultSet(rs);
+				results.add(result);
+			}
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
 	}
 
 	@Override
-	public List<Result> getBestResults(String userName, int n) {
-		// TODO Auto-generated method stub
+	public List<Result> getRecentResults(Set<String> userName, int n) {
+		// TODO: too hard?
 		return null;
 	}
 
+	// copy of above again ^^^^^^^
 	@Override
-	public List<Result> getBestResults(int quizId, int n) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Result> getBestResults(String userName, int n, long fromTimeInMs) {
+		List<Result> results = new ArrayList<Result> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT username, quiz_id, start_time, time_taken, final_grade "
+							+ "FROM results "
+							+ "JOIN users "
+							+ "ON users.id = results.user_id "
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?) "
+							+ " AND "
+							+ "start_time > ? "
+							+ "ORDER BY final_grade DESC, start_time DESC "
+							+ "LIMIT ?;"
+							);
+			preparedStatement.setString(1, userName);
+			preparedStatement.setLong(2, fromTimeInMs);
+			preparedStatement.setInt(3, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) {
+				Result result = buildResultFromResultSet(rs);
+				results.add(result);
+			}
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
+	}
+
+	// make sureresult set has correct collumn names
+	private Result buildResultFromResultSet(ResultSet rs) 
+			throws SQLException {
+		
+		Result result = 
+				classFactory.getResult(rs.getString("username"), 
+						rs.getInt("quiz_id"));
+		result.setTimeStarted(rs.getLong("start_time"));
+		result.setTimeTaken(rs.getLong("time_taken"));
+		result.setFinalGrade(rs.getInt("final_grade"));
+		return result;
+	}
+
+	@Override
+	public List<Result> getBestResults(int quizId, int n, long fromTimeInMs) {
+		List<Result> results = new ArrayList<Result> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT username, quiz_id, start_time, time_taken, final_grade "
+							+ "FROM results "
+							+ "JOIN users "
+							+ "ON users.id = results.user_id "
+							+ "WHERE quiz_id = ? "
+							+ " AND "
+							+ "start_time > ? "
+							+ "ORDER BY final_grade DESC, start_time DESC "
+							+ "LIMIT ?;"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setLong(2, fromTimeInMs);
+			preparedStatement.setInt(3, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) {
+				Result result = buildResultFromResultSet(rs);
+				results.add(result);
+			}
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
+	}
+
+	@Override
+	public List<Integer> getPopularQuizzes(int n, long fromTimeInMs) {
+		List<Integer> popularQuizIds = new ArrayList<Integer> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT quiz_id, COUNT(1) AS num_tries "
+							+ "FROM results "
+							+ "GROUP BY quiz_id "
+							+ "ORDER BY num_tries DESC"
+							+ ";"
+							);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) popularQuizIds.add(rs.getInt("quiz_id"));
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return popularQuizIds;
 	}
 
 }

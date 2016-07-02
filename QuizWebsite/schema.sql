@@ -18,8 +18,8 @@ create table users(
 );
 
 create table admins(
-	username 			varchar(255) 	not null,
-primary key(username)
+	user_id 			varchar(255) 	not null,
+	unique(user_id)
 );
 
 insert into users(username, hash_password, salt) values('vaja', '1234', 'salt');
@@ -52,6 +52,7 @@ create table user_achievements(
 
 create table questions(
 	id 					int(11) 		not null auto_increment,
+	q_id				int(11),
 	quiz_id 			int(11) 		not null,
 	problem 			longtext 		not null,
 	type 				varchar(50) 	not null,
@@ -69,8 +70,6 @@ create table multiple_choice_metadata(
 	nfields				int(11)			not null,
 	ordered				boolean			not null
 );
-
-insert into questions (quiz_id, problem, type, grade) values(1, 'whatsup', 'QR', 5);
 
 create table answers(
 	question_id 		int(11) 		not null,

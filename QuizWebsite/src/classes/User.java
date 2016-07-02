@@ -8,7 +8,6 @@ public class User {
 	private String userName;
 	private String hashedPassword;
 	private String salt;
-	private Set<String> friends;
 	private String image;
 	
 	private String description;
@@ -28,8 +27,7 @@ public class User {
 		
 		return this.getUserName().equals(otherUser.getUserName()) &&
 				this.getHashedPassword().equals(otherUser.getHashedPassword()) && 
-				this.getSalt().equals(otherUser.getSalt()) &&
-				this.getFriends().equals(otherUser.getFriends());
+				this.getSalt().equals(otherUser.getSalt());
 	}
 	
 	@Override
@@ -39,7 +37,7 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return "u: " + userName + ", p: " + hashedPassword + ", salt: " + salt + " , friends: " + friends + "image: " + image + ".";	
+		return "u: " + userName + ", p: " + hashedPassword + ", salt: " + salt + ", image: " + image + ".";	
 	}
 	
 	public User(String userName, String hashedPassword, String salt)
@@ -47,7 +45,6 @@ public class User {
 		setUserName(userName);
 		setHashedPassword(hashedPassword); 
 		setSalt(salt);
-		setFriends(new HashSet<String> ());
 	}
 	
 	public String getUserName() {
@@ -79,20 +76,6 @@ public class User {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	/**
-	 * @return the friends
-	 */
-	public Set<String> getFriends() {
-		return friends;
-	}
-
-	/**
-	 * @param friends the friends to set
-	 */
-	public void setFriends(Set<String> friends) {
-		this.friends = friends;
 	}
 
 	public String getImage() {
