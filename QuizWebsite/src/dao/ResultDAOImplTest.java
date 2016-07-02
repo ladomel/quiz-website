@@ -78,8 +78,8 @@ public class ResultDAOImplTest {
 	}
 
 	// result construction wrapper
-	private Result buildResult(String u, int q_id, int grade, int start, int duration) {
-		Result result = classFactory.getResult(u, q_id);
+	private Result buildResult(String userName, int q_id, int grade, int start, int duration) {
+		Result result = classFactory.getResult(userName, q_id);
 		result.setFinalGrade(grade);
 		result.setTimeStarted(start);
 		result.setTimeTaken(duration);
@@ -149,6 +149,87 @@ public class ResultDAOImplTest {
 		System.out.println("Number of results: " + results.size());
 	}
 	*/
+	
+	
+	@Test
+	public void insertAndGetResult()
+	{
+		User newUser = classFactory.getUser("testUser", "a", "a");
+		userDAO.addUser("testUser", "a", "a");
+		int quizId = getNewQuizId();
+		Result res = classFactory.getResult("testUser", quizId);
+		res.setFinalGrade(90);
+		res.setTimeStarted(10);
+		res.setTimeTaken(20);
+		//res.setUserName("test2");
+		System.out.println(res.toString());
+		resultDAO.insertResult(res);
+		System.out.println(resultDAO.getResult("testUser", quizId));
+		
+	}
+	
+	@Test
+	public void getPopularQuizzesTest()
+	{
+		userDAO.deleteUser("testUser");
+		userDAO.addUser("testUser", "a", "a");
+		int quizId = getNewQuizId();
+		for(int i = 0; i < 3; i++)	resultDAO.insertResult(classFactory.getResult("testUser", quizId));
+		System.out.println("Quiz1 id:" + quizId);
+		
+		int quizId2 = getNewQuizId();
+		for(int i = 0; i < 5; i++)	resultDAO.insertResult(classFactory.getResult("testUser", quizId2));
+		System.out.println("Quiz2 id:" + quizId2);
+		
+		int quizId3 = getNewQuizId();
+		for(int i = 0; i < 2; i++)	resultDAO.insertResult(classFactory.getResult("testUser", quizId3));
+		System.out.println("Quiz3 id:" + quizId3);
+
+		System.out.println(resultDAO.getPopularQuizzes(3, 21));	
+	}
+	
+	@Test
+	public void getBestResultsTest()
+	{
+		userDAO.deleteUser("testUser");
+		userDAO.addUser("testUser", "a", "a");
+		int quizId = getNewQuizId();
+		resultDAO.insertResult(buildResult("testUser", quizId, 10, 10, 6));
+		resultDAO.insertResult(buildResult("testUser", quizId, 11, 1, 7));
+		resultDAO.insertResult(buildResult("testUser", quizId, 12, 19, 11));
+		resultDAO.insertResult(buildResult("testUser", quizId, 10, 12, 12));
+		resultDAO.insertResult(buildResult("testUser", quizId, 10, 11, 13));
+		
+		System.out.println(resultDAO.getBestResults(quizId, 2, 5));
+	}
+	
+	@Test
+	public void getRecentResultsQuizTest()
+	{
+		userDAO.deleteUser("testUser");
+		userDAO.addUser("testUser", "a", "a");
+		int quizId = getNewQuizId();
+		resultDAO.insertResult(buildResult("testUser", quizId, 10, 1, 6));
+		resultDAO.insertResult(buildResult("testUser", quizId, 11, 5, 7));
+		resultDAO.insertResult(buildResult("testUser", quizId, 12, 13, 11));
+		resultDAO.insertResult(buildResult("testUser", quizId, 10, 4, 12));
+		resultDAO.insertResult(buildResult("testUser", quizId, 10, 7, 13));
+		
+		System.out.println(resultDAO.getRecentResults(quizId, 2));
+	}
+	
+	@Test
+	public void getRecentResultsUserTest()
+	{
+		userDAO.deleteUser("testUser");
+		userDAO.addUser("testUser", "a", "a");
+		int quizId = getNewQuizId();
+		resultDAO.insertResult(buildResult("testUser", quizId, 10, 1, 6));
+		resultDAO.insertResult(buildResult("testUser", quizId, 11, 5, 7));
+		
+		System.out.println(resultDAO.getRecentResults("testUser", 3));
+	}
+	
 	
 	private int getNewQuizId()
 	{
