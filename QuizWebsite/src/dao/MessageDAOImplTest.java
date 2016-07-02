@@ -139,7 +139,37 @@ public class MessageDAOImplTest {
 		System.out.println("Number of pending by test 2: " + messageDAO.numPendingFriendRequests("test2"));
 	}
 	
+	@Test
+	public void testNumPendingChallenges()
+	{
+		Challenge chal1 = classFactory.getChallenge("test1", 10, "test2", 2, false);
+		Challenge chal2 = classFactory.getChallenge("test3", 20, "test2", 3, true);
+		Challenge chal3 = classFactory.getChallenge("test4", 30, "test2", 2, false);
+		Challenge chal4 = classFactory.getChallenge("test2", 10, "test1", 2, false);
+		
+		messageDAO.addChallenges(chal1);
+		messageDAO.addChallenges(chal2);
+		messageDAO.addChallenges(chal3);
+		messageDAO.addChallenges(chal4);
+		
+		messageDAO.updateChallengeStatus(6, "Not pending");
+		
+		System.out.println("Number of pending by test 2: " + messageDAO.numPendingChallenges("test2"));
+	}
 	
-	
-	
+	@Test 
+	public void testNumUnseenNotes()
+	{
+		Note note1 = classFactory.getNote("test1", 20, "hi", "test2", false);
+		Note note2 = classFactory.getNote("test1", 20, "ho", "test2", true);
+		Note note3 = classFactory.getNote("test1", 20, "hu", "test2", false);
+		Note note4 = classFactory.getNote("test2", 20, "ha", "test3", false);
+		
+		messageDAO.addNote(note1);
+		messageDAO.addNote(note2);
+		messageDAO.addNote(note3);
+		messageDAO.addNote(note4);
+			
+		System.out.println("Number of unseen by test 2: " + messageDAO.numUnseenNotes("test2"));	
+	}
 }
