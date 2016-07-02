@@ -1,6 +1,5 @@
 package dao;
 
-import org.apache.catalina.ant.ResourcesTask;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -123,4 +122,24 @@ public class MessageDAOImplTest {
 		messageDAO.updateChallengeStatus(1, "I am new");
 		System.out.println(messageDAO.getChallenge(1).toString());
 	}
+	
+	@Test 
+	public void testNumPendingFriendRequests()
+	{
+		FriendRequest request1 = classFactory.getFriendRequest("test1", 20, "test2", false);
+		FriendRequest request2 = classFactory.getFriendRequest("test3", 20, "test2", false);
+		FriendRequest request3 = classFactory.getFriendRequest("test4", 20, "test2", true);
+		FriendRequest request4 = classFactory.getFriendRequest("test2", 20, "test1", true);
+		
+		messageDAO.addFriendRequest(request1);
+		messageDAO.addFriendRequest(request2);
+		messageDAO.addFriendRequest(request3);
+		messageDAO.addFriendRequest(request4);
+		
+		System.out.println("Number of pending by test 2: " + messageDAO.numPendingFriendRequests("test2"));
+	}
+	
+	
+	
+	
 }
