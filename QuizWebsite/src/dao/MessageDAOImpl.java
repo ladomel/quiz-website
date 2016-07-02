@@ -470,9 +470,8 @@ public class MessageDAOImpl implements MessageDAO{
 			preparedStatement.setString(1, receiverUserName);
 			preparedStatement.setString(2, "Pending");
 
-			preparedStatement.executeUpdate();
 			ResultSet rs = preparedStatement.executeQuery();
-			numRequests = rs.getFetchSize();
+			while(rs.next()) numRequests++;
 			rs.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
@@ -481,13 +480,41 @@ public class MessageDAOImpl implements MessageDAO{
 
 	@Override
 	public int numPendingChallenges(String receiverUserName) {
-		// TODO Auto-generated method stub
-		return 0;
+		int numChallenges = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+			con.prepareStatement("SELECT *"
+					+ "FROM challenges "
+					+ "WHERE receiver_username = ? AND status = ? ;"); 
+			preparedStatement.setString(1, receiverUserName);
+			preparedStatement.setString(2, "Pending");
+
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) numChallenges++;
+			rs.close();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+		return numChallenges;	
 	}
 
 	@Override
 	public int numUnseenNotes(String receiverUserName) {
-		// TODO Auto-generated method stub
-		return 0;
+		int numUnseen = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+			con.prepareStatement("SELECT *"
+					+ "FROM notes "
+					+ "WHERE receiver_username = ? AND seen = ? ;"); 
+			preparedStatement.setString(1, receiverUserName);
+			preparedStatement.setBoolean(2, false);
+
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) numUnseen++;
+			rs.close();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+		return numUnseen;	
 	}
 }
