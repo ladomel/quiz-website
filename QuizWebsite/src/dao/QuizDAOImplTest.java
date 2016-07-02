@@ -75,10 +75,6 @@ public class QuizDAOImplTest {
 		quiz.setOnePage(true);
 		quiz.setImmediatelyCorrected(false);
 		quiz.setHasPracticeMode(false);
-		quiz.setAverageRating(50);
-		quiz.setAverageScore(170);
-		quiz.setAverageTimeMillis(20);
-		quiz.setNumTries(3);
 		quiz.setCategory("Phys");
 
 		System.out.println("Before:              " + quiz.toString());
@@ -96,10 +92,6 @@ public class QuizDAOImplTest {
 		taken1.setOnePage(false);
 		taken1.setImmediatelyCorrected(true);
 		taken1.setHasPracticeMode(true);
-		taken1.setAverageRating(60);
-		taken1.setAverageScore(80);
-		taken1.setAverageTimeMillis(30);
-		taken1.setNumTries(4);
 		taken1.setCategory("phys");
 		
 		quizDAO.updateQuiz(taken1);
@@ -114,10 +106,6 @@ public class QuizDAOImplTest {
 		q2.setOnePage(false);
 		q2.setImmediatelyCorrected(true);
 		q2.setHasPracticeMode(true);
-		q2.setAverageRating(60);
-		q2.setAverageScore(80);
-		q2.setAverageTimeMillis(30);
-		q2.setNumTries(400);
 		q2.setCategory("phys");
 		quizDAO.addQuiz(q2);
 		
@@ -132,10 +120,6 @@ public class QuizDAOImplTest {
 		q3.setOnePage(false);
 		q3.setImmediatelyCorrected(true);
 		q3.setHasPracticeMode(true);
-		q3.setAverageRating(60);
-		q3.setAverageScore(80);
-		q3.setAverageTimeMillis(30);
-		q3.setNumTries(40);
 		q3.setCategory("phys");
 		quizDAO.addQuiz(q3);
 

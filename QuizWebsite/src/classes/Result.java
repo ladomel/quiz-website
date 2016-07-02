@@ -6,7 +6,7 @@ public class Result {
 	
 	private int quizId;
 	private String userName;
-	private int finalGrade = -1;
+	private int finalGrade;
 	private long timeStarted; 
 	private long timeTaken;
 	private List<Answer> answers;

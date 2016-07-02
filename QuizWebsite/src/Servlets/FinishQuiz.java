@@ -45,12 +45,7 @@ public class FinishQuiz extends HttpServlet {
     	List<Answer> answers = result.getAnswers();
     	for(Answer ans : answers) finalGrade += ans.getGrade();
     	result.setFinalGrade(finalGrade);
-    	
-    	int oldNumTries = takenQuiz.getNumTries();
-    	
-    	takenQuiz.setNumTries(oldNumTries + 1);
-    	takenQuiz.setAverageScore( 		 ( takenQuiz.getAverageScore()*oldNumTries+result.getFinalGrade() ) /   (oldNumTries + 1) );
-    	takenQuiz.setAverageTimeMillis(  ( takenQuiz.getAverageTimeMillis()*oldNumTries+result.getTimeTaken() ) /   (oldNumTries + 1) );
+
     	
     	request.setAttribute("Result", result);
 		request.setAttribute("Quiz", takenQuiz); 

@@ -89,4 +89,36 @@ public interface MessageDAO {
 	 * @param newStatus - new status
 	 */
 	public void updateChallengeStatus(int id, String newStatus);
+	
+	/**
+	 * Returns number of pending friend requests of given username.
+	 * 
+	 * @param userName - username of user who is receiver of friend requests
+	 * @return int - number of friend requests
+	 */
+	public int numPendingFriendRequests(String receiverUserName);
+	
+	/**
+	 * Returns number of pending challenges of given username.
+	 * 
+	 * @param userName - username of user who is receiver of challenges
+	 * @return int - number of challenges
+	 */
+	public int numPendingChallenges(String receiverUserName);
+	
+	
+	/**
+	 * Returns number of received and unseen messages of the user.
+	 * 
+	 * @param userName - username of user who is receiver of the messages
+	 * @return number of unseen messages
+	 */
+	public int numUnseenNotes(String receiverUserName);
+	
+	
+	
+	
+	
+	
+	
 }

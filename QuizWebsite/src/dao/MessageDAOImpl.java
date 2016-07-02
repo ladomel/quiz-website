@@ -351,9 +351,10 @@ public class MessageDAOImpl implements MessageDAO{
 			PreparedStatement preparedStatement = 
 					con.prepareStatement("SELECT *"
 							+ "FROM friendrequests "
-							+ "WHERE sender_username = ? AND receiver_username = ? ;"); 
+							+ "WHERE sender_username = ? AND receiver_username = ? AND status = ? ;"); 
 			preparedStatement.setString(1, senderUserName);
 			preparedStatement.setString(2, receiverUserName);
+			preparedStatement.setString(3, "Pending");
 
 			ResultSet rs = preparedStatement.executeQuery();
 
@@ -456,5 +457,65 @@ public class MessageDAOImpl implements MessageDAO{
 			preparedStatement.executeUpdate();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
+	}
+
+	@Override
+	public int numPendingFriendRequests(String receiverUserName) {
+		int numRequests = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+			con.prepareStatement("SELECT *"
+					+ "FROM friendrequests "
+					+ "WHERE receiver_username = ? AND status = ? ;"); 
+			preparedStatement.setString(1, receiverUserName);
+			preparedStatement.setString(2, "Pending");
+
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) numRequests++;
+			rs.close();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+		return numRequests;		
+	}
+
+	@Override
+	public int numPendingChallenges(String receiverUserName) {
+		int numChallenges = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+			con.prepareStatement("SELECT *"
+					+ "FROM challenges "
+					+ "WHERE receiver_username = ? AND status = ? ;"); 
+			preparedStatement.setString(1, receiverUserName);
+			preparedStatement.setString(2, "Pending");
+
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) numChallenges++;
+			rs.close();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+		return numChallenges;	
+	}
+
+	@Override
+	public int numUnseenNotes(String receiverUserName) {
+		int numUnseen = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+			con.prepareStatement("SELECT *"
+					+ "FROM notes "
+					+ "WHERE receiver_username = ? AND seen = ? ;"); 
+			preparedStatement.setString(1, receiverUserName);
+			preparedStatement.setBoolean(2, false);
+
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) numUnseen++;
+			rs.close();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+		return numUnseen;	
 	}
 }

@@ -162,10 +162,6 @@ public class ResultDAOImplTest {
 		quiz.setOnePage(true);
 		quiz.setImmediatelyCorrected(false);
 		quiz.setHasPracticeMode(false);
-		quiz.setAverageRating(50);
-		quiz.setAverageScore(70);
-		quiz.setAverageTimeMillis(20);
-		quiz.setNumTries(3);
 		quiz.setCategory("Phys");
 		return quizDAO.addQuiz(quiz);
 	}
