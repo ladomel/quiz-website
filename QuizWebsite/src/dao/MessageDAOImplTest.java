@@ -172,4 +172,20 @@ public class MessageDAOImplTest {
 			
 		System.out.println("Number of unseen by test 2: " + messageDAO.numUnseenNotes("test2"));	
 	}
+	
+
+	@Test
+	public void testFriendRequestExists()
+	{
+		FriendRequest request1 = classFactory.getFriendRequest("test13", 20, "test23", false);
+		messageDAO.addFriendRequest(request1);
+		System.out.println("Exists? has to be true: " + messageDAO.friendRequestExists("test13", "test23"));
+
+		messageDAO.updateFriendRequestStatus(33, "Seen");
+		System.out.println("Exists? has to be false: " + messageDAO.friendRequestExists("test13", "test23"));
+		
+		FriendRequest request2 = classFactory.getFriendRequest("test13", 20, "test23", false);
+		messageDAO.addFriendRequest(request2);
+		System.out.println("Exists? has to be true: " + messageDAO.friendRequestExists("test13", "test23"));
+	}
 }

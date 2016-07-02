@@ -351,9 +351,10 @@ public class MessageDAOImpl implements MessageDAO{
 			PreparedStatement preparedStatement = 
 					con.prepareStatement("SELECT *"
 							+ "FROM friendrequests "
-							+ "WHERE sender_username = ? AND receiver_username = ? ;"); 
+							+ "WHERE sender_username = ? AND receiver_username = ? AND status = ? ;"); 
 			preparedStatement.setString(1, senderUserName);
 			preparedStatement.setString(2, receiverUserName);
+			preparedStatement.setString(3, "Pending");
 
 			ResultSet rs = preparedStatement.executeQuery();
 
