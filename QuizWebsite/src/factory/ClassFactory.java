@@ -92,8 +92,8 @@ public class ClassFactory {
 		return new FriendRequest(sender,date,getter, seen); 
 	}
 	
-	public Achievement getAchievement(int id, String name, String pictureURL, String description)
+	public Achievement getAchievement(String name, String pictureURL, String description)
 	{
-		return new Achievement(id, name, pictureURL, description);
+		return new Achievement(name, pictureURL, description);
 	}
 }
