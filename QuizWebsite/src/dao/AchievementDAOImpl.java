@@ -22,13 +22,13 @@ public class AchievementDAOImpl implements AchievementDAO {
 	}
 
 	@Override
-	public List<Integer> getEarnedAchievements(int userId) {
+	public List<Integer> getEarnedAchievements(String userName) {
 		List<Integer> answer = new ArrayList<Integer>();
 		try{
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
 					con.prepareStatement(getEarnedAchievementsCommand());
-			preparedStatement.setInt(1, userId);
+			preparedStatement.setString(1, userName);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next())
 				answer.add(rs.getInt("achievement_id"));
@@ -41,16 +41,16 @@ public class AchievementDAOImpl implements AchievementDAO {
 	}
 
 	private String getEarnedAchievementsCommand(){
-	return "SELECT * FROM earned_achievements WHERE user_id = ? ORDER BY unlock_time DESC;";
+	return "SELECT * FROM earned_achievements WHERE username = ? ORDER BY unlock_time DESC;";
 	}
 	
 	@Override
-	public void achievementEarned(int userId, int achievementId, long date) {
+	public void achievementEarned(String userName, int achievementId, long date) {
 		try{
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
 					con.prepareStatement(addAchievementCommand());
-			preparedStatement.setInt(1, userId);
+			preparedStatement.setString(1, userName);
 			preparedStatement.setInt(2, achievementId);
 			preparedStatement.setLong(3, date);
 			preparedStatement.executeUpdate();
@@ -61,17 +61,17 @@ public class AchievementDAOImpl implements AchievementDAO {
 	}
 
 	private String addAchievementCommand() {
-		return "INSERT INTO earned_achievements (user_id, achievement_id, unlock_time) VALUES(?, ?, ?);";
+		return "INSERT INTO earned_achievements (username, achievement_id, unlock_time) VALUES(?, ?, ?);";
 	}
 
 	@Override
-	public boolean hasAchievement(int userId, int achievementId) {
+	public boolean hasAchievement(String userName, int achievementId) {
 		boolean answer = false;
 		try{
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
 					con.prepareStatement(hasAchievementCommand());
-			preparedStatement.setInt(1, userId);
+			preparedStatement.setString(1, userName);
 			preparedStatement.setInt(2, achievementId);
 			ResultSet rs = preparedStatement.executeQuery();
 			if(rs.next()) return true;
@@ -84,7 +84,7 @@ public class AchievementDAOImpl implements AchievementDAO {
 	}
 	
 	private String hasAchievementCommand() {
-		return "SELECT * FROM earned_achievements WHERE user_id = ? AND achievement_id = ?;";
+		return "SELECT * FROM earned_achievements WHERE username = ? AND achievement_id = ?;";
 	}
 }
 
