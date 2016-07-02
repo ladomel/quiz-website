@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.sql.DataSource;
 
@@ -133,10 +134,35 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	@Override
 	public void addMCH(int quizId, QuestionMCH mch) {
-		// TODO Auto-generated method stub
+		Connection con;
+		try {
+			con = dataSource.getConnection();
+			loadCommonFields(con, mch, quizId);
+			int questionId = MySQLUtil.getLastInsertId(con);
+			List<String> rightAnswers = mch.getCorrectAnswers();
+			List<String> wrongAnswers = mch.getWrongAnswers();
+			List<String> questions = mch.getQuestions();
+			loadAnswersOfField(con, rightAnswers, questionId, 0);
+			loadWrongAnswersOfField(con, wrongAnswers, questionId, 0);
+			loadQuestionLines(con, questionId, questions);
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -187,6 +213,8 @@ public class QuestionDAOImpl implements QuestionDAO {
 			// couples
 			retrieveMCMA(con, quizId, questions);
 			retrieveMC(con, quizId, questions);
+			// ?
+			retrieveMCH(con, quizId, questions);
 			
 			
 			con.close();
@@ -213,6 +241,16 @@ public class QuestionDAOImpl implements QuestionDAO {
 	
 	
 	
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -358,6 +396,37 @@ public class QuestionDAOImpl implements QuestionDAO {
 		retrieveMCFromRS(rs, questions);
 		rs.close();
 	}
+	
+	// similar to MCMA
+	private void retrieveMCH(Connection con, int quizId, List<Question> questions) 
+			throws SQLException {
+		
+		PreparedStatement preparedStatement =
+				con.prepareStatement(
+						"SELECT * FROM questions "
+						+ "LEFT JOIN answers ON answers.question_id = questions.id "
+						+ "LEFT JOIN answers_wrong AS aw ON aw.question_id = questions.id "
+						+ "LEFT JOIN question_lines AS q_l ON q_l.question_id = questions.id "
+						+ "WHERE quiz_id = ? AND type LIKE 'MCH' "
+						+ "ORDER BY id;"
+						);
+		preparedStatement.setInt(1, quizId);
+		ResultSet rs = preparedStatement.executeQuery();
+		
+		retrieveMCHFromRS(rs, questions);
+		
+		rs.close();
+	}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -577,6 +646,43 @@ public class QuestionDAOImpl implements QuestionDAO {
 		}				
 		
 	}
+	
+	private void retrieveMCHFromRS(ResultSet rs, List<Question> questions) 
+			throws SQLException {
+
+		
+		while(rs.next()) {
+			String problem = null;
+			Integer grade = null;
+			Integer currentQuestionId = null;
+			int currId = rs.getInt("questions.id");
+			problem = rs.getString("questions.problem");
+			grade = rs.getInt("questions.grade");
+			currentQuestionId = rs.getInt("questions.q_id");
+			
+			rs.previous();
+
+			Vector<String> rightAnswers = new Vector<String> ();
+			Vector<String> wrongAnswers = new Vector<String> ();
+			Vector<String> questionLines = new Vector<String> ();
+			collectMCHAnswersWithQuestionLines(rs, rightAnswers, wrongAnswers, questionLines, currId);
+			// do with class factory
+			QuestionMCH mch = new QuestionMCH(problem, grade, questionLines, rightAnswers, wrongAnswers);
+			
+			// SQL runs +1 idx:
+			questions.set(currentQuestionId - 1, mch);
+		}			
+	}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -653,7 +759,38 @@ public class QuestionDAOImpl implements QuestionDAO {
 		}
 		rs.previous();	// back up from next question
 
-	}		
+	}	
+	
+	private void collectMCHAnswersWithQuestionLines(ResultSet rs, 
+			Vector<String> rightAnswers, 
+			Vector<String> wrongAnswers,
+			Vector<String> questionLines, 
+			int currId) 
+					throws SQLException {
+
+		while(rs.next() && rs.getInt("id") == currId) {
+			int rightAnswerIdx = rs.getInt("answers.idx_in_field");
+			int wrongAnswerIdx = rs.getInt("aw.idx_in_field");
+			int questionLineIdx = rs.getInt("q_l.idx"); 
+			resizeToContain(rightAnswers, wrongAnswers, questionLines, 
+					rightAnswerIdx, wrongAnswerIdx, questionLineIdx);
+			rightAnswers.set(rightAnswerIdx, rs.getString("answers.answer"));
+			wrongAnswers.set(wrongAnswerIdx, rs.getString("aw.answer_wrong"));
+			questionLines.set(questionLineIdx, rs.getString("q_l.text"));
+		}
+		rs.previous();
+		
+	}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -731,6 +868,37 @@ public class QuestionDAOImpl implements QuestionDAO {
 		setQuestionIdOnLastInsert(con, qId);
 	}
 	
+	private void loadQuestionLines(Connection con, int questionId, List<String> questions) 
+			throws SQLException {
+		
+		for(int idx = 0; idx < questions.size(); idx++) 
+			loadQuestionLine(con, questionId, idx, questions.get(idx));
+		
+	}
+	
+	private void loadQuestionLine(Connection con, int questionId, int idx, String text) 
+			throws SQLException {
+		
+		PreparedStatement preparedStatement =
+				con.prepareStatement(
+						"INSERT INTO question_lines (text, idx, question_id) "
+						+ "VALUES(?, ?, ?);"
+						);
+		preparedStatement.setString(1, text);
+		preparedStatement.setInt(2, idx);
+		preparedStatement.setInt(3, questionId);
+		preparedStatement.executeUpdate();
+		preparedStatement.close();
+	}
+
+
+
+
+
+
+
+
+
 	private void setQuestionIdOnLastInsert(Connection con, int qId) 
 			throws SQLException {
 		PreparedStatement preparedStatement = 
@@ -878,6 +1046,15 @@ public class QuestionDAOImpl implements QuestionDAO {
 		preparedStatement.setInt(2, numAnswers);
 		preparedStatement.setBoolean(3, ordered);
 		preparedStatement.executeUpdate();
+	}
+	
+	// increases size if indexes are not contained
+	private void resizeToContain(Vector<String> rightAnswers, Vector<String> wrongAnswers, Vector<String> questionLines,
+			int int1, int int2, int int3) {
+		
+		while(rightAnswers.size() < int1 + 1) rightAnswers.add(null);
+		while(wrongAnswers.size() < int2 + 1) wrongAnswers.add(null);
+		while(questionLines.size() < int3 + 1) questionLines.add(null);
 	}
 
 
