@@ -39,6 +39,7 @@ public class CreateQR extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String problem = request.getParameter("statement");
+		int grade = Integer.parseInt(request.getParameter("grade"));
 		HashSet<String> answers = new HashSet<String>();
 		String nextAnswer = "";
 		
@@ -49,7 +50,7 @@ public class CreateQR extends HttpServlet {
 			answers.add(nextAnswer);
 		}
 		
-		QuestionQR questionQR = new QuestionQR(problem, 1, answers);
+		QuestionQR questionQR = new QuestionQR(problem, grade, answers);
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
 		createdQuestions.add(questionQR);
 	}
