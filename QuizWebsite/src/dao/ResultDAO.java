@@ -50,20 +50,20 @@ public interface ResultDAO {
 	 * @param n - int limit number
 	 * @return best of recent results by given user
 	 */
-	public List<Result> getBestResults(String userName, int n, long interval);
+	public List<Result> getBestResults(String userName, int n, long fromTimeInMs);
 	
 	/**
 	 * @param quizId - id of quiz
 	 * @param n - int limit number
 	 * @return list of best results by given quiz
 	 */
-	public List<Result> getBestResults(int quizId, int n, long interval);
+	public List<Result> getBestResults(int quizId, int n, long fromTimeInMs);
 	
 	/**
 	 * @param n - limit number
 	 * @param interval - time interval in ms
 	 * @return list of most popular quiz ids
 	 */
-	public List<Integer> getPopularQuizzes(int n, long interval);
+	public List<Integer> getPopularQuizzes(int n, long fromTimeInMs);
 	
 }
