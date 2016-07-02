@@ -41,6 +41,7 @@ public class CreateMC extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Set<String> answers = new HashSet<String>();
 		String problem = request.getParameter("statement");
+		int grade = Integer.parseInt(request.getParameter("grade"));
 		String correctAnswer = (request.getParameter("correctanswer"));
 		
 		String nextAnswer;
@@ -51,7 +52,7 @@ public class CreateMC extends HttpServlet {
 			answers.add(nextAnswer);
 		}
 		
-		QuestionMC questionMC = new QuestionMC(problem, 1, correctAnswer, answers);
+		QuestionMC questionMC = new QuestionMC(problem, grade, correctAnswer, answers);
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
 		createdQuestions.add(questionMC);
 	}
