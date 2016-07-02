@@ -2,7 +2,7 @@ package dao;
 
 import java.util.List;
 
-public interface AchievemetDAO {
+public interface AchievementDAO {
 	/**
 	 * This function returns user's earned achievements' id's sorted by date earned.
 	 * 
