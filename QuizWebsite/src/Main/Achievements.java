@@ -1,5 +1,6 @@
 package Main;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import classes.Achievement;
@@ -36,6 +37,7 @@ public class Achievements {
 	public Achievements()
 	{
 		factory = new ClassFactory();
+		setAchievements(new ArrayList<Achievement>());
 		addAchievement(ACHIEVEMENT_NAME_1, ACHIEVEMENT_URL_1, ACHIEVEMENT_DESCRIPTION_1);
 		addAchievement(ACHIEVEMENT_NAME_2, ACHIEVEMENT_URL_2, ACHIEVEMENT_DESCRIPTION_2);
 		addAchievement(ACHIEVEMENT_NAME_3, ACHIEVEMENT_URL_3, ACHIEVEMENT_DESCRIPTION_3);
@@ -52,12 +54,24 @@ public class Achievements {
 	 */
 	public static Achievement getAchievement(int id)
 	{
-		return achievements.get(id);
+		return getAchievements().get(id);
 	}
 	
 	private void addAchievement(String name, String url, String description)
 	{
-		achievements.add(factory.getAchievement(name, url, description));
+		getAchievements().add(factory.getAchievement(name, url, description));
 	}
 	
+	public int getNumAchievements()
+	{
+		return getAchievements().size();
+	}
+
+	public static List<Achievement> getAchievements() {
+		return achievements;
+	}
+
+	public static void setAchievements(List<Achievement> achievements) {
+		Achievements.achievements = achievements;
+	}
 }
