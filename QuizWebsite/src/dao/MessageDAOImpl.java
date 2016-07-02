@@ -193,8 +193,9 @@ public class MessageDAOImpl implements MessageDAO{
 			PreparedStatement preparedStatement = 
 					con.prepareStatement("SELECT *"
 							+ "FROM challenges "
-							+ "WHERE receiver_username = ?  ORDER BY time DESC;");
+							+ "WHERE receiver_username = ? AND status = ? ORDER BY time DESC;");
 			preparedStatement.setString(1, username);
+			preparedStatement.setString(2, "Pending");
 
 			ResultSet rs = preparedStatement.executeQuery();
 			fillChallengeAnswer(answer, rs);
