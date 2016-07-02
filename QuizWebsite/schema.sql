@@ -86,7 +86,7 @@ create table answers_wrong(
 insert into answers (question_id, answer) values(1, 'good'), (1, 'bad');
 
 create table quizzes(
-	id int(11) 			not null 		auto_increment,
+	id 					int(11) 		not null auto_increment,
 	creator_id 			int(11) 		not null,
 	name 				varchar(250) 	not null,
 	description 		longtext,
@@ -97,10 +97,6 @@ create table quizzes(
 	creation_time 		bigint 			not null,
 	time 				bigint 			not null,
 	max_score 			int(11) 		not null,
-	avg_rating			double,
-	avg_score			double,
-	avg_time			bigint,
-	tries				int(11),
 	category 			varchar(250),
 	primary key(id)
 );
