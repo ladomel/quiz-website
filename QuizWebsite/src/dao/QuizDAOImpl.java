@@ -172,27 +172,6 @@ public class QuizDAOImpl implements QuizDAO {
 		return "DELETE FROM quizzes WHERE id = ?;";
 	}
 
-	@Override
-	public List<Quiz> getPopularQuizzes(int n) {
-		List<Quiz> popularQuizzes = new ArrayList<Quiz> (); 
-		try {
-			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement =
-					con.prepareStatement(popularCommand());
-			preparedStatement.setInt(1, n);
-			ResultSet rs = preparedStatement.executeQuery();
-			while(rs.next()) {
-				Quiz quiz = loadIntoQuiz(rs);
-				popularQuizzes.add(quiz);
-			}
-			rs.close();
-			con.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return popularQuizzes;
-	}
-
 	private String popularCommand() {
 		return "SELECT *, username " + 
 				"FROM quizzes INNER " + 
