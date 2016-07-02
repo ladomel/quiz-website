@@ -457,4 +457,37 @@ public class MessageDAOImpl implements MessageDAO{
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 	}
+
+	@Override
+	public int numPendingFriendRequests(String receiverUserName) {
+		int numRequests = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement = 
+			con.prepareStatement("SELECT *"
+					+ "FROM friendrequests "
+					+ "WHERE receiver_username = ? AND status = ? ;"); 
+			preparedStatement.setString(1, receiverUserName);
+			preparedStatement.setString(2, "Pending");
+
+			preparedStatement.executeUpdate();
+			ResultSet rs = preparedStatement.executeQuery();
+			numRequests = rs.getFetchSize();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {	e.printStackTrace();}
+		return numRequests;		
+	}
+
+	@Override
+	public int numPendingChallenges(String receiverUserName) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int numUnseenNotes(String receiverUserName) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
