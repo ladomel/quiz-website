@@ -1,15 +1,17 @@
 package classes;
 
 public class Achievement {
+	private int id;
 	private String name;
 	private String pictureURL;
 	private String description; 
 	
-	private Achievement(String name, String pictureURL, String description)
+	private Achievement(int id, String name, String pictureURL, String description)
 	{
 		setName(name);
 		setPictureURL(pictureURL);
 		setDescription(description);
+		setId(id);
 	}
 
 	public String getName() {
@@ -34,5 +36,13 @@ public class Achievement {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }
