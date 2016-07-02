@@ -618,6 +618,7 @@ public class QuestionDAOImpl implements QuestionDAO {
 		List<Set<String>> answers = new ArrayList<Set<String>> ();
 		while(rs.next() && rs.getInt("id") == currentQuestionId) {
 			int currentFieldId = rs.getInt("field_id");
+			rs.previous();
 			Set<String> answersOfField = 
 					collectAnswersUntilFieldAndQuestionIsSame(rs, currentQuestionId, currentFieldId);
 			answers.add(answersOfField);
