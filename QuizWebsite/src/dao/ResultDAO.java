@@ -66,4 +66,30 @@ public interface ResultDAO {
 	 */
 	public List<Integer> getPopularQuizzes(int n, long fromTimeInMs);
 	
+	/**
+	 * Deletes results of given quiz.
+	 * 
+	 * @param quizId - int quizd id
+	 */
+	public void removeHistory(int quizId);
+	
+	/**
+	 * Returns results sorted by how fast it was done.
+	 * 
+	 * @param quizId - int quiz id
+	 * @param n - limit number
+	 * @param fromTimeInMs - from when in ms
+	 * @return list of results
+	 */
+	public List<Result> getFastestResults(int quizId, int n, long fromTimeInMs);
+	
+	/**
+	 * Returns average score for given quiz.
+	 * -1 if quiz was not taken at all, or it does not exists.
+	 * 
+	 * @param quizId - int quiz id
+	 * @return double average score for quiz
+	 */
+	public double averageScore(int quizId);
+	
 }
