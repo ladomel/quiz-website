@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -303,5 +304,25 @@ public class UserDAOImpl implements UserDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public int getNumberOfLoggedInUsers() {
+		int n = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = 
+					stmt.executeQuery(
+							"SELECT COUNT(1) AS n FROM loggedinusers;"
+							);
+			rs.next(); n = rs.getInt("n");
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return n;
 	}
 }

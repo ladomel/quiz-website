@@ -94,4 +94,9 @@ public interface UserDAO {
 	 */
 	public void removeFriendship(String userName1, String userName2);
 	
+	/**
+	 * @return number of users currently logged in
+	 */
+	public int getNumberOfLoggedInUsers();
+	
 }
