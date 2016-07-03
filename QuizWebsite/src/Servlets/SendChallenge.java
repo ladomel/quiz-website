@@ -58,8 +58,7 @@ public class SendChallenge extends HttpServlet {
 				i++;
 			} else break;
 		}
-		RequestDispatcher rd = request.getRequestDispatcher("Quiz?id=" + quizId);
-		rd.forward(request, response);
+		response.sendRedirect("Quiz?id=" + quizId);
 	}
 
 }

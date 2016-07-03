@@ -46,24 +46,14 @@ public class AcceptFriendRequest extends HttpServlet {
 		MessageDAO mD = (MessageDAO) request.getServletContext().getAttribute("messageDAO");
 		FriendRequest fr = mD.getFriendRequest(requestId);
 		fr.setStatus(status);
-		mD.addFriendRequest(fr);
+		mD.updateFriendRequestStatus(fr.getId(), status);
 		
 		UserDAO uD = (UserDAO) request.getServletContext().getAttribute("userDAO");
-		classes.User master = (classes.User) request.getSession().getAttribute("MasterUser");
-		master = (classes.User) uD.getUser(master.getUserName());
-		classes.User getter = (classes.User) uD.getUser(fr.getSenderUserName());
+		if (status.equals("Accept")) uD.addFriend(fr.getSenderUserName(), fr.getGetterUserName());
 		
-		Set<String> friends = master.getFriends(); friends.add(fr.getSenderUserName());
-		master.setFriends(friends); System.out.println(fr.toString());
-		friends.remove(null);
+		request.getSession().setAttribute("MasterUser", uD.getUser(fr.getGetterUserName()));
 		
-		friends = getter.getFriends(); 
-		friends.add(fr.getGetterUserName());
-		getter.setFriends(friends);
-		friends.remove(null);
-		
-		uD.updateUser(master); System.out.println(master.toString());
-		uD.updateUser(getter); System.out.println(getter.toString());
+		response.sendRedirect("Messages");
 	}
 
 }

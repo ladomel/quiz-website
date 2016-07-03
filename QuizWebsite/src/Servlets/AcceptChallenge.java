@@ -42,16 +42,14 @@ public class AcceptChallenge extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		
 		if (request.getSession().getAttribute("MasterUser") == null) return;
 		int challengeId = Integer.parseInt(request.getParameter("challengeId"));
 		MessageDAO mD = (MessageDAO) request.getServletContext().getAttribute("messageDAO");
 		String status = request.getParameter("status");
 		Challenge ch = mD.getChallenge(challengeId);
 		ch.setStatus(status); 
-		mD.addChallenges(ch);
+		mD.updateChallengeStatus(ch.getId(), status);
+		
 		
 		if (status.equals("Accept")) {
 			request.getSession().setAttribute("Challenger", ch.getSenderUserName());
@@ -62,9 +60,8 @@ public class AcceptChallenge extends HttpServlet {
 				if (res.get(i).getFinalGrade() > maxx) maxx = res.get(i).getFinalGrade();
 			}
 			request.getSession().setAttribute("ChallengerScore", maxx);
-			out.print("Quiz?id=" + ch.getQuizId()); 
-		}
-			else out.print("Decline");
+			response.sendRedirect("Quiz?id=" + ch.getQuizId());
+		} else 	response.sendRedirect("Message");
 	}
 
 }
