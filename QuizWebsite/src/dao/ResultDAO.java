@@ -83,4 +83,13 @@ public interface ResultDAO {
 	 */
 	public List<Result> getFastestResults(int quizId, int n, long fromTimeInMs);
 	
+	/**
+	 * Returns average score for given quiz.
+	 * -1 if quiz was not taken at all, or it does not exists.
+	 * 
+	 * @param quizId - int quiz id
+	 * @return double average score for quiz
+	 */
+	public double averageScore(int quizId);
+	
 }

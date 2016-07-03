@@ -71,6 +71,8 @@ public class ResultDAOImplTest {
 		resultDAO.insertResult(result6);
 		resultDAO.insertResult(result7);
 		
+		System.out.println("avg score quiz 2: " + resultDAO.averageScore(2));
+		
 		System.out.println("best by quiz id: " + resultDAO.getBestResults(2, 3, 2000));
 		System.out.println("best by user	:" + resultDAO.getBestResults("vajaber", 5, 202));
 		resultDAO.removeHistory(4);

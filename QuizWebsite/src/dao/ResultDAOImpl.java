@@ -427,4 +427,28 @@ public class ResultDAOImpl implements ResultDAO {
 		
 	}
 
+	@Override
+	public double averageScore(int quizId) {
+		double avgGrade = -1;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT AVG(final_grade) AS avg_grade "
+							+ "FROM results "
+							+ "WHERE quiz_id = ?;"
+							);
+			preparedStatement.setInt(1, quizId);
+			ResultSet rs = preparedStatement.executeQuery();
+			if(rs.next()) avgGrade = rs.getDouble("avg_grade");
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return avgGrade;
+	}
+
 }
