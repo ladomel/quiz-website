@@ -15,23 +15,23 @@ public class Achievements {
 	private static final String ACHIEVEMENT_DESCRIPTION_0 = "The user created a quiz";
 
 	private static final String ACHIEVEMENT_NAME_1 = "Prolifie Author";
-	private static final String ACHIEVEMENT_URL_1 = "secondUrl";
+	private static final String ACHIEVEMENT_URL_1 = "http://cdn.xl.thumbs.canstockphoto.com/canstock5930397.jpg";
 	private static final String ACHIEVEMENT_DESCRIPTION_1 = "The user created five quizzes";
 		
 	private static final String ACHIEVEMENT_NAME_2 = "Prodigious Author";
-	private static final String ACHIEVEMENT_URL_2 = "thirdUrl";
+	private static final String ACHIEVEMENT_URL_2 = "http://fscomps.fotosearch.com/compc/CSP/CSP373/k3739360.jpg";
 	private static final String ACHIEVEMENT_DESCRIPTION_2 = "The user created ten quizzes";
 
 	private static final String ACHIEVEMENT_NAME_3 = "Quiz Machine";
-	private static final String ACHIEVEMENT_URL_3 = "fourthUrl";
+	private static final String ACHIEVEMENT_URL_3 = "http://cdn.playbuzz.com/cdn/3fac4ca0-bc77-4426-a22f-53b56147d26e/0010ce1c-b81a-4f7d-9d30-fa099af311c1.png";
 	private static final String ACHIEVEMENT_DESCRIPTION_3 = "The user took ten quizzes";
 
 	private static final String ACHIEVEMENT_NAME_4 = "I am the Greatest";
-	private static final String ACHIEVEMENT_URL_4 = "fifthUrl";
+	private static final String ACHIEVEMENT_URL_4 = "http://thumb101.shutterstock.com/display_pic_with_logo/2813065/355898243/stock-photo--d-golden-star-number-one-with-gold-metal-frame-render-355898243.jpg";
 	private static final String ACHIEVEMENT_DESCRIPTION_4 = "The user had the highest score on a quiz";
 
 	private static final String ACHIEVEMENT_NAME_5 = "Practice Makes Perfect";
-	private static final String ACHIEVEMENT_URL_5 = "sixUrl";
+	private static final String ACHIEVEMENT_URL_5 = "http://previews.123rf.com/images/aquir/aquir1410/aquir141000015/32121851-practice-blue-grunge-stamp-isolated-on-white-Stock-Photo.jpg";
 	private static final String ACHIEVEMENT_DESCRIPTION_5 = "The user took a quiz in practice mode";
 	
 	public Achievements()
