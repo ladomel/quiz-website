@@ -34,8 +34,7 @@ public class MakeAdmin extends HttpServlet {
 		String user = request.getParameter("username");
 		UserDAO userDao= (UserDAO)request.getServletContext().getAttribute("userDAO");
 		userDao.addAdmin(user);
-		RequestDispatcher rd = request.getRequestDispatcher("Profile?username=" + user);
-		rd.forward(request, response);		
+		response.sendRedirect("Profile?username=" + user);
 	}
 
 	/**

@@ -30,19 +30,18 @@ public class DeleteQuiz extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int quizId = Integer.parseInt(request.getParameter("quizId"));
-		QuizDAO quizDao= (QuizDAO)request.getServletContext().getAttribute("quizDAO");
-		quizDao.deleteQuiz(quizId);
-		RequestDispatcher rd = request.getRequestDispatcher("index");
-		rd.forward(request, response);		
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		int quizId = Integer.parseInt(request.getParameter("quizId"));
+		QuizDAO quizDao= (QuizDAO)request.getServletContext().getAttribute("quizDAO");
+		quizDao.deleteQuiz(quizId);
+		RequestDispatcher rd = request.getRequestDispatcher("index");
+		rd.forward(request, response);		
 	}
 
 }

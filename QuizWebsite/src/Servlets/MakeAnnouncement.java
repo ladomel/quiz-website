@@ -46,8 +46,10 @@ public class MakeAnnouncement extends HttpServlet {
 		ClassFactory factory = (ClassFactory) request.getServletContext().getAttribute("factory");
 		long date = (new Date()).getTime();
 		Announcement ann = factory.getAnnouncement(master.getUserName(),announcement,date);
-		MessageDAO mD = (MessageDAO) request.getAttribute("messageDAO");
+		MessageDAO mD = (MessageDAO) request.getServletContext().getAttribute("messageDAO");
 		mD.addAnnouncement(ann);
+		
+		response.sendRedirect("index");
 	}
 
 }
