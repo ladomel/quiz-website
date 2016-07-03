@@ -170,5 +170,5 @@ create table earned_achievements
 (
 	username 			varchar(256)	not null,
 	achievement_id 		int(11)			not null, 
-	unlock_time 				bigint
+	unlock_time 		bigint
 );
