@@ -48,6 +48,9 @@ public class ResultDAOImplTest {
 		userDAO.addUser("vajaberej", "vajaspass", "vajassalt");
 		userDAO.addUser("vajabereja", "vajaspass", "vajassalt");
 		
+		userDAO.addFriend("vaja", "vajab");
+		userDAO.addFriend("vaja", "vajabe");
+		
 		Result result1 = buildResult("vaja", 1, 90, 2005, 1);
 		Result result2 = buildResult("vajab", 2, 91, 2006, 2);
 		Result result21 = buildResult("vajabe", 2, 71, 2034, 9);
@@ -75,6 +78,8 @@ public class ResultDAOImplTest {
 		System.out.println("recent u_nm n	:" + resultDAO.getRecentResults("vajaber", 3));
 		
 		System.out.println("pop quizes	202	:" + resultDAO.getPopularQuizzes(5, 202));
+		
+		System.out.println("friends quizzes" + resultDAO.getRecentResults(userDAO.getFriends("vaja"), 3));
 	}
 
 	// result construction wrapper
