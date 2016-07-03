@@ -172,6 +172,7 @@ public class QuestionDAOImplTest {
 		questionDAO.addFB(quizId, question);
 		questionDAO.addFB(quizId, question2);
 		System.out.println(questionDAO.getQuestions(quizId).toString());
+		System.out.println(questionDAO.getQuestions(quizId).get(0).getCorrectAnswers().size());
 	}
 	
 	private ArrayList<Set<String>> getSetList1()
