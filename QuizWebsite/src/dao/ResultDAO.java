@@ -73,4 +73,14 @@ public interface ResultDAO {
 	 */
 	public void removeHistory(int quizId);
 	
+	/**
+	 * Returns results sorted by how fast it was done.
+	 * 
+	 * @param quizId - int quiz id
+	 * @param n - limit number
+	 * @param fromTimeInMs - from when in ms
+	 * @return list of results
+	 */
+	public List<Result> getFastestResults(int quizId, int n, long fromTimeInMs);
+	
 }

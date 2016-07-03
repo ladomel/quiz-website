@@ -237,6 +237,42 @@ public class ResultDAOImpl implements ResultDAO {
 		}
 		return results;
 	}
+	
+	// copy of above ^^^^^^^^ again with minor change in SQL command
+	@Override
+	public List<Result> getFastestResults(int quizId, int n, long fromTimeInMs) {
+		List<Result> results = new ArrayList<Result> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT username, quiz_id, start_time, time_taken, final_grade "
+							+ "FROM results "
+							+ "JOIN users "
+							+ "ON users.id = results.user_id "
+							+ "WHERE quiz_id = ? "
+							+ " AND "
+							+ "start_time > ? "
+							+ "ORDER BY time_taken ASC, final_grade DESC, start_time DESC "
+							+ "LIMIT ?;"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setLong(2, fromTimeInMs);
+			preparedStatement.setInt(3, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) {
+				Result result = buildResultFromResultSet(rs);
+				results.add(result);
+			}
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
+	}
 
 	// make sure result set has correct column names
 	private Result buildResultFromResultSet(ResultSet rs) 
