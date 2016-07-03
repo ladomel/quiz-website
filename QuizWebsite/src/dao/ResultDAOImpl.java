@@ -115,7 +115,7 @@ public class ResultDAOImpl implements ResultDAO {
 							+ "FROM results "
 							+ "JOIN users "
 							+ "ON users.id = results.user_id "
-							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?) "
+							+ "WHERE user_id = users.username LIKE ? "
 							+ "AND quiz_id = ? "
 							+ "ORDER BY start_time DESC, final_grade DESC"
 							+ " ;"
@@ -310,6 +310,16 @@ public class ResultDAOImpl implements ResultDAO {
 		}
 		return popularQuizIds;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
