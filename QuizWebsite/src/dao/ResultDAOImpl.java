@@ -362,4 +362,23 @@ public class ResultDAOImpl implements ResultDAO {
 		return sb.toString();
 	}
 
+	@Override
+	public void removeHistory(int quizId) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"DELETE FROM results "
+							+ "WHERE quiz_id = ?;");
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 }

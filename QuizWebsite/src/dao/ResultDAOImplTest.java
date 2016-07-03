@@ -73,13 +73,16 @@ public class ResultDAOImplTest {
 		
 		System.out.println("best by quiz id: " + resultDAO.getBestResults(2, 3, 2000));
 		System.out.println("best by user	:" + resultDAO.getBestResults("vajaber", 5, 202));
-
+		resultDAO.removeHistory(4);
+		System.out.println("removed 4: " + resultDAO.getRecentResults(4, 3));
+		
 		System.out.println("recent q_id n	:" + resultDAO.getRecentResults(2, 2));
 		System.out.println("recent u_nm n	:" + resultDAO.getRecentResults("vajaber", 3));
 		
 		System.out.println("pop quizes	202	:" + resultDAO.getPopularQuizzes(5, 202));
 		
 		System.out.println("friends quizzes" + resultDAO.getRecentResults(userDAO.getFriends("vaja"), 3));
+		
 	}
 
 	// result construction wrapper

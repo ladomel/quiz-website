@@ -66,4 +66,11 @@ public interface ResultDAO {
 	 */
 	public List<Integer> getPopularQuizzes(int n, long fromTimeInMs);
 	
+	/**
+	 * Deletes results of given quiz.
+	 * 
+	 * @param quizId - int quizd id
+	 */
+	public void removeHistory(int quizId);
+	
 }
