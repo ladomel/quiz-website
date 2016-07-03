@@ -22,8 +22,6 @@ create table admins(
 	unique(user_id)
 );
 
-insert into users(username, hash_password, salt) values('vaja', '1234', 'salt');
-
 create table friends(
 	first_user_id 		int(11) 		not null,
 	second_user_id 		int(11) 		not null,
@@ -46,6 +44,12 @@ create table questions(
 	primary key(id)
 );
 
+create table question_lines(
+	text				varchar(255)	not null,
+	idx					int(11)			not null default 0,
+	question_id			int(11)			not null
+);
+
 create table images(
 	question_id			int(11)			not null,
 	image				varchar(255)
@@ -60,16 +64,16 @@ create table multiple_choice_metadata(
 create table answers(
 	question_id 		int(11) 		not null,
 	answer 				varchar(255) 	not null,
-	field_id 			int(11) 		default 0
+	field_id 			int(11) 		default 0,
+	idx_in_field		int(11)			default 0
 );
 
 create table answers_wrong(
 	question_id 		int(11) 		not null,
 	answer_wrong		varchar(255) 	not null,
-	field_id 			int(11) 		default 0
+	field_id 			int(11) 		default 0,
+	idx_in_field		int(11)			default 0
 );
-
-insert into answers (question_id, answer) values(1, 'good'), (1, 'bad');
 
 create table quizzes(
 	id 					int(11) 		not null auto_increment,
@@ -91,8 +95,6 @@ create table tags(
 	quiz_id				int(11)			not null,
 	tag					varchar(255)	not null
 );
-
-insert into quizzes (creator_id, name, creation_time, time, max_score) values(1, 'birds', 1945, 30, 100);
 
 create table quiz_problems(
 	quiz_id 			int(11) 		not null,
