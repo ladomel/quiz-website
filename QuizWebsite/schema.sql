@@ -87,7 +87,7 @@ create table quizzes(
 	creation_time 		bigint 			not null,
 	time 				bigint 			not null,
 	max_score 			int(11) 		not null,
-	category 			varchar(250),
+	category_id 		int(11),
 	primary key(id)
 );
 
