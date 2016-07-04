@@ -38,10 +38,11 @@
 		<button class="questionbuttons" onclick="addQuestion('CreateFB')">Fill in the Blanks</button>
 		<button class="questionbuttons" onclick="addQuestion('CreateMA')">Multiple Answer</button>
 		<button class="questionbuttons" onclick="addQuestion('CreateMC')">Multiple Choice</button>
-		<!--  <button class="questionbuttons" onclick="addQuestion('CreateMCH')">Matching</button> -->
+		<button class="questionbuttons" onclick="addQuestion('CreateMCH')">Matching</button>
 		<button class="questionbuttons" onclick="addQuestion('CreateMCMA')">Multi-Choice Multi-Answer</button> 
 		<button class="questionbuttons" onclick="addQuestion('CreatePR')">Picture-Response</button> 
 		<button class="questionbuttons" onclick="addQuestion('CreateQR')">Question-Response</button> 
+		<button class="questionbuttons" onclick="addQuestion('CreateTF')">True-False</button>
 	
 		<button id="submitbutton" onclick="submitQuiz();">Submit Quiz</button>
 	</div>
