@@ -357,20 +357,62 @@ public class QuizDAOImpl implements QuizDAO {
 
 	@Override
 	public Set<String> getCategories() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> categories = new HashSet<String> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT category "
+							+ "FROM categories;"
+							);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) categories.add(rs.getString("category"));
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return categories;
 	}
 
 	@Override
 	public void addCategory(String category) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"INSERT INTO categories (category) "
+							+ "values(?);"
+							);
+			preparedStatement.setString(1, category);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void removeCategory(String category) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"DELETE FROM categories "
+							+ "WHERE category LIKE ?;"
+							);
+			preparedStatement.setString(1, category);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 	
 }
