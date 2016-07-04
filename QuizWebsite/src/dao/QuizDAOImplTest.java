@@ -124,6 +124,20 @@ public class QuizDAOImplTest {
 		System.out.println("after deletion: " + quizDAO.getCategories());
 	}
 	
+	
+	@Test
+	public void testTagsOnQuiz() {
+		Quiz quiz = createQuiz(QUIZ_AUTHOR, "quiz with tag 1*", "a", "a", System.currentTimeMillis(), false, 0, false, 0, false, 0);
+		Quiz quiz1 = createQuiz(QUIZ_AUTHOR, "quiz with tag 2*", "a", "a", 							1, false, 0, false, 0, false, 0);
+		int id1 = quizDAO.addQuiz(quiz);
+		int id2 = quizDAO.addQuiz(quiz1);
+		quizDAO.addTag(id1, "tag11");
+		quizDAO.addTag(id1, "tag12");
+		quizDAO.addTag(id2, "tag22");
+		quizDAO.addTag(id2, "tag22");
+		System.out.println(quizDAO.getSeatchedQuizzes(1, "ag2"));
+	}
+	
 //	@Test
 //	public void test2() {
 //		Quiz quiz = new Quiz("vaja", "Future Vulture1", "quiz about 2034");

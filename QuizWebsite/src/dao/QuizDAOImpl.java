@@ -264,10 +264,13 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "ON users.id = quizzes.creator_id "
 							+ "LEFT JOIN categories "
 							+ "ON categories.id = quizzes.category_id "
+							+ "LEFT JOIN tags "
+							+ "ON tags.quiz_id = quizzes.id "
 							+ "WHERE name LIKE ? "
 							+ "OR category LIKE ? "
 							+ "OR quizzes.description LIKE ? "
 							+ "OR username LIKE ? "
+							+ "OR tag LIKE ? "
 							+ "ORDER BY creation_time DESC "
 							+ "LIMIT ?;"
 							);
@@ -275,7 +278,8 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setString(2, "%" + parameter + "%");
 			preparedStatement.setString(3, "%" + parameter + "%");
 			preparedStatement.setString(4, "%" + parameter + "%");
-			preparedStatement.setInt(5, numResults);
+			preparedStatement.setString(5, "%" + parameter + "%");
+			preparedStatement.setInt(6, numResults);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
 				Quiz quiz = loadIntoQuiz(rs);
