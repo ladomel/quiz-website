@@ -3,10 +3,10 @@ package dao;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//import org.apache.commons.dbcp2.BasicDataSource;  // Usual.
-
 import database.DBInfo;
 
+
+//import org.apache.commons.dbcp2.BasicDataSource;  // Usual.
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource; // Online.
 
 /**
@@ -17,7 +17,7 @@ import org.apache.tomcat.dbcp.dbcp2.BasicDataSource; // Online.
  */
 public class DAOInstances {
 
-	private static final long POOL_UPDATE_INTERVAL = 0;
+	private static final long POOL_UPDATE_INTERVAL = 10000;
 	private BasicDataSource dataSource;
 	private Timer timer;
 	private UserDAO userDAO;
