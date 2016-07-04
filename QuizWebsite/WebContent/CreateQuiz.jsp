@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     
-<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.*" %>
+<%@ page import="dao.*" %>
 <%@ page import="classes.question.Abstract.Question" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -22,7 +23,7 @@
 	
 	request.getSession().setAttribute("createdQuestions", new ArrayList<Question>());
 %>
-	<div id="centerpanel">j
+	<div id="centerpanel">
 		<form id="infoform" action="CreateQuiz" method="post">
 			<input type="text" id="name" name="name" Placeholder="  Quiz Name"> <br> <br>
 			<textarea cols="60" rows="4" name="description" id="desc" Placeholder=" Description"></textarea> <br> <br> 
@@ -30,9 +31,27 @@
 			Display on One Page? :<input type="checkbox" id="onepage" name="onepage"> <br>
 			Practice mode?       :<input type="checkbox" id="practice" name="practice"> <br>
 			Immediate Correction?: <input type="checkbox" id="imcorr" name="correction"> <br> <br>
-			Max Time: <input type="text" id="time" name="time">minutes <br> <br> <br> <br>
+			Max Time: <input type="text" id="time" name="time">minutes <br> <br> 
+			
+			Choose Category: <select name='category'>
+				<%
+					QuizDAO qD = (QuizDAO) request.getServletContext().getAttribute("quizDAO");
+					Set<String> cat = qD.getCategories();
+					for (String s : cat){
+						out.print("<option value='" + s + "'>" + s + "</option>");
+					}
+				%>
+			</select> <br> <br>
+			
+			Add Tags(max: 10): <span id='tags'> </span> 
+			
+			<br>
+			<br> <br> 
 		</form>
-		<div id="questions"></div>
+		<button id="addtag" onclick='addTag();'> Add </button>
+		<br> <br>
+		
+		<div id="questions"> </div>
 	</div>
 	<div id="bottompanel">
 		<button class="questionbuttons" onclick="addQuestion('CreateFB')">Fill in the Blanks</button>
