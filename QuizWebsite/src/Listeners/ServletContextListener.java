@@ -10,6 +10,7 @@ import dao.DAOInstances;
 import dao.MessageDAO;
 import dao.QuestionDAO;
 import dao.QuizDAO;
+import dao.ResultDAO;
 import dao.UserDAO;
 import factory.ClassFactory;
 
@@ -25,6 +26,7 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
 	private QuizDAO quizDAO;
 	private MessageDAO messageDAO;
 	private QuestionDAO questionDAO;
+	private ResultDAO resultDAO;
 	private AchievementDAO achievementDAO;
 	private PasswordHasher hasher;
 	private ClassFactory factory;
@@ -66,6 +68,7 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
     	quizDAO = daoFactory.getQuizDAO();	// TODO: add to context
     	questionDAO = daoFactory.getQuestionDAO();	// TODO: add to context
     	achievementDAO = daoFactory.getAchievementDAO();
+    	resultDAO = daoFactory.getResultDAO();
     	
     	achievements = new Achievements();
     	factory = new ClassFactory();
@@ -73,6 +76,7 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
     	
     	context.setAttribute("userDAO", userDAO);  
     	context.setAttribute("quizDAO", quizDAO);  
+    	context.setAttribute("resultDAO", resultDAO);  
     	context.setAttribute("messageDAO", messageDAO);  
     	context.setAttribute("questionDAO", questionDAO);  
     	context.setAttribute("achievementDAO", achievementDAO);  
