@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException; 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -290,20 +291,68 @@ public class QuizDAOImpl implements QuizDAO {
 	
 	@Override
 	public void addTag(int quizId, String tag) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"INSERT INTO tags(quiz_id, tag) "
+							+ "VALUES(?, ?);"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setString(2, tag);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public Set<String> getTag(int quizId) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> tags = new HashSet<String> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT tag "
+							+ "FROM tags "
+							+ "WHERE quiz_id = ?"
+							);
+			preparedStatement.setInt(1, quizId);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) tags.add(rs.getString("tag"));
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return tags;
 	}
 
 	@Override
 	public void removeTag(int quizId, String tag) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"DELETE FROM tags "
+							+ "WHERE quiz_id = ? "
+							+ " AND "
+							+ "tag LIKE ?;"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setString(2, tag);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 
 	@Override
