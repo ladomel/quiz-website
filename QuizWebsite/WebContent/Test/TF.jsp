@@ -24,9 +24,10 @@
 			int i = 0;
 			for (String s : prop){
 				out.print(s); 
-				out.print("<input type='radio' name='answers" + i + "' value='True' />True");
-				out.print("<input type='radio' name='answers" + i + "' value='False' />False");
+				out.print("<input type='radio' name='answer" + i + "' checked value='True' />True");
+				out.print("<input type='radio' name='answer" + i + "' value='False' />False");
 				out.print("<br>");
+				i++;
 			}
 		%>
 	</form>

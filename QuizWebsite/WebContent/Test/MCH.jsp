@@ -22,15 +22,15 @@
 	<form id="form"  onkeypress="return event.keyCode != 13;">
 		<%	
 			List<String> left = question.getQuestions();
-			List<String> right = question.getCorrectAnswers();
-			right.addAll(question.getRightAnswers());
+			List<String> right = question.getRightAnswers();
+			right.addAll(question.getWrongAnswers());
 			Collections.shuffle(right);
-			out.print("<span id='leftt'>");
+			out.print("<span id='leftt' style='display:inline;'>");
 			int i = 0;
 			for (String l : left) {
 				out.print("<select name='answer" + i + "'>");
 				for (int j=1;j<=right.size();j++){
-					out.print("<option value='"+j+"'>" + j + "</option>");
+					out.print("<option value='" + right.get(j-1) + "'>" + j + "</option>");
 				}
 				out.print("</select>");
 				out.println("    " + l + "<br><br>");
@@ -41,12 +41,19 @@
 			out.print("<span id='rightt'>");
 			int k = 1;
 			for (String r : right) {
-				out.println(k + ")    " + r + "<br><br>");
+				out.println(k + ")   " + r + "<br><br>");
 				k++;
 			}
 			out.print("</span>");
 		%>
 	</form>
-	<input id="submit" onclick="submit('<%= questionID %>')" type="hidden" />
+	<input id="submit" onclick="submitZ('<%= questionID %>')" type="hidden" />
+	<script type="text/javascript">
+		function submitZ(id){
+			
+			
+			submit(id);
+		}
+	</script>
 </body>
 </html>

@@ -17,19 +17,21 @@
 		int questionID = Integer.parseInt(request.getParameter("id"));
 		QuestionFB question = (QuestionFB) ((ArrayList<Question>) request.getSession().getAttribute("Questions")).get(questionID);
 	%>
-	<h2><%= question.getProblem() %></h2>
+	
 	<form id="form"  onkeypress="return event.keyCode != 13;">
 		<%	
 			String text = question.getProblem();
 			int i=0;
 			while (true){
 				int pos = text.indexOf(Constants.BLANK);
-				if (pos>=0) {
+				if (pos != -1) {
 					out.print(" " + text.substring(0,pos) + " ");
 					out.print("<input type='text' name='answer" + i + "' id='answer" + i + "'>");
 					text = text.substring(pos+7);
+					i++;
 				} else break;
 			}
+			out.print(text);
 		%>
 	</form>
 	<input id="submit" onclick="submit('<%= questionID %>')" type="hidden" />
