@@ -87,13 +87,19 @@ create table quizzes(
 	creation_time 		bigint 			not null,
 	time 				bigint 			not null,
 	max_score 			int(11) 		not null,
-	category 			varchar(250),
+	category_id 		int(11),
 	primary key(id)
 );
 
 create table tags(
 	quiz_id				int(11)			not null,
 	tag					varchar(255)	not null
+);
+
+create table categories(
+	id					int(11)			not null auto_increment,
+	category			varchar(50)		not null,
+	primary key(id)
 );
 
 create table quiz_problems(

@@ -1,6 +1,7 @@
 package dao;
 
 import java.util.List;
+import java.util.Set;
 
 import classes.Quiz; 
 
@@ -61,4 +62,58 @@ public interface QuizDAO {
 	 * @return list with  with Quizzes returned by a search
 	 */
 	public List<Quiz> getSeatchedQuizzes(int numResults, String parameter);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * Adds tag to given quiz. 
+	 * 
+	 * @param quizId - int quiz id
+	 * @param tag - String tag
+	 */
+	public void addTag(int quizId, String tag);
+	
+	/**
+	 * Returns a list of tags of given quiz.
+	 * 
+	 * @param quizId - int quiz id
+	 * @return set of String tags
+	 */
+	public Set<String> getTag(int quizId);
+	
+	/**
+	 * Removes tag of given quiz.
+	 * 
+	 * @param quizId - int quiz id
+	 * @param tag - String
+	 */
+	public void removeTag(int quizId, String tag);
+	
+	/**
+	 * Returns list of existing categories.
+	 * 
+	 * @return String category
+	 */
+	public Set<String> getCategories();
+	
+	/**
+	 * Add category to available categories.
+	 * 
+	 * @param category - String
+	 */
+	public void addCategory(String category);
+	
+	/**
+	 * Removes category from available categories if it exists.
+	 * 
+	 * @param category - String
+	 */
+	public void removeCategory(String category);
+	
 }

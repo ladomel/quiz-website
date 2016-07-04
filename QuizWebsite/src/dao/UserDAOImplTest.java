@@ -99,9 +99,34 @@ public class UserDAOImplTest{
 	}
 	
 
-	// admin test
+	// admin/login test
 	@Test
 	public void basicTest4() {
+		userDAO.deleteUser("a");
+		userDAO.deleteUser("b");
+		userDAO.deleteUser("c");	
+		
+		userDAO.addUser("a", "a123", "a12");	
+		userDAO.addUser("b", "b123", "b12");	
+		userDAO.addUser("c", "c123", "c12");	
+		
+		// check admin functions
+		assertFalse(userDAO.isAdmin("a"));
+		userDAO.addAdmin("a");
+		assertTrue(userDAO.isAdmin("a"));
+		userDAO.removeAdmin("a");
+		assertFalse(userDAO.isAdmin("a"));
+		
+		// check log in functions
+		assertFalse(userDAO.isUserLoggedIn("a"));
+		userDAO.logInUser("a");
+		assertTrue(userDAO.isUserLoggedIn("a"));
+		userDAO.logOutUser("a");
+		assertFalse(userDAO.isUserLoggedIn("a"));
+		// check count:
+		userDAO.logInUser("a");
+		userDAO.logInUser("b");
+		assertEquals(2, userDAO.getNumberOfLoggedInUsers());
 		
 	}
 }

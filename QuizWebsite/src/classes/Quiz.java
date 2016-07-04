@@ -17,7 +17,6 @@ public class Quiz {
 	
 	// extension
 	private String category; // TODO enum
-	private Set<String> tags;
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -158,11 +157,4 @@ public class Quiz {
 		this.category = category;
 	}
 
-	public Set<String> getTags() {
-		return tags;
-	}
-
-	public void setTags(Set<String> tags) {
-		this.tags = tags;
-	}
 }
