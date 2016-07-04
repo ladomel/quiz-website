@@ -58,9 +58,11 @@ public class TakeQuiz extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		classes.Quiz takenQuiz = setQuiz(session, request);
-		setResult(session, takenQuiz.getId());
-		setQuestions(session, request, takenQuiz.getId()); // Not working.
+		setQuestions(session, request, takenQuiz.getId());
+		
 		setNumPositions(session, takenQuiz.isRandom());		
+		setResult(session, takenQuiz.getId());
+		
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("QuizMultiplePages.jsp");
 		if(takenQuiz.isOnePage()) requestDispatcher = request.getRequestDispatcher("QuizOnePage.jsp");
 		requestDispatcher.forward(request, response);	
@@ -79,7 +81,7 @@ public class TakeQuiz extends HttpServlet {
 	{
 		QuestionDAO questionDAO = (QuestionDAO)request.getServletContext().getAttribute("questionDAO");
 		List<Question> questions = questionDAO.getQuestions(takenQuizId);
-		session.setAttribute("Questions", questions);System.out.println(questions.size());
+		session.setAttribute("Questions", questions);
 	}
 	
 	private void setNumPositions(HttpSession session, boolean randomize)
@@ -88,7 +90,7 @@ public class TakeQuiz extends HttpServlet {
 		List<Question> questions = (List<Question>) session.getAttribute("Questions");
 		for(int i = 0; i <questions.size(); i++) questionPositions.add(i);
 		if(randomize) Collections.shuffle(questionPositions);
-		session.setAttribute("questionPositions", questionPositions); System.out.println(questionPositions.size());
+		session.setAttribute("questionPositions", questionPositions); 
 	}
 	
 	private void setResult(HttpSession session, int takenQuizId)
@@ -98,6 +100,7 @@ public class TakeQuiz extends HttpServlet {
 		Result result = new Result(user.getUserName(), takenQuizId);
 		
 		List<Answer> answers = new ArrayList<Answer>();
+		for (int i=0;i<((List<Question>)session.getAttribute("Questions")).size();i++) answers.add(null);
 		result.setAnswers(answers);
 		Date date = new Date();
 		long startTime = date.getTime();
