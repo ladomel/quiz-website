@@ -13,12 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import classes.User;
+import classes.question.QuestionFB;
 import classes.question.QuestionMA;
 import classes.question.QuestionMC;
 import classes.question.QuestionMCH;
 import classes.question.QuestionMCMA;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
+import classes.question.QuestionTF;
 import classes.question.Abstract.Question;
 import dao.AchievementDAO;
 import dao.QuestionDAO;
@@ -55,7 +57,7 @@ public class CreateQuiz extends HttpServlet {
 		
 		System.out.println(newQuiz.toString());
 		for(int i = 0; i < createdQuestions.size(); i++)
-			System.out.println(createdQuestions.get(i).toString());
+			newQuiz.setMaxScore(newQuiz.getMaxScore() + createdQuestions.get(i).getMaxGrade());
 			
 		QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
 		QuestionDAO questionDAO = (QuestionDAO) request.getServletContext().getAttribute("questionDAO");	
@@ -67,14 +69,17 @@ public class CreateQuiz extends HttpServlet {
 				case "QR": questionDAO.addQR(id, (QuestionQR) createdQuestions.get(i)); break;
 				case "PR": questionDAO.addPR(id,(QuestionPR) createdQuestions.get(i)); break;
 				case "MC": questionDAO.addMC(id,(QuestionMC) createdQuestions.get(i)); break;
+				case "FB": questionDAO.addFB(id, (QuestionFB) createdQuestions.get(i)); break;
 				case "MA": questionDAO.addMA(id, (QuestionMA)createdQuestions.get(i)); break;
 				case "MCMA": questionDAO.addMCMA(id, (QuestionMCMA)createdQuestions.get(i)); break;
+				case "MCH": questionDAO.addMCH(id, (QuestionMCH)createdQuestions.get(i)); break;
+				case "TF": questionDAO.addTF(id, (QuestionTF)createdQuestions.get(i)); break;
 			}
 		}
 
 		createdQuestions.clear();
-		RequestDispatcher requestDispatcher = request.getRequestDispatcher("Quiz?id=" + id);
-		requestDispatcher.forward(request, response);	
+	
+		response.sendRedirect("Quiz?id=" + id);
 	}
 	
 	/**

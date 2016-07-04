@@ -52,7 +52,7 @@ public class Submit extends HttpServlet {
 		int numAnswers = (request.getParameterMap().keySet().size()-1);
 		int position = Integer.parseInt(request.getParameter("questionPosition"));
 		
-		String nextAnswer = ""; 
+		String nextAnswer = "";
 		for(int i = 0; ; i++)
 		{
 			if (0 == numAnswers) break;
@@ -61,7 +61,7 @@ public class Submit extends HttpServlet {
 			userAnswer.add(nextAnswer);
 			numAnswers--;
 		}
-		
+				 
 		Answer answer = new Answer(userAnswer);
 		
 		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("Questions");
@@ -69,12 +69,10 @@ public class Submit extends HttpServlet {
 		answer.setGrade(grade);
 
 		Result result = (Result)session.getAttribute("Result");
-		System.out.println(questions.size());
 		result.getAnswers().set(position, answer);
-		System.out.println(answer.toString());
 
 		classes.Quiz quiz = (classes.Quiz) (request.getSession().getAttribute("Quiz"));
-		if (quiz.isImmediatelyCorrected()) {
+		if (!quiz.isOnePage() && quiz.isImmediatelyCorrected()) {
 			out.print("questionResult.jsp?id=" + position + "&grade=" + grade + "&maxGrade=" + questions.get(position).getMaxGrade());
 		} else out.print("");
 	}
