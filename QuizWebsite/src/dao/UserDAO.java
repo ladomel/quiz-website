@@ -109,6 +109,14 @@ public interface UserDAO {
 	public void logOutUser(String userName);
 	
 	/**
+	 * Find out whether user is already logged in or not.
+	 * 
+	 * @param userName - String user name
+	 * @return true if user logged in, otherwise - false
+	 */
+	public boolean isUserLoggedIn(String userName);
+	
+	/**
 	 * @return number of users currently logged in
 	 */
 	public int getNumberOfLoggedInUsers();

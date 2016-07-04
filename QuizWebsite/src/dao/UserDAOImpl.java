@@ -363,6 +363,31 @@ public class UserDAOImpl implements UserDAO {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public boolean isUserLoggedIn(String userName) {
+		boolean loggedIn = false;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT COUNT(1) as cnt"
+							+ "FROM loggedinusers "
+							+ "WHERE user_id = (SELECT FROM users WHERE username LIKE ?);"
+							);
+			preparedStatement.setString(1, userName);
+			ResultSet rs = preparedStatement.executeQuery();
+			rs.next();
+			loggedIn = rs.getBoolean("cnt");
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return loggedIn;
+	}
 	
 	
 }
