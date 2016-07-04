@@ -328,13 +328,41 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public void logInUser(String userName) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"INSERT INTO loggedinusers (user_id) "
+							+ "VALUES(SELECT id FROM users WHERE username LIKE ?);"
+							);
+			preparedStatement.setString(1, userName);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void logOutUser(String userName) {
-		// TODO Auto-generated method stub
-		
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"DELETE FROM loggedinusers "
+							+ "WHERE user_id = (SELECT FROM users WHERE username LIKE ?);"
+							);
+			preparedStatement.setString(1, userName);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
+	
 }
