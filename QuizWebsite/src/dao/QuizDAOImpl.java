@@ -6,10 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException; 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
-import classes.Quiz; 
+import classes.Quiz;
+import database.MySQLUtil;
 import factory.ClassFactory;
 
 public class QuizDAOImpl implements QuizDAO {
@@ -273,6 +275,53 @@ public class QuizDAOImpl implements QuizDAO {
 			e.printStackTrace();
 		}
 		return userQuizes;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public void addTag(int quizId, String tag) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Set<String> getTag(int quizId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeTag(int quizId, String tag) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Set<String> getCategories() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void addCategory(String category) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeCategory(String category) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
