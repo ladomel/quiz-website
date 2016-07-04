@@ -96,6 +96,12 @@ create table tags(
 	tag					varchar(255)	not null
 );
 
+create table categories(
+	id					int(11)			not null auto_increment,
+	category			varchar(50)		not null,
+	primary key(id)
+);
+
 create table quiz_problems(
 	quiz_id 			int(11) 		not null,
 	`index` 			int(11) 		not null,
