@@ -325,4 +325,16 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return n;
 	}
+
+	@Override
+	public void logInUser(String userName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void logOutUser(String userName) {
+		// TODO Auto-generated method stub
+		
+	}
 }

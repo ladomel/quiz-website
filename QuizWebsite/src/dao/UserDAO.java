@@ -95,6 +95,20 @@ public interface UserDAO {
 	public void removeFriendship(String userName1, String userName2);
 	
 	/**
+	 * Add user to logged in users list.
+	 * 
+	 * @param userName - String user name
+	 */
+	public void logInUser(String userName);
+	
+	/**
+	 * Remove user from list of logged in users.
+	 * 
+	 * @param userName - String user name
+	 */
+	public void logOutUser(String userName);
+	
+	/**
 	 * @return number of users currently logged in
 	 */
 	public int getNumberOfLoggedInUsers();
