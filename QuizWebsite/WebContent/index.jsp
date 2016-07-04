@@ -30,9 +30,10 @@
 				<div class="list">
 				<% 
 					List<Announcement> ann = (List<Announcement> )request.getAttribute("Announcements");
+					if (ann != null){
 					for (int i=0;i<ann.size();i++){
 						out.println("<div class=\"listentry\" onclick=\"alert('" + ann.get(i).getAnnouncement() + "');\">" + ann.get(i).getAnnouncement() + "</div>");	
-					}
+					}}
 				%>
 				</div>
 			</span>
@@ -41,9 +42,10 @@
 				<div class="list">
 				<%
 					List<Quiz> quizzes = (List<Quiz> )request.getAttribute("RecentQuizzes");
+					if (quizzes != null){	
 					for (int i=0;i<quizzes.size();i++){
 						out.println("<div class=\"listentry\"><a href='Quiz?id="+ quizzes.get(i).getId() + "'>" + quizzes.get(i).getQuizName() + "</a></div>");	
-					}
+					}} 
 				%>
 				</div>
 			</span>
@@ -57,11 +59,12 @@
 				</div>
 				
 				<div class="list" id="poplist">
-				<%
+				<% 
 					quizzes = (List<Quiz> )request.getAttribute("PopularQuizzes");
+					if (quizzes != null){
 					for (int i=0;i<quizzes.size();i++){
-						out.println("<div class=\"listentry\"><a href='Quiz?id="+ quizzes.get(i).getId() + "'>" + quizzes.get(i).getQuizName() + "</a></div>");	
-					}
+						if (quizzes.get(i)!=null) out.println("<div class=\"listentry\"><a href='Quiz?id="+ quizzes.get(i).getId() + "'>" + quizzes.get(i).getQuizName() + "</a></div>");	
+					}} 
 				%>
 				</div>
 			</span>
@@ -70,7 +73,9 @@
 				out.println("<a href=\"CreateQuiz.jsp\"><button id=\"createaquiz\">Create a Quiz!</button></a>");		
 				out.println("<a href=\"Profile?username=" + master.getUserName() +"\"><button id=\"homepage\">Homepage!</button></a>");
 				if ((boolean)request.getSession().getAttribute("isAdmin")) {
-					out.print("<form action='MakeAnnouncement' method='post'> <input type='submit' value='Create Announcement' id='makeAnn'> </form>");
+					out.print("<form action='MakeAnnouncement' method='post'>");
+					out.print("<textarea type=\"text\" cols=\"60\" rows=\"4\" name=\"announcement\" id='an' Placeholder=\"Make Announcement\"></textarea>");
+					out.print("<input type='submit' value='Create Announcement' id='makeAnn'> </form>");
 				}
 			} else {
 				out.println("<div id='logintosee'>Log In to Create and Take a Quiz!</div>");

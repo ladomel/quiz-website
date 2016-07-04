@@ -2,6 +2,7 @@ package Servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -39,15 +40,23 @@ public class index extends HttpServlet {
 		request.setAttribute("Announcements", mD.getAnnouncements());
 		
 		String param = request.getParameter("popular");
+		
 		long fromTimeInMs = -1;
-		if (param == null) fromTimeInMs = System.currentTimeMillis() - Constants.ALLTIME_IN_MS; else {
+		if (param == null) fromTimeInMs = Constants.ALLTIME_IN_MS; else {
 			if (param.equals("week")) fromTimeInMs = System.currentTimeMillis() - Constants.WEEK_IN_MS; else {
 				if (param.equals("day")) fromTimeInMs = System.currentTimeMillis() - Constants.DAY_IN_MS;
 			}
 		}
-		request.setAttribute("PopularQuizzes", rD.getPopularQuizzes(Constants.MAX_DISPLAY, fromTimeInMs));
-		//request.setAttribute("RecentQuizzes", qD.getRecentQuizzes(Constants.MAX_DISPLAY));
-		request.setAttribute("RecentQuizzes", new ArrayList<Quiz>());
+		System.out.println(fromTimeInMs);
+		
+		List<Integer> pop = rD.getPopularQuizzes(Constants.MAX_DISPLAY, fromTimeInMs);
+		List<classes.Quiz> popQ = new ArrayList<classes.Quiz>();
+		for (Integer i : pop){
+			popQ.add(qD.getQuiz(i));
+		}
+		
+		request.setAttribute("PopularQuizzes", popQ);
+		request.setAttribute("RecentQuizzes", qD.getRecentQuizzes(Constants.MAX_DISPLAY));
 		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
 		rd.forward(request, response);
 	}
