@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class StringChanger {
 	
-	private Map<String, String> changes;
+	private Map<Character, String> changes;
 	
 	private static final String NEW_AMPERSAND = "&amp;";
 	private static final String NEW_LESS_THAN = "&lt;";
@@ -13,10 +13,10 @@ public class StringChanger {
 	
 	public StringChanger()
 	{
-		changes = new HashMap<String, String>();
-		changes.put("&", NEW_AMPERSAND);
-		changes.put("<", NEW_LESS_THAN);
-		changes.put(">", NEW_GREATER_THAN);
+		changes = new HashMap<Character, String>();
+		changes.put('&', NEW_AMPERSAND);
+		changes.put('<', NEW_LESS_THAN);
+		changes.put('>', NEW_GREATER_THAN);
 	}
 	
 	/**
@@ -30,12 +30,14 @@ public class StringChanger {
 	{
 		String after = "";
 		char nextChar;
+		
 		for(int i = 0; i < before.length(); i++)
 		{
 			nextChar = before.charAt(i);
-			if(changes.containsKey(nextChar)) after+=changes.get(nextChar);
-			else after+=nextChar;
+			if(changes.containsKey(nextChar)) {after+=changes.get(nextChar);}
+			else {after+=nextChar;}
 		}
+		
 		return after;
 	}
 }
