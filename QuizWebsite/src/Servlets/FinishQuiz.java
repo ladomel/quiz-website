@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import classes.Answer;
 import classes.Result;
+import dao.ResultDAO;
 import classes.Quiz;
 
 /**
@@ -39,17 +40,22 @@ public class FinishQuiz extends HttpServlet {
     	Quiz takenQuiz = (Quiz)session.getAttribute("Quiz");
     	Date date = new Date();
     	Result result = (Result)session.getAttribute("Result");
-    	result.setTimeTaken(result.getTimeStarted() - date.getTime());
+    	result.setTimeTaken(date.getTime() - result.getTimeStarted());
 
     	int finalGrade = 0;
     	List<Answer> answers = result.getAnswers();
+    	System.out.println(answers.size() + "---------------------------------------------");
     	for(Answer ans : answers) finalGrade += ans.getGrade();
     	result.setFinalGrade(finalGrade);
 
     	
     	request.setAttribute("Result", result);
 		request.setAttribute("Quiz", takenQuiz); 
-    	// if not practice mode send to database.
+		
+		if (!(boolean)session.getAttribute("PracticeMode")){
+			ResultDAO rD = (ResultDAO)request.getServletContext().getAttribute("resultDAO");
+			rD.insertResult(result);
+		}
 		
 		session.setAttribute("questionPositions", null);
 		session.setAttribute("Result", null); 
