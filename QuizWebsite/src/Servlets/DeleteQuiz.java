@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.QuizDAO;
+import dao.ResultDAO;
 
 /**
  * Servlet implementation class DeleteQuiz
@@ -40,6 +41,8 @@ public class DeleteQuiz extends HttpServlet {
 		int quizId = Integer.parseInt(request.getParameter("quizId"));
 		QuizDAO quizDao= (QuizDAO)request.getServletContext().getAttribute("quizDAO");
 		quizDao.deleteQuiz(quizId);
+		ResultDAO resultDAO = (ResultDAO)request.getServletContext().getAttribute("resultDAO");
+		resultDAO.removeHistory(quizId);
 		RequestDispatcher rd = request.getRequestDispatcher("index");
 		rd.forward(request, response);		
 	}

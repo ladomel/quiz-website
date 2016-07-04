@@ -40,7 +40,7 @@
 			document.getElementById(i).appendChild(field);
 		}
 		function addAnsField(){
-			document.getElementById('stmnt').value += " ______ ";
+			document.getElementById('stmnt').value += " _____ ";
 			document.getElementById('stmnt').focus();
 			var field = document.createElement("span");
 			field.className = "entry"; field.id = count;
