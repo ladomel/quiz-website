@@ -191,7 +191,6 @@ public class UserDAOImpl implements UserDAO {
 							+ ";"
 							);
 			preparedStatement.setString(1, userName);
-			System.out.println(userName);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			con.close();
@@ -333,7 +332,7 @@ public class UserDAOImpl implements UserDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"INSERT INTO loggedinusers (user_id) "
-							+ "VALUES(SELECT id FROM users WHERE username LIKE ?);"
+							+ "SELECT id FROM users WHERE username LIKE ?;"
 							);
 			preparedStatement.setString(1, userName);
 			preparedStatement.executeUpdate();
@@ -352,7 +351,7 @@ public class UserDAOImpl implements UserDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"DELETE FROM loggedinusers "
-							+ "WHERE user_id = (SELECT FROM users WHERE username LIKE ?);"
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?);"
 							);
 			preparedStatement.setString(1, userName);
 			preparedStatement.executeUpdate();
@@ -371,9 +370,9 @@ public class UserDAOImpl implements UserDAO {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
-							"SELECT COUNT(1) as cnt"
+							"SELECT COUNT(1) AS cnt "
 							+ "FROM loggedinusers "
-							+ "WHERE user_id = (SELECT FROM users WHERE username LIKE ?);"
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?);"
 							);
 			preparedStatement.setString(1, userName);
 			ResultSet rs = preparedStatement.executeQuery();
