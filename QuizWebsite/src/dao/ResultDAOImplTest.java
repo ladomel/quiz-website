@@ -48,6 +48,9 @@ public class ResultDAOImplTest {
 		userDAO.addUser("vajaberej", "vajaspass", "vajassalt");
 		userDAO.addUser("vajabereja", "vajaspass", "vajassalt");
 		
+		userDAO.addFriend("vaja", "vajab");
+		userDAO.addFriend("vaja", "vajabe");
+		
 		Result result1 = buildResult("vaja", 1, 90, 2005, 1);
 		Result result2 = buildResult("vajab", 2, 91, 2006, 2);
 		Result result21 = buildResult("vajabe", 2, 71, 2034, 9);
@@ -68,13 +71,20 @@ public class ResultDAOImplTest {
 		resultDAO.insertResult(result6);
 		resultDAO.insertResult(result7);
 		
+		System.out.println("avg score quiz 2: " + resultDAO.averageScore(2));
+		
 		System.out.println("best by quiz id: " + resultDAO.getBestResults(2, 3, 2000));
 		System.out.println("best by user	:" + resultDAO.getBestResults("vajaber", 5, 202));
-
+		resultDAO.removeHistory(4);
+		System.out.println("removed 4: " + resultDAO.getRecentResults(4, 3));
+		
 		System.out.println("recent q_id n	:" + resultDAO.getRecentResults(2, 2));
 		System.out.println("recent u_nm n	:" + resultDAO.getRecentResults("vajaber", 3));
 		
 		System.out.println("pop quizes	202	:" + resultDAO.getPopularQuizzes(5, 202));
+		
+		System.out.println("friends quizzes" + resultDAO.getRecentResults(userDAO.getFriends("vaja"), 3));
+		
 	}
 
 	// result construction wrapper
@@ -86,71 +96,6 @@ public class ResultDAOImplTest {
 		return result;
 	}
 
-	/*
-	@Test
-	public void test2() {
-		Set<String> friends = new HashSet<String>(Arrays.asList("b", "c"));
-		User testUser = new User("username", "a1234", "a123");
-//		testUser.setFriends(friends);
-		userDAO.deleteUser("username");
-		userDAO.addUser("username", "a123", "a12");	
-		userDAO.updateUser(testUser);  // Aq test user maq ukve setiani.
-	
-		int lastId = getNewQuizId();
-		
-		Result result1 = classFactory.getResult("username", lastId);
-		result1.setFinalGrade(98);
-		result1.setTimeStarted(2005);
-		result1.setTimeTaken(5);
-		
-		List<Answer> answers1 = new ArrayList<Answer> ();
-		Answer answer11 = classFactory.getAnswer(Arrays.asList("drogba", "gadavida", "chinetshi"));
-		Answer answer12 = classFactory.getAnswer(Arrays.asList("messi", "aris", "sauketeso"));
-		
-		answers1.add(answer11);
-		answers1.add(answer12);
-		
-		result1.setAnswers(answers1);
-		resultDAO.insertResult(result1);
-		
-		Result result2 = classFactory.getResult("username", lastId);
-		result2.setFinalGrade(98);
-		result2.setTimeStarted(2005);
-		result2.setTimeTaken(5);
-		
-		List<Answer> answers2 = new ArrayList<Answer> ();
-		Answer answer21 = classFactory.getAnswer(Arrays.asList("2", "3", "4"));
-		Answer answer22 = classFactory.getAnswer(Arrays.asList("5", "6", "7"));
-		
-		answers2.add(answer21);
-		answers2.add(answer22);
-		
-		result2.setAnswers(answers2);
-		resultDAO.insertResult(result2);
-		
-		Result result3 = classFactory.getResult("username", lastId);
-		result3.setFinalGrade(98);
-		result3.setTimeStarted(2005);
-		result3.setTimeTaken(5);
-		
-		List<Answer> answers3 = new ArrayList<Answer> ();
-		Answer answer31 = classFactory.getAnswer(Arrays.asList("z", "zz", "zzz"));
-		Answer answer32 = classFactory.getAnswer(Arrays.asList("x", "xx", "xxx"));
-		
-		answers3.add(answer31);
-		answers3.add(answer32);
-		
-		result3.setAnswers(answers3);
-		resultDAO.insertResult(result3);
-		
-		List<Result> results = resultDAO.getResult("username", lastId);
-		
-		System.out.println(results.toString());
-		System.out.println("Number of results: " + results.size());
-	}
-	*/
-	
-	
 	@Test
 	public void insertAndGetResult()
 	{

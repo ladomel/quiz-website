@@ -115,7 +115,7 @@ public class ResultDAOImpl implements ResultDAO {
 							+ "FROM results "
 							+ "JOIN users "
 							+ "ON users.id = results.user_id "
-							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?) "
+							+ "WHERE user_id = users.username LIKE ? "
 							+ "AND quiz_id = ? "
 							+ "ORDER BY start_time DESC, final_grade DESC"
 							+ " ;"
@@ -202,12 +202,6 @@ public class ResultDAOImpl implements ResultDAO {
 		return results;
 	}
 
-	@Override
-	public List<Result> getRecentResults(Set<String> userName, int n) {
-		// TODO: too hard?
-		return null;
-	}
-
 	// copy of above again ^^^^^^^
 	@Override
 	public List<Result> getBestResults(String userName, int n, long fromTimeInMs) {
@@ -243,8 +237,44 @@ public class ResultDAOImpl implements ResultDAO {
 		}
 		return results;
 	}
+	
+	// copy of above ^^^^^^^^ again with minor change in SQL command
+	@Override
+	public List<Result> getFastestResults(int quizId, int n, long fromTimeInMs) {
+		List<Result> results = new ArrayList<Result> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT username, quiz_id, start_time, time_taken, final_grade "
+							+ "FROM results "
+							+ "JOIN users "
+							+ "ON users.id = results.user_id "
+							+ "WHERE quiz_id = ? "
+							+ " AND "
+							+ "start_time > ? "
+							+ "ORDER BY time_taken ASC, final_grade DESC, start_time DESC "
+							+ "LIMIT ?;"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setLong(2, fromTimeInMs);
+			preparedStatement.setInt(3, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) {
+				Result result = buildResultFromResultSet(rs);
+				results.add(result);
+			}
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
+	}
 
-	// make sureresult set has correct collumn names
+	// make sure result set has correct column names
 	private Result buildResultFromResultSet(ResultSet rs) 
 			throws SQLException {
 		
@@ -315,6 +345,110 @@ public class ResultDAOImpl implements ResultDAO {
 			e.printStackTrace();
 		}
 		return popularQuizIds;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public List<Result> getRecentResults(Set<String> userName, int n) {
+		
+		List<String> friendNames = new ArrayList<String>();
+		friendNames.addAll(userName);
+		int nFriends = friendNames.size();
+		
+		List<Result> latestFriendsResults = new ArrayList<Result> (); 
+		
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(friendsResultsCommand(nFriends));
+			for(int i = 0; i < nFriends; i++)
+				preparedStatement.setString(i + 1, friendNames.get(i));
+			preparedStatement.setInt(nFriends + 1, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) 
+				latestFriendsResults.add(buildResultFromResultSet(rs));
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return latestFriendsResults;
+	}
+
+	private String friendsResultsCommand(int n) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(
+				"SELECT "
+				+ "username, quiz_id, start_time, time_taken, final_grade "
+				+ "FROM results "
+				+ "JOIN users ON users.id = results.user_id "
+				+ "WHERE ");
+		for(int i = 0; i < n - 1; i++)
+			sb.append("user_id = (SELECT id FROM users WHERE username LIKE ?) OR ");
+		sb.append("user_id = (SELECT id FROM users WHERE username LIKE ?) "
+				+ "ORDER BY start_time DESC, final_grade DESC "
+				+ "LIMIT ?;");
+		return sb.toString();
+	}
+
+	@Override
+	public void removeHistory(int quizId) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"DELETE FROM results "
+							+ "WHERE quiz_id = ?;");
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public double averageScore(int quizId) {
+		double avgGrade = -1;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT AVG(final_grade) AS avg_grade "
+							+ "FROM results "
+							+ "WHERE quiz_id = ?;"
+							);
+			preparedStatement.setInt(1, quizId);
+			ResultSet rs = preparedStatement.executeQuery();
+			if(rs.next()) avgGrade = rs.getDouble("avg_grade");
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return avgGrade;
 	}
 
 }
