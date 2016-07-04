@@ -104,6 +104,26 @@ public class QuizDAOImplTest {
 
 	// search works from server testing
 	
+	
+	@Test
+	public void testTags() {
+		quizDAO.addTag(1, "tag1");
+		quizDAO.addTag(1, "tag2");
+		quizDAO.addTag(1, "tag3");
+		quizDAO.addTag(2, "tag1");
+		System.out.println("tags for 1: " + quizDAO.getTag(1));
+		System.out.println("tags for 2: " + quizDAO.getTag(2));
+	}
+	
+	@Test
+	public void testCategories() {
+		quizDAO.addCategory("cat1");
+		quizDAO.addCategory("cat2");
+		System.out.println("befor deletion: " + quizDAO.getCategories());
+		quizDAO.removeCategory("cat1");
+		System.out.println("after deletion: " + quizDAO.getCategories());
+	}
+	
 //	@Test
 //	public void test2() {
 //		Quiz quiz = new Quiz("vaja", "Future Vulture1", "quiz about 2034");

@@ -42,6 +42,8 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON users.id = quizzes.creator_id "
+							+ "LEFT JOIN categories "
+							+ "ON categories.id = quizzes.category_id "
 							+ "WHERE quizzes.id = ?;"
 							);
 			preparedStatement.setInt(1, quizId);
@@ -96,7 +98,7 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "creation_time = ?, "
 							+ "time = ?, "
 							+ "max_score = ?, "
-							+ "category = ? "
+							+ "category_id = (SELECT id FROM categories WHERE category LIKE ?) "
 							+ "WHERE id = ?");
 			preparedStatement.setString(1, quiz.getUserName());
 			preparedStatement.setString(2, quiz.getQuizName());
@@ -136,9 +138,12 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "creation_time, "
 							+ "time, "
 							+ "max_score,"
-							+ "category "
-							+ ") VALUES ( (SELECT id FROM users WHERE username LIKE ?), "
-							+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+							+ "category_id "
+							+ ") VALUES ( "
+							+ "(SELECT id FROM users WHERE username LIKE ?), "
+							+ "?, ?, ?, ?, ?, ?, ?, ?, ?, "
+							+ "(SELECT id FROM categories WHERE category LIKE ?)"
+							+ ");"
 							);
 			preparedStatement.setString(1, quiz.getUserName());
 			preparedStatement.setString(2, quiz.getQuizName());
@@ -192,6 +197,8 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON users.id = quizzes.creator_id "
+							+ "LEFT JOIN categories "
+							+ "ON categories.id = quizzes.category_id "
 							+ "ORDER BY creation_time DESC "
 							+ "LIMIT ?;"
 							);
@@ -218,10 +225,12 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-							+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
+							+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category_id, is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON quizzes.creator_id = users.id "
+							+ "LEFT JOIN categories "
+							+ "ON quizzes.category_id = categories.id "
 							+ "WHERE username LIKE ? "
 							+ "ORDER BY creation_time DESC;"
 							);
