@@ -19,7 +19,7 @@
 		</span>
 	</form>
 	<br><br>
-	<button onclick="addQuestion();">Add Blank</button>
+	<button onclick="addQuestion();">Add Statement</button>
 	
 	<input id="submit" onclick="submit('CreateTF');" type="hidden" />
 	
