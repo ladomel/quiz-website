@@ -262,6 +262,8 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON users.id = quizzes.creator_id "
+							+ "LEFT JOIN categories "
+							+ "ON categories.id = quizzes.category_id "
 							+ "WHERE name LIKE ? "
 							+ "OR category LIKE ? "
 							+ "OR quizzes.description LIKE ? "
