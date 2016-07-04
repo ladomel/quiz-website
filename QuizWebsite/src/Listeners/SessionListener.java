@@ -37,40 +37,13 @@ public class SessionListener implements HttpSessionListener {
      * @see HttpSessionListener#sessionCreated(HttpSessionEvent)
      */
     public void sessionCreated(HttpSessionEvent arg0)  { 
-
-    	ArrayList<Question> questions = new ArrayList<Question>(); // questions stored here while submitting quiz
-    	
-    	HashSet<String> PRanswers = new HashSet<String>();
-    	PRanswers.add("a");
-    	PRanswers.add("b");
-    	questions.add(new QuestionPR("ProblemPR", 5, "url", PRanswers));
-    	
-    	HashSet<String> QRanswers = new HashSet<String>();
-    	QRanswers.add("c");
-    	QRanswers.add("d");
-    	questions.add(new QuestionQR("ProblemQR", 5, QRanswers));
-    	
-    	HashSet<String> wrongAnswers = new HashSet<String>();
-    	wrongAnswers.add("b");
-    	wrongAnswers.add("c");
-    	questions.add(new QuestionMC("ProblemMC", 5, "correct", wrongAnswers));
-    	
-    	List<Set<String>> answersList = new ArrayList<Set<String>>();
-    	answersList.add(new HashSet<>((Arrays.asList("a", "b"))));
-    	questions.add(new QuestionMA("ProblemMA", 5, true, answersList, 5));
-    	
-    	ArrayList<String> correctAnswers = new ArrayList<String>();
-    	correctAnswers.add("a");
-    	ArrayList<String> incorrectAnswers = new ArrayList<String>();
-    	incorrectAnswers.add("b");
-    	questions.add(new QuestionMCMA("ProblemMCMA", 5, correctAnswers, incorrectAnswers));
-    	
-    	Quiz quiz = new Quiz("creatorName", "Quizname", "Very good thank you");
     	
     	HttpSession s = arg0.getSession();
-    	s.setAttribute("Quiz", quiz);
-    	s.setAttribute("Questions", questions);	
-
+    	//s.setAttribute("Quiz", quiz); 
+    	//s.setAttribute("Questions", questions);	
+    	
+    	s.setAttribute("isAdmin", false);
+    	s.setAttribute("PracticeMode", false);
     	s.setAttribute("createdQuestions", null);
     	s.setAttribute("MasterUser", null);
     }
@@ -82,5 +55,7 @@ public class SessionListener implements HttpSessionListener {
     	HttpSession s = arg0.getSession();
         s.removeAttribute("MasterUser");
         s.removeAttribute("createdQuestions");
+        s.removeAttribute("Questions");
+        s.removeAttribute("questionPositions");
     }
 }
