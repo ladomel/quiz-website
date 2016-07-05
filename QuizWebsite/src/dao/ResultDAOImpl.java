@@ -217,7 +217,7 @@ public class ResultDAOImpl implements ResultDAO {
 							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?) "
 							+ " AND "
 							+ "start_time > ? "
-							+ "ORDER BY final_grade DESC, start_time DESC "
+							+ "ORDER BY final_grade DESC, time_taken DESC "
 							+ "LIMIT ?;"
 							);
 			preparedStatement.setString(1, userName);
@@ -301,7 +301,7 @@ public class ResultDAOImpl implements ResultDAO {
 							+ "WHERE quiz_id = ? "
 							+ " AND "
 							+ "start_time > ? "
-							+ "ORDER BY final_grade DESC, start_time DESC "
+							+ "ORDER BY final_grade DESC, time_taken DESC "
 							+ "LIMIT ?;"
 							);
 			preparedStatement.setInt(1, quizId);
