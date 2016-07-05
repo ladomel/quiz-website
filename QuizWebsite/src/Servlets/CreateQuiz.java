@@ -50,18 +50,19 @@ public class CreateQuiz extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Date date = new Date();
+		classes.Quiz newQuiz = createQuiz(request, date.getTime());
 		
-		classes.Quiz newQuiz = createQuiz(request);
 		HttpSession session = request.getSession();				
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)session.getAttribute("createdQuestions");
 		
-		System.out.println(newQuiz.toString());
 		for(int i = 0; i < createdQuestions.size(); i++)
 			newQuiz.setMaxScore(newQuiz.getMaxScore() + createdQuestions.get(i).getMaxGrade());
 			
 		QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
 		QuestionDAO questionDAO = (QuestionDAO) request.getServletContext().getAttribute("questionDAO");	
 		int id = quizDAO.addQuiz(newQuiz);
+
 		
 		for (int i=0;i<createdQuestions.size();i++){
 			System.out.println(createdQuestions.get(i).toString());
@@ -87,33 +88,48 @@ public class CreateQuiz extends HttpServlet {
 			i++;
 		}
 		
+		checkAchievements(request, date.getTime());
 		response.sendRedirect("Quiz?id=" + id);
 	}
 	
 	/**
 	 * This function creates quiz according to user's input
 	 */
-	private classes.Quiz createQuiz(HttpServletRequest request)
+	private classes.Quiz createQuiz(HttpServletRequest request, long date)
 	{
-		Date date = new Date();
 		HttpSession session = request.getSession();
 		User masterUser = (User)session.getAttribute("MasterUser");
 		ClassFactory factory = (ClassFactory)request.getServletContext().getAttribute("factory");
 		classes.Quiz newQuiz = factory.getQuiz(masterUser.getUserName(),  request.getParameter("name"), request.getParameter("description"));
-		newQuiz.setDateCreated(date.getTime());
+		newQuiz.setDateCreated(date);
 		newQuiz.setHasPracticeMode(request.getParameter("practice") != null);
 		newQuiz.setImmediatelyCorrected(request.getParameter("correction") != null);
 		newQuiz.setOnePage(request.getParameter("onepage") != null);
 		newQuiz.setRandom(request.getParameter("random") != null);
 		newQuiz.setQuizTime(Integer.parseInt(request.getParameter("time")));
 		newQuiz.setCategory(request.getParameter("category"));
-
-		AchievementDAO achievementDAO = (AchievementDAO)request.getServletContext().getAttribute("achievementDAO");
-		achievementDAO.achievementEarned(masterUser.getUserName(), 0, date.getTime());
-		masterUser.getUserName();
-		
 		return newQuiz;
 	}
+	
+	
+	private void checkAchievements(HttpServletRequest request, long date)
+	{
+		HttpSession session = request.getSession();
+		User masterUser = (User)session.getAttribute("MasterUser");
+		String userName = masterUser.getUserName();
+		
+		AchievementDAO achievementDAO = (AchievementDAO)request.getServletContext().getAttribute("achievementDAO");
+		QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
+		int numQuizzesCreated = quizDAO.getCreatedQuizzes(userName).size();
+		
+		if(!achievementDAO.hasAchievement(userName,0) && numQuizzesCreated >= 1) achievementDAO.achievementEarned(userName, 0, date);
+		if(!achievementDAO.hasAchievement(userName,1) && numQuizzesCreated >= 5) achievementDAO.achievementEarned(userName, 1, date);
+		if(!achievementDAO.hasAchievement(userName,2) && numQuizzesCreated >= 10) achievementDAO.achievementEarned(userName, 2, date);
+	}
+	
+	
+	
+	
 	
 	
 	
