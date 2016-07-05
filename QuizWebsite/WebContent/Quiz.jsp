@@ -68,11 +68,20 @@
 		<%
 			String disabled = "";
 			if (request.getSession().getAttribute("MasterUser")==null) disabled = "disabled";
+			String disabledPractice = null;
+			if (quiz.hasPracticeMode()) disabledPractice = ""; else disabledPractice = "disabled";
 		%>
 		<form action="TakeQuiz" method="post">
 			<input type="hidden" name="id" value='<%= quiz.getId() %>' >
 			<button id="startquiz"  <%= disabled %>>Start Quiz</button>
 		</form>
+		
+		<form id="practice" action="TakeQuiz" method="post">
+			<input type="hidden" name="id" value='<%= quiz.getId() %>' >
+			<input type="hidden" name="PracticeMode" value='Yes'>			
+		</form>
+		<button id="startquizpractice"  <%= disabledPractice %> onclick='practiceMode();'>Start Practice Mode</button>
+		
 	</div>
 	<%
 		if (master!=null && uD.isAdmin(master.getUserName())) {
@@ -104,6 +113,13 @@
 						}
 					}		
 				);
+		}
+		
+		function practiceMode(){
+			var decide = confirm("In Practice Mode Your Result Will Not Be Saved!" + '\n' + "Want to Continue?");
+			if (decide) {
+				document.getElementById("practice").submit();
+			}
 		}
 	</script>
 </body>

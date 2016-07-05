@@ -5,7 +5,9 @@ public interface Constants {
 	// Website name
 	public static final String SITE_NAME = "QuizWebsite";
 	public static final String BLANK = " _____ ";
-	public static final int MAX_DISPLAY = 20;
+	public static final int MAX_DISPLAY = 50;
+	public static final int BROWSING_DISPLAY_LIMIT = 100;
+	
 	public static final int MINUTE_IN_MS = 60 * 1000;
 	public static final int HOUR_IN_MS = 60 * 60 * 1000;	
 	public static final int DAY_IN_MS = 24 * 60 * 60 * 1000;	
