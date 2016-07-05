@@ -13,8 +13,8 @@
 		</a>
 		<span id="searchbar">
 			<input type="text" id="searchfield" name="search" placeholder="Search" autocomplete="off">
-				<button type="submit" id="searchquiz" onclick="searchQuiz()">Search Quiz</button>
-				<button type="submit" id="searchprofile" onclick="searchProfile()">Search Profile</button>
+				<button type="submit" id="searchquiz" onclick="searchQuiz();">Search Quiz</button>
+				<button type="submit" id="searchprofile" onclick="searchProfile();">Search Profile</button>
 		</span>
 		
 		<span id="loginbox">
@@ -39,7 +39,7 @@
 		function searchProfile(){
 			window.location = "Profile?username=" + document.getElementById("searchfield").value;
 		}
-		function searchQuiz(parameter){
+		function searchQuiz(){
 			window.location = "Quiz?quizname=" + document.getElementById("searchfield").value;
 		}
 		</script>

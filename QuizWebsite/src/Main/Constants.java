@@ -15,4 +15,5 @@ public interface Constants {
 	public static final int MONTH_IN_MS = 30 * 24 * 60 * 60 * 1000;
 	public static final int YEAR_IN_MS = 365 * 24 * 60 * 60 * 1000;
 	public static final int ALLTIME_IN_MS = 0;
+	
 }

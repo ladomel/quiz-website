@@ -74,7 +74,11 @@ public class AchievementDAOImpl implements AchievementDAO {
 			preparedStatement.setString(1, userName);
 			preparedStatement.setInt(2, achievementId);
 			ResultSet rs = preparedStatement.executeQuery();
-			if(rs.next()) return true;
+			if(rs.next()) {
+				rs.close();
+				con.close();
+				return true;
+			}
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
