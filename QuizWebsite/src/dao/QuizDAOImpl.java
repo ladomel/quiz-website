@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import classes.Quiz;
+import classes.Result;
 import database.MySQLUtil;
 import factory.ClassFactory;
 
@@ -463,6 +464,13 @@ public class QuizDAOImpl implements QuizDAO {
 			e.printStackTrace();
 		}
 		return userQuizes;
+	}
+
+	@Override
+	public List<Quiz> getQuizzesOfUsers(Set<String> userNames, int n) {
+		
+		
+		return null;
 	}
 	
 }
