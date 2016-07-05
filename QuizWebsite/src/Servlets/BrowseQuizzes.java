@@ -40,9 +40,9 @@ public class BrowseQuizzes extends HttpServlet {
 		
 		if (category == null || category.equals("all")) {
 			quizzes = qD.getRecentQuizzes(Constants.BROWSING_DISPLAY_LIMIT);
-			System.out.println("jandaba" + quizzes.size());
+			//System.out.println("jandaba" + quizzes.size());
 		} else {
-			//quizzes = qD.getRecentQuizzes(0);
+			quizzes = qD.getQuizzesByCategory(category,Constants.BROWSING_DISPLAY_LIMIT);
 		}
 		
 		request.setAttribute("Quizzes", quizzes);

@@ -11,7 +11,7 @@
 		width: 800px;
 		text-align: center;
 		top:110px;
-		left: 20px;
+		left: calc(50% - 400px);
 	}
 </style>
 </head>
