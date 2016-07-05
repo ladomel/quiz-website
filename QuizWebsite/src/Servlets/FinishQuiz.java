@@ -45,7 +45,7 @@ public class FinishQuiz extends HttpServlet {
     	int finalGrade = 0;
     	List<Answer> answers = result.getAnswers();
     	System.out.println(answers.size() + "---------------------------------------------");
-    	for(Answer ans : answers) finalGrade += ans.getGrade();
+    	for(Answer ans : answers) if (ans!=null) finalGrade += ans.getGrade();
     	result.setFinalGrade(finalGrade);
 
     	

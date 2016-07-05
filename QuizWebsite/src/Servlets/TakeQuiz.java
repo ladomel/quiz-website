@@ -57,6 +57,8 @@ public class TakeQuiz extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		
+		if (request.getParameter("PracticeMode") != null) session.setAttribute("PracticeMode",true);
+		
 		classes.Quiz takenQuiz = setQuiz(session, request);
 		setQuestions(session, request, takenQuiz.getId());
 		
