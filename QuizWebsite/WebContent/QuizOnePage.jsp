@@ -34,7 +34,7 @@
 	<br>
 <%	
 	for (int i=0;i<size;i++){
-		out.print("<iframe name='question" + i + "' src='Question?id=" + i + "' id='" + i + "' ></iframe>");
+		out.print("<iframe name='question" + i + "' src='Question?qid=" + i + "' id='" + i + "' ></iframe>");
 		out.print("<br><br>");
 	}
 %>

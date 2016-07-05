@@ -30,14 +30,14 @@ public class Question extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = (Integer.parseInt(request.getParameter("id")));
+		int id = (Integer.parseInt(request.getParameter("qid")));
 		
 		//System.out.println("id" + id);
 		ArrayList<Integer> positions = (ArrayList<Integer>)request.getSession().getAttribute("questionPositions");
 		ArrayList<classes.question.Abstract.Question> questions = (ArrayList<classes.question.Abstract.Question>)request.getSession().getAttribute("Questions");
 		
 		RequestDispatcher rd = request.getRequestDispatcher("quizFinished.html");
-		for (classes.question.Abstract.Question q : questions) System.out.println(q.getType());
+		//for (classes.question.Abstract.Question q : questions) System.out.println(q.getType());
 		//for (Integer q : positions) System.out.println(q);
 		//System.out.println(positions.size());
 		if (id<positions.size()) {
