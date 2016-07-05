@@ -2,11 +2,14 @@
  * 
  */
 
+var count = 1;
+
 function submitQuiz(){
 	if (document.getElementById("iframe") != null) {
-		var url = document.getElementById("iframe").src;
-		var num = parseInt(url.substring(url.indexOf("?id=") + 4)) + 1;
-		if (num >= document.getElementById("num").value) {$(window).unbind(); window.location = "FinishQuiz"; return;}
+		//var url = document.getElementById("iframe").src;
+		//var num = parseInt(url.substring(url.indexOf("?id=") + 4)) + 1;
+		//if (num >= document.getElementById("num").value) 
+		{$(window).unbind(); window.location = "FinishQuiz"; return;}
 	} 
 	var questions = document.getElementsByTagName("iframe");
 	for (var i=0;i<questions.length;i++){
@@ -20,11 +23,13 @@ function submitQuiz(){
 
 function nextQuestion(){
 	var url = document.getElementById("iframe").src;
-	var num = parseInt(url.substring(url.indexOf("?id=") + 4)) + 1;
+	//var num = parseInt(url.substring(url.indexOf("?id=") + 4)) + 1;
 	var doc = document.getElementById("iframe").contentDocument;
 	doc.getElementById("submit").click();
+	if (count >= document.getElementById("num").value) document.getElementById("nextquestion").disabled = true;
 	setTimeout(function(){
-		document.getElementById("iframe").src = "Question?id=" + num;
+		document.getElementById("iframe").src = "Question?qid=" + count;
+		count++;
 	}, 2000);	
 }
 

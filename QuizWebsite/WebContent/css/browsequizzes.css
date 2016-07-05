@@ -1,0 +1,39 @@
+@CHARSET "ISO-8859-1";
+
+#centerpanel {
+	position: absolute;
+	top: 100px;
+	width: 100%;
+	min-width: 1200px;
+	height: calc(100% - 100px);
+	margin: 0px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	background: #e6e6e6;
+}
+
+#categories {
+	position: absolute;
+	top: 10px;
+	left: calc(50% - 600px);
+	width: 300px;
+	height: 100%;
+	margin: 0px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	background: #grey;
+	font-size: 30px;
+}
+
+#list {
+	position: absolute;
+	top: 10px;
+	left: calc(50% - 300px);
+	width: 900px;
+	height: 100%;
+	margin: 0px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	background: #grey;
+	font-size: 24px;
+}

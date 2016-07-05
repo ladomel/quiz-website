@@ -32,7 +32,7 @@
 	</div>
 	
 	<div id="centerpanel">
-		<iframe name="question0" id="iframe" src="Question?id=0"></iframe>
+		<iframe name="question0" id="iframe" src="Question?qid=0"></iframe>
 	</div>
 
 	<input type="hidden" id="timeleft" value="<%= quiz.getQuizTime() %>">
