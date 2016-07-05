@@ -338,6 +338,10 @@ public class ResultDAOImpl implements ResultDAO {
 		
 		List<Result> latestFriendsResults = new ArrayList<Result> (); 
 		
+		// special cases:
+		if(nFriends == 0) return latestFriendsResults;	// in case there are no friends
+		if(nFriends == 1) return getRecentResults(friendNames.get(0), n);	// in case of only one friend
+		// case polyfriendism:
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
@@ -365,13 +369,17 @@ public class ResultDAOImpl implements ResultDAO {
 				"SELECT "
 				+ "username, quiz_id, start_time, time_taken, final_grade "
 				+ "FROM results "
-				+ "JOIN users ON users.id = results.user_id "
-				+ "WHERE ");
+				+ "JOIN users "
+				+ "ON users.id = results.user_id "
+				+ "WHERE "
+				);
 		for(int i = 0; i < n - 1; i++)
 			sb.append("user_id = (SELECT id FROM users WHERE username LIKE ?) OR ");
-		sb.append("user_id = (SELECT id FROM users WHERE username LIKE ?) "
-				+ "ORDER BY start_time DESC, final_grade DESC "
-				+ "LIMIT ?;");
+		sb.append(
+				"user_id = (SELECT id FROM users WHERE username LIKE ?) "
+				+ "ORDER BY start_time "
+				+ "LIMIT ?;"
+				);
 		return sb.toString();
 	}
 
