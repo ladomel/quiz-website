@@ -246,8 +246,8 @@ public class QuestionDAOImplTest {
 	public void testMCH() 
 	{
 		QuestionMCH question = classFactory.getQuestionMCH("problem1", 1, getList1(), getList2(), getList3());
-		QuestionMCH question2 = classFactory.getQuestionMCH("problem2", 2, getList2(), getList3(), getList4());
-		System.out.println(question.toString());
+		QuestionMCH question2 = classFactory.getQuestionMCH("problem2", 2, getList2(), getList4(), getList4());
+		//System.out.println(question.toString());
 		
 		int quizId = getNewQuizId();
 		questionDAO.addMCH(quizId, question);
@@ -267,7 +267,8 @@ public class QuestionDAOImplTest {
 	
 	private List<String> getList3()
 	{
-		return new ArrayList<String>(Arrays.asList("y", "x", "z"));
+		return new ArrayList<String>();
+		//return new ArrayList<String>(Arrays.asList("y", "x", "z"));
 	}
 	
 	private List<String> getList4()
