@@ -38,7 +38,7 @@
 	color: white; 
 }
 
-#deletequiz {
+#deletequiz, #deletehistory {
 	position: absolute;
 	top: 103px;
 	left: 5px;
@@ -50,6 +50,10 @@
 	font-size: 14px;
 	font-weight: 500;
 	color: White;	
+}
+
+#deletehistory {
+	top: 153px;
 }
 
 .inf {
@@ -171,10 +175,20 @@
 
 #startquiz {
 	background: green;
-	font-size: 30px;
+	font-size: 26px;
 	width: 200px;
-	height: 50px;
+	height: 40px;
 	position: absolute;
-	top: 210px;
+	top: 200px;
 	left: calc(50% - 100px);	
+}
+
+#startquizpractice {
+	background: blue;
+	font-size: 18px;
+	width: 200px;
+	height: 25px;
+	position: absolute;
+	top: 242px;
+	left: calc(50% - 100px);
 }

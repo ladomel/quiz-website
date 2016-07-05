@@ -83,8 +83,8 @@ public class QuestionMCH extends Question {
 	 * @param wrongNumbers - list of wrong answers
 	 */
 	public void setWrongAnswers(List<String> wrongAnswers) {
-		if(wrongAnswers == null || wrongAnswers.contains(null)) 
-			throw new IllegalArgumentException("Wrong wrongAnswers format!");
+		if(wrongAnswers == null) 	throw new IllegalArgumentException("Wrong wrongAnswers format!");
+		if(wrongAnswers.contains(null)) wrongAnswers.clear();
 		this.wrongAnswers = wrongAnswers;
 	}
 	

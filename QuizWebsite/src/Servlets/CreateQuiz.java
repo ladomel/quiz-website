@@ -79,6 +79,14 @@ public class CreateQuiz extends HttpServlet {
 
 		createdQuestions.clear();
 	
+		int i = 0;
+		while (true){
+			String tag = request.getParameter("tag" + i);
+			if (tag == null) break;
+			quizDAO.addTag(id, tag);
+			i++;
+		}
+		
 		response.sendRedirect("Quiz?id=" + id);
 	}
 	
@@ -98,7 +106,7 @@ public class CreateQuiz extends HttpServlet {
 		newQuiz.setOnePage(request.getParameter("onepage") != null);
 		newQuiz.setRandom(request.getParameter("random") != null);
 		newQuiz.setQuizTime(Integer.parseInt(request.getParameter("time")));
-		
+		newQuiz.setCategory(request.getParameter("category"));
 
 		AchievementDAO achievementDAO = (AchievementDAO)request.getServletContext().getAttribute("achievementDAO");
 		achievementDAO.achievementEarned(masterUser.getUserName(), 0, date.getTime());
