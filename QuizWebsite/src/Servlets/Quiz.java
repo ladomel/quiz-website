@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Main.Constants;
 import dao.QuestionDAO;
 import dao.QuizDAO;
 
@@ -42,20 +43,18 @@ public class Quiz extends HttpServlet {
 			classes.Quiz quiz = quizDAO.getQuiz(quizId);
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("Quiz.jsp");
 			if (quiz == null) requestDispatcher = request.getRequestDispatcher("notFound.jsp");
-			System.out.println("Taken out quiz: " + quiz.toString());
 			request.setAttribute("Quiz", quiz);
 			
 			requestDispatcher.forward(request, response);	
 		} else {
-			List<Integer> quizzes = null;// quizDAO.		
+			List<classes.Quiz> quizzes = quizDAO.getSeatchedQuizzes(Constants.MAX_DISPLAY, quizName);	
+			System.out.println(quizName);
+			System.out.println(quizzes.size());
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("quizSearchResults.jsp");
 			request.setAttribute("Quizzes", quizzes);
-		}
 		
-			
-		//QuestionDAO questionDAO = (QuestionDAO)request.getServletContext().getAttribute("questionDAO");
-		//List<classes.question.Abstract.Question> questions = questionDAO.getQuestions(quizId);
-		//request.setAttribute("Questions", questions);
+			requestDispatcher.forward(request, response);	
+		}
 		
 	}
 

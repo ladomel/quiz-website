@@ -75,12 +75,21 @@
 				Achievements ach = (Achievements) request.getServletContext().getAttribute("achievements");
 				for (int i=0; i<ach.getNumAchievements(); i++){
 					Achievement a = ach.getAchievement(i);
-					if (aD.hasAchievement(user.getUserName(), i)) 
-						out.print("<img class='achimage' src='" + a.getPictureURL() + "' onclick=\"alert('" + a.getDescription() + "')\" />");
+						if (aD.hasAchievement(user.getUserName(), i)) 
+							out.print("<img class='achimage' src='" + a.getPictureURL() + "' onclick=\"dropDown('" + a.getPictureURL() + "','" + a.getName() + "','" + a.getDescription() + "');\" />");
+						else 
+							out.print("<img class='achimage' src='" + "images/qmark.png" + "' onclick=\"dropDown('" + "images/qmark.png" + "','" + a.getName() + "','" + a.getDescription() + "');\" />");
 				}
 			
 			%>
 		</div>
+		
+		<div id="achdrop" class='achdropdown-content' onclick="dropDownDown();">
+			<img id="achimg" class='achimage-content' src='' />
+			<span id="achnm" class='achnm'></span>
+			<span id="achdscr" class='achdescr'></span>
+		</div>
+		
 		
 		<div id="friendslist">
 			<div class="divtitle">Friends:</div>
@@ -226,5 +235,18 @@
 	<div id="toppanel">
 		<jsp:include page='<%= toppanel %>' />
 	</div>
+	
+	<script type="text/javascript">
+		function dropDown(url,nm,desc){
+			document.getElementById('achimg').src = url;
+			document.getElementById('achdscr').innerHTML = "       " + desc;
+			document.getElementById('achnm').innerHTML = nm;
+			document.getElementById('achdrop').style.display = "block";
+		}
+		function dropDownDown(){
+			document.getElementById('achdrop').style.display = "none";
+		}
+	</script>
+	
 </body>
 </html>
