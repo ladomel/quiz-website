@@ -38,7 +38,7 @@
 	color: white; 
 }
 
-#deletequiz {
+#deletequiz, #deletehistory {
 	position: absolute;
 	top: 103px;
 	left: 5px;
@@ -50,6 +50,10 @@
 	font-size: 14px;
 	font-weight: 500;
 	color: White;	
+}
+
+#deletehistory {
+	top: 153px;
 }
 
 .inf {

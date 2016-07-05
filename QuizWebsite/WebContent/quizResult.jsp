@@ -19,5 +19,6 @@
 		if (session.getAttribute("Challenger")!=null) out.print("<h2>" +session.getAttribute("Challenger") + "'s Hight Score was: " +
 				session.getAttribute("ChallengerScore") + "/" + quiz.getMaxScore()  +" </h2>");
 	%>
+	<br><a href="index">indexxxxxxxxxxxxxxxxx</a>
 </body>
 </html>
