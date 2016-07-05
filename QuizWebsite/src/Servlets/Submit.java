@@ -46,28 +46,18 @@ public class Submit extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		
+
 		HttpSession session = request.getSession();
-		List<String> userAnswer = new ArrayList<String>();
-		int numAnswers = (request.getParameterMap().keySet().size()-1);
 		int position = Integer.parseInt(request.getParameter("questionPosition"));
 		
-		String nextAnswer = "";
-		for(int i = 0; ; i++)
-		{
-			if (0 == numAnswers) break;
-			nextAnswer = request.getParameter("answer" + i);
-			if (nextAnswer == null) continue;
-			userAnswer.add(nextAnswer);
-			numAnswers--;
-		}
-				 
+		List<String> userAnswer = fillAnswer(request);		 
 		Answer answer = new Answer(userAnswer);
 		
 		ArrayList<Question> questions = (ArrayList<Question>)session.getAttribute("Questions");
 		int grade = questions.get(position).getGrade(userAnswer);
+		
 		answer.setGrade(grade);
-
+		
 		Result result = (Result)session.getAttribute("Result");
 		result.getAnswers().set(position, answer);
 
@@ -75,5 +65,24 @@ public class Submit extends HttpServlet {
 		if (!quiz.isOnePage() && quiz.isImmediatelyCorrected()) {
 			out.print("questionResult.jsp?id=" + position + "&grade=" + grade + "&maxGrade=" + questions.get(position).getMaxGrade());
 		} else out.print("");
+	}
+	
+	
+	private List<String> fillAnswer(HttpServletRequest request)
+	{
+		List<String> userAnswer = new ArrayList<String>();
+		int numAnswers = (request.getParameterMap().keySet().size()-1);
+		
+		String nextAnswer = "";
+		for(int i = 0; ; i++)
+		{
+			if (0 == numAnswers) break;
+			nextAnswer = request.getParameter("answer" + i);
+			System.out.println("NextAnswer: " + nextAnswer);
+			if (nextAnswer == null) continue;
+			userAnswer.add(nextAnswer);
+			numAnswers--;
+		}
+		return userAnswer;
 	}
 }
