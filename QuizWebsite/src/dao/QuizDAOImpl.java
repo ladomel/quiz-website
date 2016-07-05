@@ -258,12 +258,14 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-							+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
+							+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score "
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON users.id = quizzes.creator_id "
 							+ "LEFT JOIN tags "
 							+ "ON tags.quiz_id = quizzes.id "
+							+ "LEFT JOIN categories "
+							+ "ON categories.id = quizzes.category_id "
 							+ "WHERE name LIKE ? "
 							+ "OR quizzes.description LIKE ? "
 							+ "OR username LIKE ? "
@@ -429,8 +431,38 @@ public class QuizDAOImpl implements QuizDAO {
 
 	@Override
 	public List<Quiz> getQuizzesByCategory(String category, int n) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Quiz> userQuizes = new ArrayList<Quiz>();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT "
+							+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score "
+							+ "FROM quizzes "
+							+ "LEFT JOIN users "
+							+ "ON users.id = quizzes.creator_id "
+							+ "LEFT JOIN tags "
+							+ "ON tags.quiz_id = quizzes.id "
+							+ "LEFT JOIN categories "
+							+ "ON categories.id = quizzes.category_id "
+							+ "WHERE category LIKE ? "
+							+ "ORDER BY creation_time DESC "
+							+ "LIMIT ?;"
+							);
+			preparedStatement.setString(1, category);
+			preparedStatement.setInt(2, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) {
+				Quiz quiz = loadIntoQuiz(rs);
+				userQuizes.add(quiz);
+			}
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) { 
+			e.printStackTrace();
+		}
+		return userQuizes;
 	}
 	
 }
