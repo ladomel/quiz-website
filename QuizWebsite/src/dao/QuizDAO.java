@@ -116,4 +116,14 @@ public interface QuizDAO {
 	 */
 	public void removeCategory(String category);
 	
+	/**
+	 * Returns list of quizzes corresponding to given category.
+	 * Ordered by newness.
+	 * 
+	 * @param category - String
+	 * @param n - limit number
+	 * @return list of quizzes
+	 */
+	public List<Quiz> getQuizzesByCategory(String category, int n);
+	
 }
