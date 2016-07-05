@@ -69,7 +69,7 @@
 	display: inline;
 	white-space: nowrap; 
 	background: grey;
-	left: calc(50% - 400px)
+	left: calc(50% - 400px);
 }
 
 #alabel {
@@ -86,6 +86,47 @@
 	display: inline;
 	max-height: 120px;
 	min-height: 120px;
+}
+
+.achimage:hover  .achdropdown-content{
+	display: block;
+}
+
+#achimg {
+	display: inline-block;
+}
+
+.achimage-content {
+	display: block;
+	width: 260px;
+	height: 260px;
+}
+
+.achdropdown-content {
+	display: none;
+	position: absolute;
+	width: 800px;
+	height: 260px;
+	top: 370px;
+	left: calc(50% - 400px);
+	z-index: 100;
+	background: #0080ff;
+}
+
+#achnm {
+	position: absolute;
+	top: 10px;
+	left: 300px;
+	font-size: 36px;
+	font-weight: 700;
+}
+
+#achdscr {
+	position: absolute;
+	top: 70px;
+	left: 280px;
+	font-size: 20px;
+	font-weight: 500;
 }
 
 .divtitle {

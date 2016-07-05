@@ -98,7 +98,7 @@ public class CreateQuiz extends HttpServlet {
 		newQuiz.setOnePage(request.getParameter("onepage") != null);
 		newQuiz.setRandom(request.getParameter("random") != null);
 		newQuiz.setQuizTime(Integer.parseInt(request.getParameter("time")));
-		
+		newQuiz.setCategory(request.getParameter("category"));
 
 		AchievementDAO achievementDAO = (AchievementDAO)request.getServletContext().getAttribute("achievementDAO");
 		achievementDAO.achievementEarned(masterUser.getUserName(), 0, date.getTime());

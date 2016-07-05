@@ -1,26 +1,28 @@
 package Servlets;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import classes.User;
-import dao.UserDAO;
+import dao.QuizDAO;
+import dao.ResultDAO;
 
 /**
- * Servlet implementation class EditDescription
+ * Servlet implementation class DeleteQuizHistory
  */
-@WebServlet("/EditDescription")
-public class EditDescription extends HttpServlet {
+@WebServlet("/DeleteQuizHistory")
+public class DeleteQuizHistory extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EditDescription() {
+    public DeleteQuizHistory() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,10 +38,9 @@ public class EditDescription extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User master = (User) request.getSession().getAttribute("MasterUser");
-		master.setDescription(request.getParameter("description"));
-		UserDAO uD = (UserDAO) request.getServletContext().getAttribute("userDAO");
-		request.getSession().setAttribute("MasterUser", uD.updateUser(master));
+		int quizId = Integer.parseInt(request.getParameter("quizId"));
+		ResultDAO resultDAO= (ResultDAO)request.getServletContext().getAttribute("resultDAO");
+		resultDAO.removeHistory(quizId);
 	}
 
 }
