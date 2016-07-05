@@ -331,10 +331,13 @@ public class ResultDAOImpl implements ResultDAO {
 					con.prepareStatement(
 							"SELECT quiz_id, COUNT(1) AS num_tries "
 							+ "FROM results "
+							+ "WHERE start_time > ? "
 							+ "GROUP BY quiz_id "
-							+ "ORDER BY num_tries DESC"
-							+ ";"
+							+ "ORDER BY num_tries DESC "
+							+ "LIMIT ?;"
 							);
+			preparedStatement.setLong(1, fromTimeInMs);
+			preparedStatement.setInt(2, n);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) popularQuizIds.add(rs.getInt("quiz_id"));
 			preparedStatement.close();
