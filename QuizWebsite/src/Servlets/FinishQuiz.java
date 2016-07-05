@@ -41,8 +41,8 @@ public class FinishQuiz extends HttpServlet {
     	HttpSession session = request.getSession();
     	User masterUser = (User)session.getAttribute("MasterUser");
 		String userName = masterUser.getUserName();
-		AchievementDAO achievementDAO = (AchievementDAO)request.getServletContext().getAttribute("achievementDAO");
-		ResultDAO resultDAO = (ResultDAO)request.getServletContext().getAttribute("resultDAO");
+		
+		
 		
     	Quiz takenQuiz = (Quiz)session.getAttribute("Quiz");
     	Date date = new Date();
@@ -54,27 +54,17 @@ public class FinishQuiz extends HttpServlet {
     	for(Answer ans : answers) if (ans!=null) finalGrade += ans.getGrade();
     	result.setFinalGrade(finalGrade);
 
-    	
     	request.setAttribute("Result", result);
 		request.setAttribute("Quiz", takenQuiz); 
 		
 		if (!(boolean)session.getAttribute("PracticeMode")){
 			ResultDAO rD = (ResultDAO)request.getServletContext().getAttribute("resultDAO");
-			achievementDAO.achievementEarned(userName, 5, date.getTime()); // Practice mode
 			rD.insertResult(result);
 		}
 		
-		if(resultDAO.getRecentResults(userName, 10).size() == 10) 	
-			achievementDAO.achievementEarned(userName, 3, date.getTime()); // User took 10 quizzes.
+		checkAchievements(request, userName, date);
+		setAttributesToNulls(session);
 		
-		if(resultDAO.getBestResults(takenQuiz.getId(), 1, 0).get(0).getUserName().equals(userName))
-			achievementDAO.achievementEarned(userName, 4, date.getTime()); // Best result.
-		
-		session.setAttribute("questionPositions", null);
-		session.setAttribute("Result", null); 
-		session.setAttribute("Questions", null); 
-		session.setAttribute("Quiz", null);
-
     	RequestDispatcher requestDispatcher = request.getRequestDispatcher("quizResult.jsp");
     	requestDispatcher.forward(request, response);	
     }
@@ -88,5 +78,32 @@ public class FinishQuiz extends HttpServlet {
      */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+	}
+	
+	private void checkAchievements(HttpServletRequest request, String userName, Date date)
+	{	
+		Quiz takenQuiz = (Quiz)request.getSession().getAttribute("Quiz");
+		AchievementDAO achievementDAO = (AchievementDAO)request.getServletContext().getAttribute("achievementDAO");
+		ResultDAO resultDAO = (ResultDAO)request.getServletContext().getAttribute("resultDAO");
+
+		if(!achievementDAO.hasAchievement(userName,3) && resultDAO.getRecentResults(userName, 10).size() == 10) 	
+			achievementDAO.achievementEarned(userName, 3, date.getTime()); // User took 10 quizzes.
+
+		if(!achievementDAO.hasAchievement(userName,4) && 
+				resultDAO.getBestResults(takenQuiz.getId(), 1, 0).get(0).getUserName().equals(userName))
+			achievementDAO.achievementEarned(userName, 4, date.getTime()); // Best result.
+
+		if(!achievementDAO.hasAchievement(userName,5) && 
+				(boolean)request.getSession().getAttribute("PracticeMode"))
+			achievementDAO.achievementEarned(userName, 5, date.getTime()); // Practice mode
+	}
+	
+	
+	private void setAttributesToNulls(HttpSession session)
+	{
+		session.setAttribute("questionPositions", null);
+		session.setAttribute("Result", null); 
+		session.setAttribute("Questions", null); 
+		session.setAttribute("Quiz", null);
 	}
 }
