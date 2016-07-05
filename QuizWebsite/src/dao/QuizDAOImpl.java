@@ -468,9 +468,59 @@ public class QuizDAOImpl implements QuizDAO {
 
 	@Override
 	public List<Quiz> getQuizzesOfUsers(Set<String> userNames, int n) {
+		List<String> friendNames = new ArrayList<String>();
+		friendNames.addAll(userNames);
+		int nFriends = friendNames.size();
 		
+		List<Quiz> latestFriendsQuizzes = new ArrayList<Quiz> (); 
 		
-		return null;
+		// special cases:
+		if(nFriends == 0) return latestFriendsQuizzes;	// in case there are no friends
+		if(nFriends == 1) {	// case one friend
+			latestFriendsQuizzes = getCreatedQuizzes(friendNames.get(0));
+			for(int idx = latestFriendsQuizzes.size() - 1; idx >= n; idx--)
+				latestFriendsQuizzes.remove(idx);
+			return latestFriendsQuizzes;
+		}
+		// case polyfriendism:
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(friendsQuizzesCommand(nFriends));
+			for(int i = 0; i < nFriends; i++)
+				preparedStatement.setString(i + 1, friendNames.get(i));
+			preparedStatement.setInt(nFriends + 1, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) 
+				latestFriendsQuizzes.add(loadIntoQuiz(rs));
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return latestFriendsQuizzes;
 	}
-	
+
+	private String friendsQuizzesCommand(int nFriends) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(
+				"SELECT "
+				+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score "
+				+ "FROM quizzes "
+				+ "JOIN users "
+				+ "ON users.id = quizzes.creator_id "
+				+ "WHERE "
+				);
+		for(int i = 0; i < nFriends - 1; i++)
+			sb.append("creator_id = (SELECT id FROM users WHERE username LIKE ?) OR ");
+		sb.append(
+				"creator_id = (SELECT id FROM users WHERE username LIKE ?) "
+				+ "ORDER BY creation_time DESC "
+				+ "LIMIT ?;"
+				);
+		return sb.toString();
+	}
+
 }
