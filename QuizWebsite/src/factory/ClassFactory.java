@@ -13,6 +13,7 @@ import classes.Message.Note;
 import classes.question.QuestionFB;
 import classes.question.QuestionMA;
 import classes.question.QuestionMC;
+import classes.question.QuestionMCH;
 import classes.question.QuestionMCMA;
 import classes.question.QuestionPR;
 import classes.question.QuestionQR;
@@ -64,6 +65,11 @@ public class ClassFactory {
 	public QuestionTF getQuestionTF(String newProblem, int grade,  List<String> propositions, List<String> answers)
 	{
 		return new QuestionTF(newProblem, grade, propositions, answers);
+	}
+	
+	public QuestionMCH getQuestionMCH(String newProblem, int grade, List<String> questions, List<String> rightAnswers, List<String> wrongAnswers)
+	{
+		return new QuestionMCH(newProblem, grade, questions, rightAnswers, wrongAnswers);
 	}
 	
 	public classes.Result getResult(String userName, int quizId)
