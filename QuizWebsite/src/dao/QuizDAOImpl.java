@@ -6,11 +6,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException; 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
-import classes.Quiz; 
+import classes.Quiz;
+import database.MySQLUtil;
 import factory.ClassFactory;
 
 public class QuizDAOImpl implements QuizDAO {
@@ -40,6 +43,8 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON users.id = quizzes.creator_id "
+							+ "LEFT JOIN categories "
+							+ "ON categories.id = quizzes.category_id "
 							+ "WHERE quizzes.id = ?;"
 							);
 			preparedStatement.setInt(1, quizId);
@@ -94,7 +99,7 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "creation_time = ?, "
 							+ "time = ?, "
 							+ "max_score = ?, "
-							+ "category = ? "
+							+ "category_id = (SELECT id FROM categories WHERE category LIKE ?) "
 							+ "WHERE id = ?");
 			preparedStatement.setString(1, quiz.getUserName());
 			preparedStatement.setString(2, quiz.getQuizName());
@@ -134,9 +139,12 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "creation_time, "
 							+ "time, "
 							+ "max_score,"
-							+ "category "
-							+ ") VALUES ( (SELECT id FROM users WHERE username LIKE ?), "
-							+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+							+ "category_id "
+							+ ") VALUES ( "
+							+ "(SELECT id FROM users WHERE username LIKE ?), "
+							+ "?, ?, ?, ?, ?, ?, ?, ?, ?, "
+							+ "(SELECT id FROM categories WHERE category LIKE ?)"
+							+ ");"
 							);
 			preparedStatement.setString(1, quiz.getUserName());
 			preparedStatement.setString(2, quiz.getQuizName());
@@ -190,6 +198,8 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON users.id = quizzes.creator_id "
+							+ "LEFT JOIN categories "
+							+ "ON categories.id = quizzes.category_id "
 							+ "ORDER BY creation_time DESC "
 							+ "LIMIT ?;"
 							);
@@ -216,10 +226,12 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT "
-							+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
+							+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category_id, is_random, is_one_page, immediate_correction, practice_mode, creation_time, category, time, max_score "
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON quizzes.creator_id = users.id "
+							+ "LEFT JOIN categories "
+							+ "ON quizzes.category_id = categories.id "
 							+ "WHERE username LIKE ? "
 							+ "ORDER BY creation_time DESC;"
 							);
@@ -250,10 +262,15 @@ public class QuizDAOImpl implements QuizDAO {
 							+ "FROM quizzes "
 							+ "LEFT JOIN users "
 							+ "ON users.id = quizzes.creator_id "
+							+ "LEFT JOIN categories "
+							+ "ON categories.id = quizzes.category_id "
+							+ "LEFT JOIN tags "
+							+ "ON tags.quiz_id = quizzes.id "
 							+ "WHERE name LIKE ? "
 							+ "OR category LIKE ? "
 							+ "OR quizzes.description LIKE ? "
 							+ "OR username LIKE ? "
+							+ "OR tag LIKE ? "
 							+ "ORDER BY creation_time DESC "
 							+ "LIMIT ?;"
 							);
@@ -261,7 +278,8 @@ public class QuizDAOImpl implements QuizDAO {
 			preparedStatement.setString(2, "%" + parameter + "%");
 			preparedStatement.setString(3, "%" + parameter + "%");
 			preparedStatement.setString(4, "%" + parameter + "%");
-			preparedStatement.setInt(5, numResults);
+			preparedStatement.setString(5, "%" + parameter + "%");
+			preparedStatement.setInt(6, numResults);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) {
 				Quiz quiz = loadIntoQuiz(rs);
@@ -274,6 +292,143 @@ public class QuizDAOImpl implements QuizDAO {
 			e.printStackTrace();
 		}
 		return userQuizes;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public void addTag(int quizId, String tag) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"INSERT INTO tags(quiz_id, tag) "
+							+ "VALUES(?, ?);"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setString(2, tag);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public Set<String> getTag(int quizId) {
+		Set<String> tags = new HashSet<String> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT tag "
+							+ "FROM tags "
+							+ "WHERE quiz_id = ?"
+							);
+			preparedStatement.setInt(1, quizId);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) tags.add(rs.getString("tag"));
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return tags;
+	}
+
+	@Override
+	public void removeTag(int quizId, String tag) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"DELETE FROM tags "
+							+ "WHERE quiz_id = ? "
+							+ " AND "
+							+ "tag LIKE ?;"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setString(2, tag);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+
+	@Override
+	public Set<String> getCategories() {
+		Set<String> categories = new HashSet<String> ();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT category "
+							+ "FROM categories;"
+							);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) categories.add(rs.getString("category"));
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return categories;
+	}
+
+	@Override
+	public void addCategory(String category) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"INSERT INTO categories (category) "
+							+ "values(?);"
+							);
+			preparedStatement.setString(1, category);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void removeCategory(String category) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"DELETE FROM categories "
+							+ "WHERE category LIKE ?;"
+							);
+			preparedStatement.setString(1, category);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 	
 }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -190,7 +191,6 @@ public class UserDAOImpl implements UserDAO {
 							+ ";"
 							);
 			preparedStatement.setString(1, userName);
-			System.out.println(userName);
 			preparedStatement.executeUpdate();
 			preparedStatement.close();
 			con.close();
@@ -304,4 +304,89 @@ public class UserDAOImpl implements UserDAO {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public int getNumberOfLoggedInUsers() {
+		int n = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = 
+					stmt.executeQuery(
+							"SELECT COUNT(1) AS n FROM loggedinusers;"
+							);
+			rs.next(); n = rs.getInt("n");
+			stmt.close();
+			rs.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return n;
+	}
+
+	@Override
+	public void logInUser(String userName) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"INSERT INTO loggedinusers (user_id) "
+							+ "SELECT id FROM users WHERE username LIKE ?;"
+							);
+			preparedStatement.setString(1, userName);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void logOutUser(String userName) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"DELETE FROM loggedinusers "
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?);"
+							);
+			preparedStatement.setString(1, userName);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public boolean isUserLoggedIn(String userName) {
+		boolean loggedIn = false;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT COUNT(1) AS cnt "
+							+ "FROM loggedinusers "
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?);"
+							);
+			preparedStatement.setString(1, userName);
+			ResultSet rs = preparedStatement.executeQuery();
+			rs.next();
+			loggedIn = rs.getBoolean("cnt");
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return loggedIn;
+	}
+	
+	
 }

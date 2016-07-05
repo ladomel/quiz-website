@@ -1,8 +1,13 @@
 package dao;
 
-import org.apache.commons.dbcp2.BasicDataSource;  // Usual.
+import java.util.Timer;
+import java.util.TimerTask;
 
-//import org.apache.tomcat.dbcp.dbcp2.BasicDataSource; // Online.
+import database.DBInfo;
+
+
+//import org.apache.commons.dbcp2.BasicDataSource;  // Usual.
+import org.apache.tomcat.dbcp.dbcp2.BasicDataSource; // Online.
 
 /**
  * This class is probably not quite factory, hence the name.
@@ -12,32 +17,50 @@ import org.apache.commons.dbcp2.BasicDataSource;  // Usual.
  */
 public class DAOInstances {
 
+	private static final long POOL_UPDATE_INTERVAL = 10000;
 	private BasicDataSource dataSource;
+	private Timer timer;
+	private UserDAO userDAO;
 	
 	public DAOInstances() {
 		dataSource = null;
+		timer = null;
+		userDAO = null;
 	}
 	
 	/**
 	 * Call this before using any of the methods.
 	 */
 	public void init() {
-		// TODO: move all these strings as constants
+		
 		dataSource = new BasicDataSource();
 		
-		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUsername("root");
-		dataSource.setPassword("nuca");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/oop");
-		// we can control how connection pool behaves
-		dataSource.setMaxIdle(20);
+		dataSource.setDriverClassName(DBInfo.DRIVER_CLASS_NAME);
+		dataSource.setUsername(DBInfo.USER_NAME);
+		dataSource.setPassword(DBInfo.PASSWORD);
+		dataSource.setUrl(DBInfo.DB_URL);
+		
+		// set up user dao to use for pooling
+		userDAO = new UserDAOImpl(dataSource);
+
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				// set connection pool size here:
+				dataSource.setMinIdle( 
+						(int) userDAO.getNumberOfLoggedInUsers() / 10
+						);
+				// TODO: make finer adjustments
+			}
+		}, 0, POOL_UPDATE_INTERVAL);
+
 	}
 	
 	public UserDAO getUserDAO() {
-		return new UserDAOImpl(dataSource);
+		return userDAO;
 	}
 	
-
 	public AchievementDAO getAchievementDAO() {
 		return new AchievementDAOImpl(dataSource);
 	}
