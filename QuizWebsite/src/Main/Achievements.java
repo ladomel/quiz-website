@@ -10,6 +10,8 @@ public class Achievements {
 	private static List<Achievement> achievements;
 	private ClassFactory factory;
 	
+	private static final String ACHIEVEMENT_URL_DEFAULT = "https://i.kinja-img.com/gawker-media/image/upload/s--ZGfvhqgX--/18161pd0zsg3xjpg.jpg";
+	
 	private static final String ACHIEVEMENT_NAME_0 = "Amateur Author";
 	private static final String ACHIEVEMENT_URL_0 = "http://comps.gograph.com/bronze-3d-question-mark_gg57847833.jpg";
 	private static final String ACHIEVEMENT_DESCRIPTION_0 = "The user created a quiz";
@@ -73,5 +75,15 @@ public class Achievements {
 
 	public static void setAchievements(List<Achievement> achievements) {
 		Achievements.achievements = achievements;
+	}
+	
+	/**
+	 * Returns default url of achievement image (if it is not unlocked yet) 
+	 * 
+	 * @return default url of achievement image (if it is not unlocked yet) 
+	 */
+	public static String getDefaultURL()
+	{
+		return ACHIEVEMENT_URL_DEFAULT;
 	}
 }
