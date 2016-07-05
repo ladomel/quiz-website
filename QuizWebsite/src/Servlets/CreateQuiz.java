@@ -122,9 +122,9 @@ public class CreateQuiz extends HttpServlet {
 		QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
 		int numQuizzesCreated = quizDAO.getCreatedQuizzes(userName).size();
 		
-		if(numQuizzesCreated >= 1 )	achievementDAO.achievementEarned(userName, 0, date);
-		if(numQuizzesCreated >= 5 )	achievementDAO.achievementEarned(userName, 1, date);
-		if(numQuizzesCreated >= 10 )	achievementDAO.achievementEarned(userName, 2, date);
+		if(numQuizzesCreated >= 1) achievementDAO.achievementEarned(userName, 0, date);
+		if(numQuizzesCreated >= 2) achievementDAO.achievementEarned(userName, 1, date);
+		if(numQuizzesCreated >= 3) achievementDAO.achievementEarned(userName, 2, date);
 	}
 	
 	
