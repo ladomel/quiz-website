@@ -126,4 +126,14 @@ public interface QuizDAO {
 	 */
 	public List<Quiz> getQuizzesByCategory(String category, int n);
 	
+	/**
+	 * Returns list of quizzes created by given users.
+	 * Ordered by creation date.
+	 * 
+	 * @param userNames - Set<String> set of user names
+	 * @param n - limit number
+	 * @return list of created quizzes
+	 */
+	public List<Quiz> getQuizzesOfUsers(Set<String> userNames, int n);
+	
 }

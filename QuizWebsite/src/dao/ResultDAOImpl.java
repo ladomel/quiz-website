@@ -377,7 +377,7 @@ public class ResultDAOImpl implements ResultDAO {
 			sb.append("user_id = (SELECT id FROM users WHERE username LIKE ?) OR ");
 		sb.append(
 				"user_id = (SELECT id FROM users WHERE username LIKE ?) "
-				+ "ORDER BY start_time "
+				+ "ORDER BY start_time DESC "
 				+ "LIMIT ?;"
 				);
 		return sb.toString();
