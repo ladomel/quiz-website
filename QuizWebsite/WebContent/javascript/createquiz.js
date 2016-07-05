@@ -32,9 +32,11 @@ function remove(obj2,obj){
 }
 
 function submitQuiz(){
-	for (var i=0;i<count;i++){
-		var doc = document.getElementById(i).contentDocument;
-		doc.getElementById("submit").click();
+	var questions = document.getElementsByTagName("iframe");
+	for (var i=0;i<questions.length;i++){
+		var doc = questions[i].contentDocument;
+		var button = doc.getElementById("submit");
+		button.click();
 	}
 	document.getElementById("infoform").submit();
 }
