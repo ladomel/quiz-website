@@ -202,42 +202,6 @@ public class ResultDAOImpl implements ResultDAO {
 		return results;
 	}
 
-	// copy of above again ^^^^^^^
-	@Override
-	public List<Result> getBestResults(String userName, int n, long fromTimeInMs) {
-		List<Result> results = new ArrayList<Result> ();
-		try {
-			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement =
-					con.prepareStatement(
-							"SELECT username, quiz_id, start_time, time_taken, final_grade "
-							+ "FROM results "
-							+ "JOIN users "
-							+ "ON users.id = results.user_id "
-							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?) "
-							+ " AND "
-							+ "start_time > ? "
-							+ "ORDER BY final_grade DESC, start_time DESC "
-							+ "LIMIT ?;"
-							);
-			preparedStatement.setString(1, userName);
-			preparedStatement.setLong(2, fromTimeInMs);
-			preparedStatement.setInt(3, n);
-			ResultSet rs = preparedStatement.executeQuery();
-			while(rs.next()) {
-				Result result = buildResultFromResultSet(rs);
-				results.add(result);
-			}
-			preparedStatement.close();
-			rs.close();
-			con.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return results;
-	}
-	
 	// copy of above ^^^^^^^^ again with minor change in SQL command
 	@Override
 	public List<Result> getFastestResults(int quizId, int n, long fromTimeInMs) {
@@ -301,7 +265,7 @@ public class ResultDAOImpl implements ResultDAO {
 							+ "WHERE quiz_id = ? "
 							+ " AND "
 							+ "start_time > ? "
-							+ "ORDER BY final_grade DESC, start_time DESC "
+							+ "ORDER BY final_grade DESC, time_taken DESC "
 							+ "LIMIT ?;"
 							);
 			preparedStatement.setInt(1, quizId);
@@ -331,10 +295,13 @@ public class ResultDAOImpl implements ResultDAO {
 					con.prepareStatement(
 							"SELECT quiz_id, COUNT(1) AS num_tries "
 							+ "FROM results "
+							+ "WHERE start_time > ? "
 							+ "GROUP BY quiz_id "
-							+ "ORDER BY num_tries DESC"
-							+ ";"
+							+ "ORDER BY num_tries DESC "
+							+ "LIMIT ?;"
 							);
+			preparedStatement.setLong(1, fromTimeInMs);
+			preparedStatement.setInt(2, n);
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) popularQuizIds.add(rs.getInt("quiz_id"));
 			preparedStatement.close();
@@ -371,6 +338,10 @@ public class ResultDAOImpl implements ResultDAO {
 		
 		List<Result> latestFriendsResults = new ArrayList<Result> (); 
 		
+		// special cases:
+		if(nFriends == 0) return latestFriendsResults;	// in case there are no friends
+		if(nFriends == 1) return getRecentResults(friendNames.get(0), n);	// in case of only one friend
+		// case polyfriendism:
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement preparedStatement =
@@ -398,13 +369,17 @@ public class ResultDAOImpl implements ResultDAO {
 				"SELECT "
 				+ "username, quiz_id, start_time, time_taken, final_grade "
 				+ "FROM results "
-				+ "JOIN users ON users.id = results.user_id "
-				+ "WHERE ");
+				+ "JOIN users "
+				+ "ON users.id = results.user_id "
+				+ "WHERE "
+				);
 		for(int i = 0; i < n - 1; i++)
 			sb.append("user_id = (SELECT id FROM users WHERE username LIKE ?) OR ");
-		sb.append("user_id = (SELECT id FROM users WHERE username LIKE ?) "
-				+ "ORDER BY start_time DESC, final_grade DESC "
-				+ "LIMIT ?;");
+		sb.append(
+				"user_id = (SELECT id FROM users WHERE username LIKE ?) "
+				+ "ORDER BY start_time "
+				+ "LIMIT ?;"
+				);
 		return sb.toString();
 	}
 

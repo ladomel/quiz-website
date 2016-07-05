@@ -46,13 +46,6 @@ public interface ResultDAO {
 	public List<Result> getRecentResults(int quizId, int n);
 	
 	/**
-	 * @param userName - String user name
-	 * @param n - int limit number
-	 * @return best of recent results by given user
-	 */
-	public List<Result> getBestResults(String userName, int n, long fromTimeInMs);
-	
-	/**
 	 * @param quizId - id of quiz
 	 * @param n - int limit number
 	 * @return list of best results by given quiz
