@@ -79,6 +79,14 @@ public class CreateQuiz extends HttpServlet {
 
 		createdQuestions.clear();
 	
+		int i = 0;
+		while (true){
+			String tag = request.getParameter("tag" + i);
+			if (tag == null) break;
+			quizDAO.addTag(id, tag);
+			i++;
+		}
+		
 		response.sendRedirect("Quiz?id=" + id);
 	}
 	
