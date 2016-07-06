@@ -175,4 +175,12 @@ public interface QuizDAO {
 	 */
 	public boolean reviewExists(String userName, int quizId);
 	
+	/**
+	 * This method will delete all reviews belonging to user for specific quiz.
+	 * 
+	 * @param userName - String user name
+	 * @param quizId - int quiz id
+	 */
+	public void deleteReview(String userName, int quizId);
+	
 }

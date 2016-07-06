@@ -644,4 +644,27 @@ public class QuizDAOImpl implements QuizDAO {
 		return exists;
 	}
 
+	@Override
+	public void deleteReview(String userName, int quizId) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"DELETE FROM reviews "
+							+ "WHERE quiz_id = ? "
+							+ " AND "
+							+ "user_id = (SELECT id FROM users WHERE username LIKE ?);"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setString(2, userName);
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 }
