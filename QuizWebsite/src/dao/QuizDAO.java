@@ -3,7 +3,8 @@ package dao;
 import java.util.List;
 import java.util.Set;
 
-import classes.Quiz; 
+import classes.Quiz;
+import classes.Review; 
 
 public interface QuizDAO {
 
@@ -136,4 +137,24 @@ public interface QuizDAO {
 	 */
 	public List<Quiz> getQuizzesOfUsers(Set<String> userNames, int n);
 	
+	
+	
+	
+	
+	// review part
+	
+	/**
+	 * Self-explanatory.
+	 * 
+	 * @param review - Review object
+	 */
+	public void addReview(Review review);
+	
+	/**
+	 * Get review for given quiz.
+	 * 
+	 * @param quizId - int
+	 * @return list of reviews ordered by creation date
+	 */
+	public List<Review> getReviews(int quizId);
 }

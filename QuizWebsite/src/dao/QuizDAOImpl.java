@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 
 import classes.Quiz;
 import classes.Result;
+import classes.Review;
 import database.MySQLUtil;
 import factory.ClassFactory;
 
@@ -525,6 +526,23 @@ public class QuizDAOImpl implements QuizDAO {
 				+ "LIMIT ?;"
 				);
 		return sb.toString();
+	}
+
+	
+	
+	
+	// review part
+	
+	@Override
+	public void addReview(Review review) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Review> getReviews(int quizId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
