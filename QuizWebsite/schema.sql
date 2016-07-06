@@ -185,6 +185,7 @@ create table reviews(
 	text				longtext		not null,
 	quiz_id				int(11)			not null,
 	date				long			not null,
+	rating				int(11),
 	primary key(id)
 );
 

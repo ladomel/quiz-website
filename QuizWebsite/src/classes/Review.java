@@ -12,12 +12,14 @@ public class Review {
 	private long date;
 	private String userName;
 	private int quizId;
+	private int rating;
 	
-	public Review(String text, long date, String userName, int quizId) {
+	public Review(String text, long date, String userName, int quizId, int rating) {
 		this.text = text;
 		this.date = date;
 		this.userName = userName;
 		this.quizId = quizId;
+		this.rating = rating;
 	}
 	
 	/**
