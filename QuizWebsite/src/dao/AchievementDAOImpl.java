@@ -34,6 +34,7 @@ public class AchievementDAOImpl implements AchievementDAO {
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next())
 				answer.add(rs.getInt("achievement_id"));
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
@@ -56,6 +57,7 @@ public class AchievementDAOImpl implements AchievementDAO {
 			preparedStatement.setInt(2, achievementId);
 			preparedStatement.setLong(3, date);
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
