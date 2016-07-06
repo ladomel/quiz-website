@@ -4,7 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import database.DBInfo;
-
+import database.PoolHandler;
 
 //import org.apache.commons.dbcp2.BasicDataSource;  // Usual.
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource; // Online.
@@ -39,22 +39,16 @@ public class DAOInstances {
 		dataSource.setUsername(DBInfo.USER_NAME);
 		dataSource.setPassword(DBInfo.PASSWORD);
 		dataSource.setUrl(DBInfo.DB_URL);
-		
+		dataSource.setInitialSize(10);
+
 		// set up user dao to use for pooling
 		userDAO = new UserDAOImpl(dataSource);
 
 		timer = new Timer();
-		timer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				// set connection pool size here:
-				dataSource.setMinIdle( 
-						(int) userDAO.getNumberOfLoggedInUsers() / 10
-						);
-				// TODO: make finer adjustments
-			}
-		}, 0, POOL_UPDATE_INTERVAL);
-
+		timer.scheduleAtFixedRate(
+				new PoolHandler(dataSource, userDAO.getNumberOfLoggedInUsers()), 
+				0, 
+				POOL_UPDATE_INTERVAL);
 	}
 	
 	public UserDAO getUserDAO() {
