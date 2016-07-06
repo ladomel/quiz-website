@@ -150,6 +150,8 @@ public class QuizDAOImplTest {
 		quizDAO.addReview(new Review("better", 8, "god", quizId, 4));
 //		System.out.println("expected 6.6, got: " + quizDAO.getAverageRating(quizId));
 		System.out.println(quizDAO.getReviews(quizId));
+		assertTrue(quizDAO.reviewExists("god", quizId));
+		assertFalse(quizDAO.reviewExists("god", quizId + 1));
 }
 	
 //	@Test
