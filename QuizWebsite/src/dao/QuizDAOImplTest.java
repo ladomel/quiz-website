@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import classes.Quiz;
+import classes.Review;
 import classes.User;
 import factory.ClassFactory;
 
@@ -137,6 +138,19 @@ public class QuizDAOImplTest {
 		quizDAO.addTag(id2, "tag22");
 		System.out.println(quizDAO.getSeatchedQuizzes(1, "ag2"));
 	}
+	
+	@Test
+	public void testReviews() {
+		Quiz quiz = createQuiz(QUIZ_AUTHOR, "reviewed", "rev", "asd", 1234, false, 9, false, 100, false, 120);
+		int quizId = quizDAO.addQuiz(quiz);
+		quizDAO.addReview(new Review("good", 1, "god", quizId, 10));
+		quizDAO.addReview(new Review("ok", 2, "god", quizId, 9));
+		quizDAO.addReview(new Review("not bad", 5, "god", quizId, 8));
+		quizDAO.addReview(new Review("bad", 7, "god", quizId, 2));
+		quizDAO.addReview(new Review("better", 8, "god", quizId, 4));
+//		System.out.println("expected 6.6, got: " + quizDAO.getAverageRating(quizId));
+		System.out.println(quizDAO.getReviews(quizId));
+}
 	
 //	@Test
 //	public void test2() {
