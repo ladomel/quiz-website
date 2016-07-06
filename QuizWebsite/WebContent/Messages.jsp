@@ -31,7 +31,7 @@
 					String seen = "noteSeen";
 					if (!notes.get(i).isSeen()) seen = "note";
 					out.print("<div id='Note" + notes.get(i).getId() + "'  class='" + seen + "' onclick=\"alert('" + notes.get(i).getNote() + "'); seen('" + notes.get(i).getId() +"'); \">");
-					out.print("<div class='from'>FROM: " + notes.get(i).getSenderUserName() + " TO: " + notes.get(i).getGetterUserName() + " (" + notes.get(i).getDateSent() + ")</div>");
+					out.print("<div class='from'>FROM: " + notes.get(i).getSenderUserName() + " TO: " + notes.get(i).getGetterUserName() + " (" + new Date(notes.get(i).getDateSent()) + ")</div>");
 					out.print("<div class='text'>NOTE: " + notes.get(i).getNote() + "</div>");
 					if (!user.getUserName().equals(notes.get(i).getSenderUserName())) 
 						out.print("<button id='reply' onclick=\"reply('" + notes.get(i).getSenderUserName() + "');\">Reply</button>");
