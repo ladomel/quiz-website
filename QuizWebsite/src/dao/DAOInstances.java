@@ -16,7 +16,7 @@ import org.apache.tomcat.dbcp.dbcp2.BasicDataSource; // Online.
  */
 public class DAOInstances {
 
-	private static final long POOL_UPDATE_INTERVAL = 10000;
+	private static final long POOL_UPDATE_INTERVAL = 30 * 1000;	// 30 secs
 	private BasicDataSource dataSource;
 	private Timer timer;
 	private UserDAO userDAO;
@@ -38,7 +38,7 @@ public class DAOInstances {
 		dataSource.setUsername(DBInfo.USER_NAME);
 		dataSource.setPassword(DBInfo.PASSWORD);
 		dataSource.setUrl(DBInfo.DB_URL);
-		dataSource.setInitialSize(10);
+		dataSource.setInitialSize(2);
 
 		// set up user dao to use for pooling
 		userDAO = new UserDAOImpl(dataSource);
