@@ -37,6 +37,7 @@ public class MessageDAOImpl implements MessageDAO{
 		preparedStatement.setDouble(4, friendRequest.getDateSent());
 		preparedStatement.setBoolean(5, friendRequest.isSeen());
 		preparedStatement.executeUpdate();
+		preparedStatement.close();
 		con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -59,6 +60,7 @@ public class MessageDAOImpl implements MessageDAO{
 			preparedStatement.setDouble(4, note.getDateSent());
 			preparedStatement.setBoolean(5, note.isSeen());
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -82,6 +84,7 @@ public class MessageDAOImpl implements MessageDAO{
 			preparedStatement.setDouble(5, challenge.getDateSent());
 			preparedStatement.setBoolean(6, challenge.isSeen());
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -102,6 +105,7 @@ public class MessageDAOImpl implements MessageDAO{
 			preparedStatement.setString(2, announcement.getAnnouncement());
 			preparedStatement.setLong(3, announcement.getDate());
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -123,6 +127,7 @@ public class MessageDAOImpl implements MessageDAO{
 							+ "ORDER BY time DESC;");
 			ResultSet rs = preparedStatement.executeQuery();
 			fillAnnouncementAnswer(answer, rs);
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
@@ -161,6 +166,7 @@ public class MessageDAOImpl implements MessageDAO{
 
 			ResultSet rs = preparedStatement.executeQuery();
 			fillRequestAnswer(answer, rs);
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
@@ -199,6 +205,7 @@ public class MessageDAOImpl implements MessageDAO{
 
 			ResultSet rs = preparedStatement.executeQuery();
 			fillChallengeAnswer(answer, rs);
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
@@ -237,6 +244,7 @@ public class MessageDAOImpl implements MessageDAO{
 
 			ResultSet rs = preparedStatement.executeQuery();
 			fillNoteAnswer(answer, rs);
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {
@@ -359,7 +367,7 @@ public class MessageDAOImpl implements MessageDAO{
 
 			ResultSet rs = preparedStatement.executeQuery();
 
-			if(rs.next()) return true;
+			if(rs.next()) answer = true;
 			rs.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
@@ -375,6 +383,7 @@ public class MessageDAOImpl implements MessageDAO{
 			preparedStatement.setBoolean(1, true);
 			preparedStatement.setInt(2, id);
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 	}
@@ -388,6 +397,7 @@ public class MessageDAOImpl implements MessageDAO{
 			preparedStatement.setBoolean(1, true);
 			preparedStatement.setInt(2, id);
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 		
@@ -402,6 +412,7 @@ public class MessageDAOImpl implements MessageDAO{
 			preparedStatement.setBoolean(1, true);
 			preparedStatement.setInt(2, id);
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 	}
@@ -428,6 +439,7 @@ public class MessageDAOImpl implements MessageDAO{
 			preparedStatement.setString(1, username);
 			rs = preparedStatement.executeQuery();
 			if(rs.next())answer += rs.getInt("total");
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
@@ -443,6 +455,7 @@ public class MessageDAOImpl implements MessageDAO{
 			preparedStatement.setString(1, newStatus);
 			preparedStatement.setInt(2, id);
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 	}
@@ -456,6 +469,7 @@ public class MessageDAOImpl implements MessageDAO{
 			preparedStatement.setString(1, newStatus);
 			preparedStatement.setInt(2, id);
 			preparedStatement.executeUpdate();
+			preparedStatement.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
 	}
@@ -474,6 +488,7 @@ public class MessageDAOImpl implements MessageDAO{
 
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) numRequests++;
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
@@ -494,6 +509,7 @@ public class MessageDAOImpl implements MessageDAO{
 
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) numChallenges++;
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
@@ -514,6 +530,7 @@ public class MessageDAOImpl implements MessageDAO{
 
 			ResultSet rs = preparedStatement.executeQuery();
 			while(rs.next()) numUnseen++;
+			preparedStatement.close();
 			rs.close();
 			con.close();
 		} catch (SQLException e) {	e.printStackTrace();}
