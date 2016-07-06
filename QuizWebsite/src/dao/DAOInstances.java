@@ -38,16 +38,16 @@ public class DAOInstances {
 		dataSource.setUsername(DBInfo.USER_NAME);
 		dataSource.setPassword(DBInfo.PASSWORD);
 		dataSource.setUrl(DBInfo.DB_URL);
-		dataSource.setInitialSize(2);
+		dataSource.setInitialSize(10);
 
 		// set up user dao to use for pooling
 		userDAO = new UserDAOImpl(dataSource);
 
-		timer = new Timer();
-		timer.scheduleAtFixedRate(
-				new PoolHandler(dataSource, userDAO.getNumberOfLoggedInUsers()), 
-				0, 
-				POOL_UPDATE_INTERVAL);
+//		timer = new Timer();
+//		timer.scheduleAtFixedRate(
+//				new PoolHandler(dataSource, userDAO.getNumberOfLoggedInUsers()), 
+//				0, 
+//				POOL_UPDATE_INTERVAL);
 	}
 	
 	public UserDAO getUserDAO() {

@@ -28,6 +28,7 @@ public class StringChanger {
 	 */
 	public String changeString(String before)
 	{
+		if(before == null) return "";
 		String after = "";
 		char nextChar;
 		
