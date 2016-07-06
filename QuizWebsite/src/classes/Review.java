@@ -49,5 +49,12 @@ public class Review {
 	public int getQuizId() {
 		return quizId;
 	}
-	
+
+	/**
+	 * @return the rating
+	 */
+	public int getRating() {
+		return rating;
+	}
+
 }
