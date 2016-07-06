@@ -52,8 +52,8 @@ public class Login extends HttpServlet {
 		User user = userDAO.getUser(userName);
 		
 		if (userDAO.isUserLoggedIn(userName)) {
-			dispatcher = request.getRequestDispatcher("loggedIn.html");
-		} else {
+			//dispatcher = request.getRequestDispatcher("loggedIn.html");
+		} else 
 		
 			userDAO.logInUser(userName);
 		
@@ -64,7 +64,7 @@ public class Login extends HttpServlet {
 			request.getSession().setAttribute("MasterUser", user);
 			dispatcher = request.getRequestDispatcher("index");
 			request.getSession().setAttribute("isAdmin", userDAO.isAdmin(user.getUserName()));
-		}		}
+		}		
 		dispatcher.forward(request, response);
 	}
 }
