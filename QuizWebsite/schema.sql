@@ -180,10 +180,12 @@ create table earned_achievements
 );
 
 create table reviews(
+	id					int(11)			not null auto_increment,
 	user_id				int(11)			not null,
 	text				longtext		not null,
 	quiz_id				int(11)			not null,
-	date				long			
+	date				long			not null,
+	primary key(id)
 );
 
 insert into users(username, hash_password, salt, description, image)
