@@ -509,8 +509,13 @@ public class QuizDAOImpl implements QuizDAO {
 				"SELECT "
 				+ "quizzes.id, username, name, quizzes.description, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score, category, is_random, is_one_page, immediate_correction, practice_mode, creation_time, time, max_score "
 				+ "FROM quizzes "
-				+ "JOIN users "
+				+ "LEFT JOIN users "
 				+ "ON users.id = quizzes.creator_id "
+				+ "LEFT JOIN tags "
+				+ "ON tags.quiz_id = quizzes.id "
+				+ "LEFT JOIN categories "
+				+ "ON categories.id = quizzes.category_id "
+				+ "ON categories.id = "
 				+ "WHERE "
 				);
 		for(int i = 0; i < nFriends - 1; i++)

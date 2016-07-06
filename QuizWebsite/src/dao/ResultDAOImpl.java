@@ -426,4 +426,95 @@ public class ResultDAOImpl implements ResultDAO {
 		return avgGrade;
 	}
 
+	@Override
+	public List<Result> getRecentResults(Set<String> userName, int quizId, int n) {
+
+		List<String> friendNames = new ArrayList<String>();
+		friendNames.addAll(userName);
+		int nFriends = friendNames.size();
+		
+		List<Result> latestFriendsResults = new ArrayList<Result> (); 
+		
+		// special cases:
+		if(nFriends == 0) return latestFriendsResults;	// in case there are no friends
+		if(nFriends == 1) return getRecentResults(friendNames.get(0), n);	// in case of only one friend
+		// case polyfriendism:
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(friendsResultsOnQuizCommand(nFriends));
+			for(int i = 0; i < nFriends; i++)
+				preparedStatement.setString(i + 1, friendNames.get(i));
+			preparedStatement.setInt(nFriends + 1, quizId);
+			preparedStatement.setInt(nFriends + 2, n);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) 
+				latestFriendsResults.add(buildResultFromResultSet(rs));
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return latestFriendsResults;
+	}
+
+	private String friendsResultsOnQuizCommand(int nFriends) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(
+				"SELECT "
+				+ "username, quiz_id, start_time, time_taken, final_grade "
+				+ "FROM results "
+				+ "JOIN users "
+				+ "ON users.id = results.user_id "
+				+ "WHERE "
+				);
+		for(int i = 0; i < nFriends - 1; i++)
+			sb.append("user_id = (SELECT id FROM users WHERE username LIKE ?) OR ");
+		sb.append(
+				"user_id = (SELECT id FROM users WHERE username LIKE ?) "
+				+ "AND quiz_id = ? "
+				+ "ORDER BY start_time DESC "
+				+ "LIMIT ?;"
+				);
+		return sb.toString();
+	}
+
+	@Override
+	public int rankInQuiz(String userName, int quizId) {
+		int rank = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT COUNT(1) AS rank "
+							+ "FROM results "
+							+ "WHERE quiz_id = ? AND "
+							+ "final_grade >= ("
+							+ "SELECT final_grade "
+							+ "FROM results "
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?) AND "
+							+ "quiz_id = ? "
+							+ "ORDER BY final_grade DESC "
+							+ "LIMIT 1"
+							+ ");"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setString(2, userName);
+			preparedStatement.setInt(3, quizId);
+			ResultSet rs = preparedStatement.executeQuery();
+			rs.next();
+			rank = rs.getInt("rank");
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rank;
+	}
+
 }

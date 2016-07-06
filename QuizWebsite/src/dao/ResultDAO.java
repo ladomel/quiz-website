@@ -38,6 +38,10 @@ public interface ResultDAO {
 	
 	public List<Result> getRecentResults(Set<String> userName, int n);
 	
+	public List<Result> getRecentResults(Set<String> userName, int quizId, int n);
+	
+	public int rankInQuiz(String userName, int quizId);
+	
 	/**
 	 * @param quizId - id of quiz
 	 * @param n - int limit number
