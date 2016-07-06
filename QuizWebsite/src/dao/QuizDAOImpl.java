@@ -567,8 +567,8 @@ public class QuizDAOImpl implements QuizDAO {
 							"SELECT users.username, reviews.text, reviews.quiz_id, reviews.date, reviews.rating "
 							+ "FROM reviews "
 							+ "LEFT JOIN users "
-							+ "ON users.id = review.user_id "
-							+ "WHERE reviews.quiz_id = ?"
+							+ "ON users.id = reviews.user_id "
+							+ "WHERE reviews.quiz_id = ? "
 							+ "ORDER BY rating DESC, date DESC;"
 							);
 			preparedStatement.setInt(1, quizId);
@@ -604,7 +604,7 @@ public class QuizDAOImpl implements QuizDAO {
 			PreparedStatement preparedStatement =
 					con.prepareStatement(
 							"SELECT AVG(rating) AS avg "
-							+ "FROM review "
+							+ "FROM reviews "
 							+ "WHERE quiz_id = ?;"
 							);
 			preparedStatement.setInt(1, quizId);
