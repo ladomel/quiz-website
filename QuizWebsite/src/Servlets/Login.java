@@ -51,6 +51,12 @@ public class Login extends HttpServlet {
 		PasswordHasher hasher = (PasswordHasher)ctx.getAttribute("hasher");
 		User user = userDAO.getUser(userName);
 		
+		if (userDAO.isUserLoggedIn(userName)) {
+			//dispatcher = request.getRequestDispatcher("loggedIn.html");
+		} else 
+		
+			userDAO.logInUser(userName);
+		
 		dispatcher = request.getRequestDispatcher("invalidlogin.jsp");	
 		
 		if(user != null && hasher.hashPassword(password + user.getSalt()).equals(user.getHashedPassword()))
