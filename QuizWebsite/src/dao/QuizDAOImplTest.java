@@ -152,6 +152,8 @@ public class QuizDAOImplTest {
 		System.out.println(quizDAO.getReviews(quizId));
 		assertTrue(quizDAO.reviewExists("god", quizId));
 		assertFalse(quizDAO.reviewExists("god", quizId + 1));
+		quizDAO.deleteReview("god", quizId);
+		assertFalse(quizDAO.reviewExists("god", quizId));
 }
 	
 //	@Test
