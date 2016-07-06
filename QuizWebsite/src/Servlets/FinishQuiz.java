@@ -1,6 +1,7 @@
 package Servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,12 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import Main.Constants;
 import classes.Answer;
 import classes.Result;
 import classes.User;
 import dao.AchievementDAO;
 import dao.QuizDAO;
 import dao.ResultDAO;
+import dao.UserDAO;
 import classes.Quiz;
 
 /**
@@ -45,6 +48,9 @@ public class FinishQuiz extends HttpServlet {
 		
 		
     	Quiz takenQuiz = (Quiz)session.getAttribute("Quiz");
+    	
+    	if (takenQuiz == null) return;
+    	
     	Date date = new Date();
     	Result result = (Result)session.getAttribute("Result");
     	result.setTimeTaken(date.getTime() - result.getTimeStarted());
@@ -64,6 +70,19 @@ public class FinishQuiz extends HttpServlet {
 		
 		checkAchievements(request, userName, date);
 		setAttributesToNulls(session);
+		
+		ResultDAO resultDao =  (ResultDAO) request.getServletContext().getAttribute("resultDAO");
+		UserDAO userDao =  (UserDAO) request.getServletContext().getAttribute("userDAO");
+		 
+		List<Result> rece = (List<Result>) resultDao.getRecentResults(userDao.getFriends(userName), Constants.MAX_DISPLAY);
+		request.setAttribute("FriendsRecentResults", rece);
+		List<String> frnds = new ArrayList<String>();
+		for (Result r : rece){
+			frnds.add(r.getUserName());
+		}
+		request.setAttribute("FriendsRecentUsers", frnds);
+		
+		request.setAttribute("Ranking", resultDao.rankInQuiz(userName, takenQuiz.getId()));
 		
     	RequestDispatcher requestDispatcher = request.getRequestDispatcher("quizResult.jsp");
     	requestDispatcher.forward(request, response);	

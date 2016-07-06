@@ -41,24 +41,33 @@ public class Profile extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("Profile.java-Start");
 		String userName = request.getParameter("username");
-		RequestDispatcher dispatcher = request.getRequestDispatcher("notfound.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("notFound.jsp");
 		ServletContext ctx= getServletContext();  
 		UserDAO userDAO = (UserDAO)ctx.getAttribute("userDAO");
 		User master = (User) request.getSession().getAttribute("MasterUser");
-		
+		System.out.println("Profile.java-BeforeFetch-" + userName);
 		User user = userDAO.getUser(userName);
+		System.out.println("Profile.java-FetchUser");
+		
 		if(user != null){
+			System.out.println("Profile.java-If");
+			request.setAttribute("User", user);
+			
 			QuizDAO quizDao= (QuizDAO)ctx.getAttribute("quizDAO");
 			ResultDAO resultDao= (ResultDAO)ctx.getAttribute("resultDAO");
 			MessageDAO messageDao= (MessageDAO)ctx.getAttribute("messageDAO");
 			
 			Set<String> friends = userDAO.getFriends(userName);
-			
 			request.setAttribute("Friends", friends);
-			request.setAttribute("createdQuizzes", quizDao.getCreatedQuizzes(userName));
+			System.out.println("Profile.java-Friends");
 			
-			request.setAttribute("User", user);
+			
+			request.setAttribute("createdQuizzes", quizDao.getCreatedQuizzes(userName));
+			System.out.println("Profile.java-Created");
+			
+			
 			if (master != null){
 				request.setAttribute("FriendRequestSent", messageDao.friendRequestExists(master.getUserName(), userName));
 				request.setAttribute("FriendRequestReceived", messageDao.friendRequestExists(userName, master.getUserName()));
@@ -66,7 +75,8 @@ public class Profile extends HttpServlet {
 			
 			
 			List<Result> recent = resultDao.getRecentResults(userName, Constants.MAX_DISPLAY);
-			// add sort by time date and score
+			System.out.println("Profile.java-Results");
+			
 			
 			List<classes.Quiz> recQuiz= new ArrayList<classes.Quiz>();
 			if (recent!= null){
@@ -76,21 +86,33 @@ public class Profile extends HttpServlet {
 			}
 			request.setAttribute("recentResults", recent);
 			request.setAttribute("recentQuizzes", recQuiz);
+			System.out.println("Profile.java-Recents");
 			
+			List<Result> rece = (List<Result>) resultDao.getRecentResults(friends, Constants.MAX_DISPLAY);
+			request.setAttribute("FriendsRecentResults", rece);
+			List<String> frnds = new ArrayList<String>();
+			List<classes.Quiz> quizzes = new ArrayList<classes.Quiz>();
+			for (Result r : rece){
+				frnds.add(r.getUserName());
+				quizzes.add(quizDao.getQuiz(r.getQuizId()));
+			}
+			request.setAttribute("FriendsRecentQuizzes", quizzes);
+			request.setAttribute("FriendsRecentUsers", frnds);
 			
-			request.setAttribute("FriendsRecent", resultDao.getRecentResults(friends, Constants.MAX_DISPLAY));
-			request.setAttribute("FriendsCreated", null);
-			request.setAttribute("FriendsAchievements", null);
+			List<classes.Quiz> fqq = quizDao.getQuizzesOfUsers(friends, Constants.MAX_DISPLAY);
+			request.setAttribute("FriendsCreatedQuizzes", fqq);
+			List<String> usrq = new ArrayList<String>();
+			for (classes.Quiz q : fqq){
+				usrq.add(q.getUserName());
+			}
+			request.setAttribute("FriendsCreatedUsers",usrq);
 			
-			
-			//achievements
-			AchievementDAO aD = (AchievementDAO) ctx.getAttribute("achievementDAO");
-			
+			System.out.println("Profile.java-Friendsandstuff");
 			
 			dispatcher = request.getRequestDispatcher("Profile.jsp");
 		}
-		
-		dispatcher.forward(request, response);
+		System.out.println("Profile.java-End"); 
+		dispatcher.forward(request, response); 
 	}
 
 	/**
@@ -100,6 +122,6 @@ public class Profile extends HttpServlet {
 	 * 
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		doGet(request,response);
 	}
 }

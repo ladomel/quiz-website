@@ -69,5 +69,6 @@ public class CreateMCH extends HttpServlet {
 		QuestionMCH questionMCH = new QuestionMCH(problem, grade, questions, rightAnswers, wrongAnswers);
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
 		createdQuestions.add(questionMCH);
+		System.out.println(questionMCH.toString() + "//aaaaaaaaaaaaaaaaaaaaaa");
 	}
 }

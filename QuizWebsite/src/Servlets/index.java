@@ -35,9 +35,12 @@ public class index extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("index.java-Start");
 		MessageDAO mD = (MessageDAO) request.getServletContext().getAttribute("messageDAO");
 		QuizDAO qD = (QuizDAO) request.getServletContext().getAttribute("quizDAO");
 		ResultDAO rD = (ResultDAO) request.getServletContext().getAttribute("resultDAO");
+		
+		
 		request.setAttribute("Announcements", mD.getAnnouncements());
 		
 		String param = request.getParameter("popular");
@@ -58,7 +61,9 @@ public class index extends HttpServlet {
 		
 		request.setAttribute("PopularQuizzes", popQ);
 		request.setAttribute("RecentQuizzes", qD.getRecentQuizzes(Constants.MAX_DISPLAY));
+		
 		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
+		System.out.println("index.java-End");
 		rd.forward(request, response);
 	}
 

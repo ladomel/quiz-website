@@ -1,0 +1,43 @@
+@CHARSET "ISO-8859-1";
+
+
+#centerpanel {
+	position: absolute;
+	left: 0px;
+	top: 100px;
+	width: 100%;
+	min-width: 1200px;
+	height: calc(100% - 100px);
+	margin: 0px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	text-align: center;
+}	
+
+h2 {
+	align: center;
+}
+
+form {
+	width: 600px;
+	height: 200px;
+	position: absolute;
+	top : 50px;
+	left: calc(50% - 300px);
+}
+
+#list {
+	width: 600px;
+	position: absolute;
+	top: 250px;
+	left: calc(50% - 300px);
+}
+
+.ls {
+	width: 100%;
+	border: 3px solid black;
+	 word-wrap: break-word;
+	 overflow: auto;
+	height: 100px;
+	background: grey;
+}

@@ -12,6 +12,7 @@
 	background: #e6e6e6;
 }
 
+
 .divtitle {
 	position: absolute;
 	top: 0px;
@@ -61,13 +62,25 @@
 #createaquiz {
 	position: absolute;
 	top: 15px;
-	width: 340px;
+	width: 300px;
 	border: none;
 	background: grey;
 	height: 50px;
 	font-size: 30px;
-	left: calc(50% - 342px);
+	left: calc(50% - 150px);
 }
+
+#brwquizzes {
+	position: absolute;
+	top: 15px;
+	width: 300px;
+	border: none;
+	background: grey;
+	height: 50px;
+	font-size: 30px;
+	left: calc(50% - 455px);	
+}
+
 
 #logintosee {
 	position: absolute;
@@ -85,15 +98,15 @@
 #homepage {
 	position: absolute;
 	top: 15px;
-	width: 340px;
+	width: 300px;
 	border: none;
 	background: grey;
 	height: 50px;
 	font-size: 30px;
-	left: calc(50%  + 2px);
+	left: calc(50%  + 155px);
 }
 
-#createaquiz:hover ,#homepage:hover {
+#createaquiz:hover ,#homepage:hover ,#brwquizzes:hover{
 	background: green;
 }
 

@@ -29,6 +29,15 @@
 	top: 20px;	
 }
 
+.breaker {
+	width: 300px;
+	height: 100px;
+	position: absolute;
+	top: 850px;
+	font-size: 30px;
+	left: calc(50% - 150px); 
+}
+
 #description {
 	height: 130px;
 	width: 550px;
@@ -171,12 +180,12 @@
 	position: absolute;
 	top: 400px;
 	background: grey;
-	left: calc(50% - 410px);
+	left: calc(50% - 510px);
 	margin-bottom: 80px;
 }
 
 #createdquizzes {
-	left: calc(50% - 200px);
+	left: calc(50% - 300px);
 }
 
 .inf {
@@ -191,40 +200,39 @@
 
 .usrname, .timetaken, .scr ,.date, .qzname {
 	display: inline-block;
-	width: 80px;
+	width: 70px;
 	height: 100%;
 	color: white;
-	font-size: 18px;
+	font-size: 15px;
 	line-height: 20px;
-	padding-left: 4px;
 	vertical-align: middle;
 }
 
 .entrydate , .entrytime, .entryscore, .entryquiz, .entryuser {
 	display: inline-block;
-	width: 80px;
+	width: 70px;
 	height: 100%;
 	color: white;
-	font-size: 20px;
+	font-size: 15px;
 	line-height: 30px;
 	vertical-align: middle;
 	text-align: center;
 	overflow:hidden;
 }
 
-.usrname,.entryuser { width: 150px;}
-.timetaken, .entrytime { width: 100px;}
-.qzname ,.entryquiz{ width: 200px;}
+.usrname,.entryuser { width: 100px;}
+.timetaken, .entrytime { width: 70px;}
+.qzname ,.entryquiz{ width: 190px;}
 .scr ,.entryscore{ width: 60px;}
-.date , .entrydate{ width: 100px;}
+.date , .entrydate{ width: 170px;}
 
 #reslist, #jjj, #jj,#j {
 	top: 50px;
 }
 
 #recentresults {
-	width: 500px;
-	left:  calc(50% + 10px);
+	width: 600px;
+	left:  calc(50% - 90px);
 }
 
 .listentry:hover {
@@ -243,23 +251,21 @@
 }
 
 
-#friendsachievements , #friendsrecent , #friendscreated {
+#friendsrecent , #friendscreated {
 	position: absolute;
 	width: 400px;
 	height: 400px;
 	background: grey;
-	top : 830px;
-	left: calc(50% + 80px);
+	top : 900px;
 }
 
 #friendscreated {
 	width: 380px;
-	left:  calc(50% - 340px);
+	left:  calc(50% - 550px);
 }
 
 #friendsrecent {
-	top: 1300px;
-	left:  calc(50% - 350px);
+	left:  calc(50% - 150px);
 	width: 700px;
 }
 

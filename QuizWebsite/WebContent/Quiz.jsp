@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="classes.*" %>
 <%@ page import="dao.*" %>
+<%@ page import="java.util.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -23,7 +24,7 @@
 </head>
 <body>
 	<div id="centerpanel">
-		<span id="qname"><%= quiz.getQuizName() %></span>
+		<span id="qname"><%= quiz.getQuizName() %> (Cat: <%=quiz.getCategory() %>)</span>
 		<span id="qdescription"><%= quiz.getDescription() %></span>
 		<span id="qauthor"><a href='Profile?username=<%= quiz.getUserName() %>'>Author: <%= quiz.getUserName() %></a></span>
 		<%
@@ -33,22 +34,41 @@
 				if (master.equals(quiz.getUserName())) {
 					out.print("<button id='editdescr'>Edit Description</button>");
 				}
+				out.print("<a href=\"Reviews?quizId=" + quiz.getId() + "\"><button id=\"reviews\">View Reviews</button></a>");
 				
 			} 
 	
 		%>
 		
+		
+		
 		<div id="topscores">
 			<div class="divtitle">Top Scores:</div>
 			<div class="inf">
-			<span class="usrname">Username</span>
-			<span class="scr">Score</span>
-			<span class="timetaken">Time</span>
+				<span class="usrname">Username</span>
+				<span class="scr">Score</span>
+				<span class="timetaken">Time Taken</span>
+				<span class="date">Date</span>
 			</div>
 			<div class="list">
 			<%
-				// results
+			List<Result> res = ( List<Result>) request.getAttribute("BestResults");
+			List<String> users = (List<String> ) request.getAttribute("BestResultsUsers");
 				
+			if (res != null && users != null){
+				int i = 0;
+				for (Result r : res){
+					out.print("<div class='listentry'>");
+					
+					out.print("<span class='uname'><a href='Profile?username=" + users.get(i) + "'>" + users.get(i) + "</a></span>");
+					out.print("<span class='scor'>" + r.getFinalGrade() + "</span>");
+					out.print("<span class='tim'>" + r.getTimeTaken()/(1000 * 60) + "mins</span>");
+					out.print("<span class='dt'>" + new Date(r.getTimeStarted()) + "</span>");
+					
+					out.print("</div>");
+					i++;
+				}
+			}
 			%>
 			</div>
 		</div>
@@ -57,19 +77,64 @@
 			<div class="inf">
 			<span class="usrname">Username</span>
 			<span class="scr">Score</span>
-			<span class="timetaken">Time</span>
+			<span class="timetaken">Time Taken</span>
 			</div>
 			<div class="list">
 			<%
+			 res = ( List<Result>) request.getAttribute("RecentTakersQuizzes");
+			users = (List<String> ) request.getAttribute("RecentTakersUsers");
 				
+			if (res != null && users != null){
+				int i = 0;
+				for (Result r : res){
+					out.print("<div class='listentry'>");
+					
+					out.print("<span class='uname'><a href='Profile?username=" + users.get(i) + "'>" + users.get(i) + "</a></span>");
+					out.print("<span class='scor'>" + r.getFinalGrade() + "</span>");
+					out.print("<span class='tim'>" + r.getTimeTaken()/(1000 * 60) + "mins</span>");
+							
+					out.print("</div>");
+					i++;
+				}
+			}
+			
 			%>
 			</div>
 		</div>
+		
+		<% String disp = null; if (master== null) disp = "none"; else disp= "block";  %>
+		
+		<div id='yourperformance' style="display:<%=disp %>">
+			<div class="divtitle">Your Past Performance:</div>
+			<div class="inf">
+				<span class="dt" >Date</span>
+				<span class="z2">Score</span>
+				<span class="z3" >Time Taken</span>
+			</div>
+			<div class="list">
+				<%
+					res =  (List<Result>) request.getAttribute("PastResults");
+					if (res != null){
+
+					for (Result r : res){
+						out.print("<div class='listentry'>");
+						
+						out.print("<span class='dt'>" + r.getTimeStarted() + "</span>");
+						out.print("<span class='scor'>" + r.getFinalGrade() + "</span>");
+						out.print("<span class='tim'>" + r.getTimeTaken()/(1000 * 60) + "mins</span>");
+								
+						out.print("</div>");
+					}
+				}
+				%>
+			</div>
+		</div>
+		
 		<%
 			String disabled = "";
 			if (request.getSession().getAttribute("MasterUser")==null) disabled = "disabled";
 			String disabledPractice = null;
-			if (quiz.hasPracticeMode()) disabledPractice = ""; else disabledPractice = "disabled";
+			if (quiz.hasPracticeMode() && master != null) disabledPractice = ""; else disabledPractice = "disabled";
 		%>
 		<form action="TakeQuiz" method="post">
 			<input type="hidden" name="id" value='<%= quiz.getId() %>' >
@@ -80,7 +145,7 @@
 			<input type="hidden" name="id" value='<%= quiz.getId() %>' >
 			<input type="hidden" name="PracticeMode" value='Yes'>			
 		</form>
-		<button id="startquizpractice"  <%= disabledPractice %> onclick='practiceMode();'>Start Practice Mode</button>
+		<button id="startquizpractice"  <%= disabledPractice %> onclick='practiceMode();'>Start in Practice Mode</button>
 		
 	</div>
 	<%

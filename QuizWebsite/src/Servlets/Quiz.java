@@ -12,8 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Main.Constants;
+import classes.Result;
+import classes.User;
 import dao.QuestionDAO;
 import dao.QuizDAO;
+import dao.ResultDAO;
 
 /**
  * Servlet implementation class Quiz
@@ -37,6 +40,7 @@ public class Quiz extends HttpServlet {
 		String quizName = request.getParameter("quizname");
 		
 		QuizDAO quizDAO = (QuizDAO)request.getServletContext().getAttribute("quizDAO");
+		ResultDAO resultDAO = (ResultDAO) request.getServletContext().getAttribute("resultDAO");
 		
 		if (id != null) {
 			int quizId = Integer.parseInt(id);
@@ -44,6 +48,32 @@ public class Quiz extends HttpServlet {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("Quiz.jsp");
 			if (quiz == null) requestDispatcher = request.getRequestDispatcher("notFound.jsp");
 			request.setAttribute("Quiz", quiz);
+			
+			List<Result> res =resultDAO.getRecentResults(quizId, Constants.MAX_DISPLAY);
+			request.setAttribute("RecentTakersQuizzes", res);
+			List<String> users = new ArrayList<String>();
+			for (Result r : res){
+				users.add(r.getUserName());
+			}
+			request.setAttribute("RecentTakersUsers", users);
+			
+			users = new ArrayList<String>();
+			res = resultDAO.getBestResults(quizId, Constants.MAX_DISPLAY, Constants.ALLTIME_IN_MS);
+			request.setAttribute("BestResults", res);
+			for (Result r : res){
+				users.add(r.getUserName());
+			}
+			request.setAttribute("BestResultsUsers", users);
+			
+			User master = (User) request.getSession().getAttribute("MasterUser");
+			if (master!=null){
+			if (request.getParameter("result") == null) {
+				request.setAttribute("PastResults", resultDAO.getResult(master.getUserName(), quizId));
+			} else if (request.getParameter("result").equals("score")) {
+				// sort score
+			} else {
+				// sort time
+			}}
 			
 			requestDispatcher.forward(request, response);	
 		} else {

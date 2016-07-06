@@ -20,6 +20,8 @@
 	User user = (User)request.getAttribute("User"); 
 	UserDAO uD = (UserDAO) request.getServletContext().getAttribute("userDAO");
 	Set<String> friends = (Set<String>) request.getAttribute("Friends");
+	
+	StringChanger sc = new StringChanger();
 %>
 <title><% out.print(user.getUserName() + "'s Profile"); %></title>
 </head>
@@ -27,7 +29,7 @@
 	<div id="centerpanel">
 		<img id="profileimage" src="<%= user.getImage() %>">
 		<span id="profilename"><%= user.getUserName() %></span>
-		<span id="description"><%= user.getDescription() %></span>
+		<span id="description"><%= sc.changeString(user.getDescription()) %></span>
 		<% 
 		if (masterUser != null){
 			if (!friends.contains(masterUser.getUserName()) && !user.equals(masterUser)){
@@ -78,9 +80,9 @@
 					Achievement a = ach.getAchievement(i);
 					
 						if (aD.hasAchievement(user.getUserName(), i)) 
-							out.print("<img class='achimage' src='" + a.getPictureURL() + "' onclick=\"dropDown('" + a.getPictureURL() + "','" + a.getName() + "','" + a.getDescription() + "');\" />");
+							out.print("<img class='achimage' src='" + a.getPictureURL() + "' onclick=\"dropDown('" + a.getPictureURL() + "','" + a.getName() + "','" + sc.changeString( a.getDescription()) + "');\" />");
 						else 
-							out.print("<img class='achimage' src='" + ach.getDefaultURL() + "' onclick=\"dropDown('" + ach.getDefaultURL() + "','" + a.getName() + "','" + a.getDescription() + "');\" />");
+							out.print("<img class='achimage' src='" + ach.getDefaultURL() + "' onclick=\"dropDown('" + ach.getDefaultURL() + "','" + a.getName() + "','" + sc.changeString(a.getDescription()) + "');\" />");
 					
 				}
 			
@@ -112,7 +114,7 @@
 				List<Quiz> quizzes = (List<Quiz>) request.getAttribute("createdQuizzes");
 				if (quizzes != null)
 				for (int i=0;i<quizzes.size();i++){ 
-					out.println("<a href=\"Quiz?id=" + quizzes.get(i).getId() + "\" ><div class=\"listentry\">" + quizzes.get(i).getQuizName() + "</div></a>");	
+					out.println("<a href=\"Quiz?id=" + quizzes.get(i).getId() + "\" ><div class=\"listentry\">" + sc.changeString(  quizzes.get(i).getQuizName() ) + "</div></a>");	
 				}
 			%>
 			</div>
@@ -134,10 +136,10 @@
 				for (int i=0;i<recent.size();i++){ 
 					out.print("<div class='listentry'>");
 						
-					out.print("<a href='Quiz?id=" + quizzes.get(i).getId() + "'><span class='entryquiz'>" + quizzes.get(i).getQuizName() + "</span><a/>");
-					out.print("<span class='entrydate'>" + recent.get(i).getTimeStarted() + "</span>");
+					out.print("<a href='Quiz?id=" + quizzes.get(i).getId() + "'><span class='entryquiz'>" + sc.changeString(  quizzes.get(i).getQuizName() ) + "</span><a/>");
+					out.print("<span class='entrydate'>" + new Date(recent.get(i).getTimeStarted()) + "</span>");
 					out.print("<span class='entryscore'>" + recent.get(i).getFinalGrade() + "</span>");
-					out.print("<span class='entrytime'>" + recent.get(i).getTimeTaken() + "</span>");
+					out.print("<span class='entrytime'>" + recent.get(i).getTimeTaken()/(1000 * 60) + "mins</span>");
 					
 					out.print("</div>");	
 				}}
@@ -146,7 +148,8 @@
 		</div>
 		
 		 
-					
+		<!-- It's useless and stupid just visit his/her page
+		
 		<div id="friendsachievements">
 			<div class="divtitle">Achievements</div>
 			<div class="inf">
@@ -154,7 +157,7 @@
 				<span class="qzname">Achievement</span>
 			</div>
 			<div class="list" id="jj">
-			<% 
+			<% /*
 			List<String> achh = (List<String>) request.getAttribute("FriendsAchievements");
 			List<String> frnds = (List<String>) request.getAttribute("FriendsAchievementsUser");
 	
@@ -166,10 +169,16 @@
 				out.print("<span class='entryquiz'>" + achh.get(i) + "</span>");
 				
 				out.print("</div>");	
-			} }
+			} }*/
 			%>
 			</div>
 		</div>
+		 -->
+		 
+		 <div class="breaker">
+		 	Friend's Activities:
+		 </div>
+		 
 		<div id="friendsrecent">
 			<div class="divtitle">Recent Results</div>
 			<div class="inf">
@@ -183,16 +192,16 @@
 			<% 
 			recent = (List<classes.Result>) request.getAttribute("FriendsRecentResults");
 			quizzes = (List<classes.Quiz>) request.getAttribute("FriendsRecentQuizzes");
-			frnds = (List<String>) request.getAttribute("FriendsRecentUsers");
+			List<String> frnds = (List<String>) request.getAttribute("FriendsRecentUsers");
 			if (recent != null && quizzes != null && frnds!= null)
 			for (int i=0;i<recent.size();i++){ 
 				out.print("<div class='listentry'>");
 					
 				out.print("<a href='Profile?username=" + frnds.get(i) + "'><span class='entryuser'>" + frnds.get(i) + "</span><a/>");
 				out.print("<a href='Quiz?id=" + quizzes.get(i).getId() + "'><span class='entryquiz'>" + quizzes.get(i).getQuizName() + "</span><a/>");
-				out.print("<span class='entrydate'>" + recent.get(i).getTimeStarted() + "</span>");
+				out.print("<span class='entrydate'>" + new Date(recent.get(i).getTimeStarted()) + "</span>");
 				out.print("<span class='entryscore'>" + recent.get(i).getFinalGrade() + "</span>");
-				out.print("<span class='entrytime'>" + recent.get(i).getTimeTaken() + "</span>");
+				out.print("<span class='entrytime'>" + recent.get(i).getTimeTaken()/(1000 * 60) + "mins</span>");
 				
 				out.print("</div>");	
 			}
@@ -215,7 +224,7 @@
 					out.print("<div class='listentry'>");
 					
 					out.print("<a href='Profile?username=" + frnds.get(i) + "'><span class='entryuser'>" + frnds.get(i) + "</span><a/>");
-					out.print("<a href='Quiz?id=" + quizzes.get(i).getId() + "'><span class='entryquiz'>" + quizzes.get(i).getQuizName() + "</span><a/>");
+					out.print("<a href='Quiz?id=" + quizzes.get(i).getId() + "'><span class='entryquiz'>" + sc.changeString(  quizzes.get(i).getQuizName()) + "</span><a/>");
 					
 					out.print("</div>");	
 				}}

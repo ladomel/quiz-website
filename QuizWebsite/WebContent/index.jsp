@@ -20,11 +20,15 @@
 		User master = (User)request.getSession().getAttribute("MasterUser"); 
 		if (master == null) toppanel = "toppanel-loggedout.jsp";
 		else toppanel = "toppanel-loggedin.jsp";
+		
+		StringChanger sc = new StringChanger();
 	%>
 	
 	
 	<div id="centerpanel">
-		
+			
+			<a  href="BrowseQuizzes"><button id="brwquizzes">Browse Quizzes</button></a>
+			
 			<span id="announcements">
 				<div class="divtitle">Announcements</div>
 				<div class="list">
@@ -32,7 +36,7 @@
 					List<Announcement> ann = (List<Announcement> )request.getAttribute("Announcements");
 					if (ann != null){
 					for (int i=0;i<ann.size();i++){
-						out.println("<div class=\"listentry\" onclick=\"alert('" + ann.get(i).getAnnouncement() + "');\">" + ann.get(i).getAnnouncement() + "</div>");	
+						out.println("<div class=\"listentry\" onclick=\"alert('" + sc.changeString(ann.get(i).getAnnouncement()) + "');\">" + sc.changeString(ann.get(i).getAnnouncement()) + "</div>");	
 					}}
 				%>
 				</div>
@@ -44,7 +48,7 @@
 					List<Quiz> quizzes = (List<Quiz> )request.getAttribute("RecentQuizzes");
 					if (quizzes != null){	
 					for (int i=0;i<quizzes.size();i++){
-						out.println("<div class=\"listentry\"><a href='Quiz?id="+ quizzes.get(i).getId() + "'>" + quizzes.get(i).getQuizName() + "</a></div>");	
+						out.println("<div class=\"listentry\"><a href='Quiz?id="+ quizzes.get(i).getId() + "'>" + sc.changeString(quizzes.get(i).getQuizName()) + "</a></div>");	
 					}} 
 				%>
 				</div>
