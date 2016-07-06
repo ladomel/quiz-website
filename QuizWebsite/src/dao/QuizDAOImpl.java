@@ -620,4 +620,28 @@ public class QuizDAOImpl implements QuizDAO {
 		return avg;
 	}
 
+	@Override
+	public boolean reviewExists(String userName, int quizId) {
+		boolean exists = false;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT COUNT(1) AS cnt "
+							+ "FROM reviews "
+							+ "WHERE quiz_id = ? "
+							+ " AND "
+							+ "user_id = (SELECT id FROM users WHERE username LIKE ?);"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setString(2, userName);
+			ResultSet rs = preparedStatement.executeQuery();
+			rs.next(); exists = rs.getInt("cnt") > 0;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return exists;
+	}
+
 }

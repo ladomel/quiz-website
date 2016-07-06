@@ -1,7 +1,6 @@
 package dao;
 
 import java.util.Timer;
-import java.util.TimerTask;
 
 import database.DBInfo;
 import database.PoolHandler;
