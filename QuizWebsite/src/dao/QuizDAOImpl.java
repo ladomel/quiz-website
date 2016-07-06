@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 
 import classes.Quiz;
 import classes.Result;
+import classes.Review;
 import database.MySQLUtil;
 import factory.ClassFactory;
 
@@ -525,6 +526,98 @@ public class QuizDAOImpl implements QuizDAO {
 				+ "LIMIT ?;"
 				);
 		return sb.toString();
+	}
+
+	
+	
+	
+	// review part
+	
+	@Override
+	public void addReview(Review review) {
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"INSERT INTO reviews (user_id, quiz_id, date, rating, text) "
+							+ "VALUES((SELECT id FROM users WHERE username LIKE ?), ?, ?, ?, ?);"
+							);
+			preparedStatement.setString(1, review.getUserName());
+			preparedStatement.setInt(2, review.getQuizId());
+			preparedStatement.setLong(3, review.getDate());
+			preparedStatement.setInt(4, review.getRating());
+			preparedStatement.setString(5, review.getText());
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public List<Review> getReviews(int quizId) {
+		List<Review> reviews = new ArrayList<Review>();
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT users.username, reviews.text, reviews.quiz_id, reviews.date, reviews.rating "
+							+ "FROM reviews "
+							+ "LEFT JOIN users "
+							+ "ON users.id = reviews.user_id "
+							+ "WHERE reviews.quiz_id = ? "
+							+ "ORDER BY rating DESC, date DESC;"
+							);
+			preparedStatement.setInt(1, quizId);
+			ResultSet rs = preparedStatement.executeQuery();
+			while(rs.next()) reviews.add(buildReviewFromRS(rs));
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return reviews;
+	}
+
+	private Review buildReviewFromRS(ResultSet rs) 
+			throws SQLException {
+		
+		Review review = new Review(
+				rs.getString("text"),
+				rs.getLong("date"),
+				rs.getString("username"),
+				rs.getInt("quiz_id"),
+				rs.getInt("rating"));
+		return review;
+	}
+
+	@Override
+	public double getAverageRating(int quizId) {
+		double avg = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT AVG(rating) AS avg "
+							+ "FROM reviews "
+							+ "WHERE quiz_id = ?;"
+							);
+			preparedStatement.setInt(1, quizId);
+			ResultSet rs = preparedStatement.executeQuery();
+			rs.next(); avg = rs.getDouble("avg");
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return avg;
 	}
 
 }
