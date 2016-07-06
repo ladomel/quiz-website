@@ -38,6 +38,7 @@
 	<input type="hidden" id="timeleft" value="<%= quiz.getQuizTime() %>">
 	
 	<input type="hidden" id="num" value="<%= positions.size() %>">
+	<input type="hidden" id="imcor" value="<% if (quiz.isImmediatelyCorrected()) out.print("Yes"); else out.print("No"); %>">
 	
 	<script type="text/javascript">
 		var remaining = 60*1000 * document.getElementById("timeleft").value;

@@ -27,10 +27,14 @@ function nextQuestion(){
 	var doc = document.getElementById("iframe").contentDocument;
 	doc.getElementById("submit").click();
 	if (count >= document.getElementById("num").value) document.getElementById("nextquestion").disabled = true;
+	if (document.getElementById("imcor").value == "No") {
+		document.getElementById("iframe").src = "Question?qid=" + count;
+		count++;
+	} else {
 	setTimeout(function(){
 		document.getElementById("iframe").src = "Question?qid=" + count;
 		count++;
-	}, 2000);	
+	}, 2000);	}
 }
 
 $(window).bind('beforeunload', function() {
