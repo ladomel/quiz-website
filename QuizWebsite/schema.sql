@@ -13,7 +13,7 @@ create table users(
 	hash_password 		varchar(255) 	not null,
 	salt 				varchar(255) 	not null,
 	description 		longtext,
-	image 				varchar(255),
+	image 				varchar(255)    default  'http://live.warthunder.com/style/img/no_avatar.jpg',
 	primary key(id)
 );
 
