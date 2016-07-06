@@ -620,4 +620,10 @@ public class QuizDAOImpl implements QuizDAO {
 		return avg;
 	}
 
+	@Override
+	public boolean reviewExists(String userName, int quizId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
