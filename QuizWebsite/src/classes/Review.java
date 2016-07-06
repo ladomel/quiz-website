@@ -14,6 +14,11 @@ public class Review {
 	private int quizId;
 	private int rating;
 	
+	@Override
+	public String toString() {
+		return "quiz: " + quizId + ", username: " + userName + ", text: " + text + ", rating: " + rating + "|||";
+	}
+	
 	public Review(String text, long date, String userName, int quizId, int rating) {
 		this.text = text;
 		this.date = date;
