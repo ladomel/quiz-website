@@ -165,4 +165,14 @@ public interface QuizDAO {
 	 * @return average rating for given quiz
 	 */
 	public double getAverageRating(int quizId);
+	
+	/**
+	 * Find out whether given user has already contributed to quiz review.
+	 * 
+	 * @param userName - String user name
+	 * @param quizId - int quiz id
+	 * @return true if review exists
+	 */
+	public boolean reviewExists(String userName, int quizId);
+	
 }
