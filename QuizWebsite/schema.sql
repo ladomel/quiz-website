@@ -189,6 +189,20 @@ create table reviews(
 	primary key(id)
 );
 
+# user zero admin god
 insert into users(username, hash_password, salt, description, image)
 values('god', 'f240f5d7013e156ab27332c1a91ad0449231a3b4', 'aaaaaaaaaaaaaaaaaaaa', 'This user has god-mode enabled.', 'http://3.bp.blogspot.com/-o8eeIO82GZE/TnasVVFNcjI/AAAAAAAAAcs/vk26j6xbpEc/s1600/pantocrator.jpg');
-insert into admins(user_id) values(1);
+insert into admins(user_id) values(1); 
+
+# default categories,  one can add more from provided interfaces
+insert into categories (category) values
+('history'), 
+('science'), 
+('sex'), 
+('qurduli'), 
+('humanities'), 
+('math'), 
+('popular culture'), 
+('religion'), 
+('logic'), 
+('miscellanious');
