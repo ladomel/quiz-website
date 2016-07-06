@@ -15,20 +15,21 @@
 #categories {
 	position: absolute;
 	top: 10px;
-	left: calc(50% - 600px);
-	width: 300px;
+	left: calc(50% - 530px);
+	width: 250px;
 	height: 100%;
 	margin: 0px;
+	text-align: center;
 	overflow-y: auto;
 	overflow-x: hidden;
-	background: #grey;
+	background: grey;
 	font-size: 30px;
 }
 
 #list {
 	position: absolute;
 	top: 10px;
-	left: calc(50% - 300px);
+	left: calc(50% - 250px);
 	width: 900px;
 	height: 100%;
 	margin: 0px;

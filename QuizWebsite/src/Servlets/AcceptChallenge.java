@@ -60,6 +60,7 @@ public class AcceptChallenge extends HttpServlet {
 				if (res.get(i).getFinalGrade() > maxx) maxx = res.get(i).getFinalGrade();
 			}
 			request.getSession().setAttribute("ChallengerScore", maxx);
+			request.getSession().setAttribute("ChallengerQuiz", ch.getQuizId());
 			response.sendRedirect("Quiz?id=" + ch.getQuizId());
 		} else 	response.sendRedirect("Message");
 	}

@@ -51,6 +51,15 @@
 			field.innerHTML += "<input type='text' name='answer" + count + "/0' class='ans'>";
 			count++;
 		}
+
+		$('input[name=grade]').change(function(){
+				var p = document.getElementById('grade').value;
+				if (isNaN(parseInt(p))) {
+					alert("Type integer into Grade field!");
+					document.getElementById('grade').value = "1";
+				}
+		});
+
 	</script>
 </body>
 </html>

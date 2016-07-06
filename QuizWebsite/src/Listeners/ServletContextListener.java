@@ -42,14 +42,17 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      */
     public void contextDestroyed(ServletContextEvent arg0)  {
-    	hasher = null;
-    	factory = null;
-    	
-    	daoFactory = null;	
-    	userDAO = null;	
-    	quizDAO = null;
-    	messageDAO = null;	
-    	questionDAO = null;
+    	ServletContext context = arg0.getServletContext();
+    	userDAO = null;quizDAO= null;resultDAO= null;messageDAO= null;questionDAO= null;achievementDAO= null;factory= null;hasher= null;achievements= null;
+    	context.removeAttribute("userDAO");
+    	context.removeAttribute("quizDAO");
+    	context.removeAttribute("resultDAO");
+    	context.removeAttribute("messageDAO");
+    	context.removeAttribute("questionDAO");
+    	context.removeAttribute("achievementDAO");
+    	context.removeAttribute("factory");
+    	context.removeAttribute("hasher");
+    	context.removeAttribute("achievements");
     }
 
 	/**

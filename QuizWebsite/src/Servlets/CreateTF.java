@@ -62,5 +62,6 @@ public class CreateTF extends HttpServlet {
 		QuestionTF questionTF = new QuestionTF(problem, grade, questions, answers);
 		ArrayList<Question> createdQuestions = (ArrayList<Question>)request.getSession().getAttribute("createdQuestions");
 		createdQuestions.add(questionTF);
+		System.out.println(questionTF.toString());
 	}
 }

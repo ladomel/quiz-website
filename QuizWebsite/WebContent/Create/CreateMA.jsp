@@ -17,7 +17,7 @@
 <script type="text/javascript" src="../javascript/createquestion.js"></script>
 </head>
 <body>
-	<form id="form" onkeypress="return event.keyCode != 13;">
+	<form id="form" onsubmit="checkInt();" onkeypress="return event.keyCode != 13;">
 	Question Grade: <input type="text" name="grade" id="grade"> <br><br>
 	Question:
 	<textarea type="text" cols="60" rows="6" name="statement"></textarea> <br>
@@ -53,6 +53,15 @@
 			field.innerHTML += "<input type='text' name='answer" + count + "/0' class='ans'>";
 			count++;
 		}
+
+		$('input[name=grade]').change(function(){
+				var p = document.getElementById('grade').value;
+				if (isNaN(parseInt(p))) {
+					alert("Type integer into Grade field!");
+					document.getElementById('grade').value = "1";
+				}
+		});
+
 	</script>
 </body>
 </html>

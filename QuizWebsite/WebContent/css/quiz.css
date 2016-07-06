@@ -12,6 +12,16 @@
 	background: #e6e6e6;
 }
 
+#reviews {
+	position:absolute;
+	top: 240px;
+	left: calc(50% - 400px);
+	width: 110px;
+	height: 30px;
+	border: none;
+	background: grey;
+}
+
 #sendchallenge {
 	border: none;
 	outline: 0;
@@ -65,18 +75,18 @@
 	background: green;
 }
 
-.usrname, .timetaken, .scr {
+.usrname, .timetaken, .scr ,.date{
 	display: inline-block;
-	width: 370px;
+	width: 210px;
 	height: 20px;
 	color: white;
-	font-size: 18px;
+	font-size: 15px;
 	line-height: 20px;
 	padding-left: 4px;
 	vertical-align: middle;
 }
 
-.scr, .timetaken {width: 50px;}
+.scr, .timetaken , .date{width: 80px;}
 
 .list {
 	position: absolute;
@@ -91,9 +101,42 @@
 .listentry {
 	width: 100%;
 	height: 30px;
-	background: black;
+	background: white;
 	text-width: 300px;
 	font-size: 20px;
+}
+
+.listentry:hover {
+	background: grey;
+}
+
+#yourperformance {
+	width: 540px;
+	height: 400px;
+	position: absolute;
+	top: 600px;
+	left: calc(50% - 270px);
+}
+
+.z1 , .z2 , .z3 {
+	display: inline-block;
+	width: 80px;
+	text-align: center;
+	height: 100%;
+}
+
+.uname,.tim, .scor , .dt{
+	display: inline-block;
+	width: 210px;
+	text-align: center;
+}
+
+.tim, .scor {
+	width: 80px;
+}
+
+.dt  {
+	width: 300px;
 }
 
 #qname, #qdescription, #qauthor {
@@ -124,53 +167,18 @@
 
 #topscores , #recentscores {
 	position: absolute;
-	width: 500px;
+	width: 700px;
 	height: 400px;
 	top: 270px;
-	left: calc(50% - 505px);
+	left: calc(50% - 600px);
 }
 
 #recentscores {
-	left: calc(50% + 5px);
+	width: 490px;
 }
 
-.time {
-	height: 30px; 
-	width: 50px;
-	color: yellow; 
-	background: black;
-	text-align: center;
-	font-weight: 600;
-	line-height: 30px;
-	border: none;
-	vertical-align: middle;
-	display: inline-block;
-}
-
-.profile {
-	height: 30px; 
-	width: 380px;
-	color: red; 
-	background: grey;
-	border: none;
-	font-weight: 600;
-	line-height: 30px;
-	padding-left: 4px;
-	vertical-align: middle;
-	display: inline-block;
-}
-
-.score {
-	height: 30px; 
-	width: 50px;
-	color: red; 
-	background: black;
-	text-align: center;
-	border: none;
-	font-weight: 600;
-	line-height: 30px;
-	vertical-align: middle;
-	display: inline-block;
+#recentscores {
+	left: calc(50% + 110px);
 }
 
 #startquiz {
