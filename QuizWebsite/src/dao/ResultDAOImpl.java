@@ -482,4 +482,39 @@ public class ResultDAOImpl implements ResultDAO {
 		return sb.toString();
 	}
 
+	@Override
+	public int rankInQuiz(String userName, int quizId) {
+		int rank = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT COUNT(1) AS rank "
+							+ "FROM results "
+							+ "WHERE quiz_id = ? AND "
+							+ "final_grade >= ("
+							+ "SELECT final_grade "
+							+ "FROM results "
+							+ "WHERE user_id = (SELECT id FROM users WHERE username LIKE ?) AND "
+							+ "quiz_id = ? "
+							+ "ORDER BY final_grade DESC "
+							+ "LIMIT 1"
+							+ ");"
+							);
+			preparedStatement.setInt(1, quizId);
+			preparedStatement.setString(2, userName);
+			preparedStatement.setInt(3, quizId);
+			ResultSet rs = preparedStatement.executeQuery();
+			rs.next();
+			rank = rs.getInt("rank");
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return rank;
+	}
+
 }

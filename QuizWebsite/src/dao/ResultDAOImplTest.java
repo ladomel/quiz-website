@@ -84,6 +84,8 @@ public class ResultDAOImplTest {
 		
 		System.out.println("friends quizzes" + resultDAO.getRecentResults(userDAO.getFriends("vaja"), 3));
 		
+		System.out.println("rank: " + resultDAO.rankInQuiz("god", 1)); 
+		
 	}
 
 	// result construction wrapper
