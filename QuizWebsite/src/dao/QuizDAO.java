@@ -157,4 +157,12 @@ public interface QuizDAO {
 	 * @return list of reviews ordered by creation date
 	 */
 	public List<Review> getReviews(int quizId);
+	
+	/**
+	 * Self-explanatory
+	 * 
+	 * @param quizId - int
+	 * @return average rating for given quiz
+	 */
+	public double getAverageRating(int quizId);
 }

@@ -596,4 +596,10 @@ public class QuizDAOImpl implements QuizDAO {
 		return review;
 	}
 
+	@Override
+	public double getAverageRating(int quizId) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
