@@ -515,7 +515,6 @@ public class QuizDAOImpl implements QuizDAO {
 				+ "ON tags.quiz_id = quizzes.id "
 				+ "LEFT JOIN categories "
 				+ "ON categories.id = quizzes.category_id "
-				+ "ON categories.id = "
 				+ "WHERE "
 				);
 		for(int i = 0; i < nFriends - 1; i++)
