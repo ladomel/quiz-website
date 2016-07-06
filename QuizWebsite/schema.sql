@@ -179,6 +179,13 @@ create table earned_achievements
 	unlock_time 		bigint
 );
 
+create table reviews(
+	user_id				int(11)			not null,
+	text				longtext		not null,
+	quiz_id				int(11)			not null,
+	date				long			
+);
+
 insert into users(username, hash_password, salt, description, image)
 values('god', 'f240f5d7013e156ab27332c1a91ad0449231a3b4', 'aaaaaaaaaaaaaaaaaaaa', 'This user has god-mode enabled.', 'http://3.bp.blogspot.com/-o8eeIO82GZE/TnasVVFNcjI/AAAAAAAAAcs/vk26j6xbpEc/s1600/pantocrator.jpg');
 insert into admins(user_id) values(1);
