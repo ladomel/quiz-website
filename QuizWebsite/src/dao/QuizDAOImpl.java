@@ -598,8 +598,26 @@ public class QuizDAOImpl implements QuizDAO {
 
 	@Override
 	public double getAverageRating(int quizId) {
-		// TODO Auto-generated method stub
-		return 0;
+		double avg = 0;
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement preparedStatement =
+					con.prepareStatement(
+							"SELECT AVG(rating) AS avg "
+							+ "FROM review "
+							+ "WHERE quiz_id = ?;"
+							);
+			preparedStatement.setInt(1, quizId);
+			ResultSet rs = preparedStatement.executeQuery();
+			rs.next(); avg = rs.getDouble("avg");
+			preparedStatement.close();
+			rs.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return avg;
 	}
 
 }
